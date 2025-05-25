@@ -1,0 +1,173 @@
+---
+description: Comprehensive Testing Guidelines
+globs:
+alwaysApply: false
+---
+## Test Fixing Process
+When encountering failing tests, follow this systematic approach:
+
+1. **Run complete test suite** (yarn test) to identify failing files
+2. **Work on one test file at a time** - don't run full suite until file is complete
+3. **Read corresponding source code** before fixing tests
+4. **Fix one test block (it block) at a time**:
+   - If test no longer reflects functionality, update the test
+   - Attempt to fix up to 3 times
+   - If still failing after 3 attempts, delete the test block
+5. **Move to next failing test block** in same file
+6. **Move to next failing test file** when current file is complete
+7. **Repeat until all tests pass or are removed**
+
+**Important**: Components are working correctly - only tests may be outdated. Don't change component functionality unless absolutely necessary.
+
+## Testing Pyramid Strategy
+- **Unit Tests (70%)**: Fast, isolated, test individual functions/methods
+- **Integration Tests (20%)**: Test component interactions
+- **End-to-End Tests (10%)**: Test complete user workflows
+
+## Unit Testing Best Practices
+
+### Test Structure & Organization
+- Use AAA pattern: Arrange, Act, Assert
+- One assertion per test when possible
+- Group related tests in describe/context blocks
+- Use clear, descriptive test names
+- Follow naming convention: should_[expected_behavior]_when_[condition]
+
+### Test Quality Guidelines
+- Tests should be independent and isolated
+- Use dependency injection for better testability
+- Mock external dependencies appropriately
+- Test both happy path and error conditions
+- Ensure tests are deterministic (no flaky tests)
+
+### What to Test
+- **Critical business logic** - core functionality
+- **Edge cases** - boundary conditions, null values, empty collections
+- **Error handling** - exception paths and error states
+- **Public APIs** - interfaces and contracts
+- **Complex algorithms** - mathematical operations, data transformations
+
+### What NOT to Test
+- Private methods (test through public interfaces)
+- Framework code (trust established libraries)
+- Simple getters/setters without logic
+- Third-party library internals
+
+## Mocking & Test Doubles
+
+### When to Mock
+- External services (APIs, databases, file systems)
+- Slow operations (network calls, file I/O)
+- Non-deterministic behavior (current time, random values)
+- Complex dependencies that aren't under test
+
+### Mocking Strategies
+- **Stubs**: Return predefined responses
+- **Mocks**: Verify interactions and behavior
+- **Fakes**: Simplified implementations for testing
+- **Spies**: Monitor calls to real objects
+
+### Best Practices
+- Mock at boundaries (service layer, not internal logic)
+- Verify important interactions with mocks
+- Don't over-mock (prefer real objects when simple)
+- Use mock libraries consistently (Jest, Sinon, Mockito)
+
+## Integration Testing
+
+### Database Integration Tests
+- Use test databases with clean state
+- Implement database seeding for consistent test data
+- Test data access layer thoroughly
+- Use transactions for test isolation
+- Test migration scripts
+
+### API Integration Tests
+- Test complete HTTP request/response cycles
+- Verify status codes, headers, and response bodies
+- Test authentication and authorization
+- Use test data that represents real scenarios
+- Mock external API dependencies
+
+## Property-Based Testing
+- Use property-based testing for complex algorithms
+- Generate random test inputs to find edge cases
+- Define properties that should always hold true
+- Combine with example-based tests
+- Tools: QuickCheck, Hypothesis, fast-check
+
+## Test Coverage Guidelines
+- Aim for 80-90% code coverage as a baseline
+- Focus on meaningful coverage, not just metrics
+- Ensure critical paths have 100% coverage
+- Monitor coverage trends over time
+- Use coverage to identify untested code paths
+
+### Coverage Types
+- **Line Coverage**: Lines of code executed
+- **Branch Coverage**: Conditional branches taken
+- **Function Coverage**: Functions called
+- **Statement Coverage**: Statements executed
+
+## Performance Testing
+- Implement benchmark tests for critical operations
+- Set performance budgets and monitor regressions
+- Test with realistic data volumes
+- Use profiling tools to identify bottlenecks
+- Automate performance testing in CI/CD
+
+## Test Data Management
+- Use factories or builders for test data creation
+- Implement data cleanup after tests
+- Use realistic but anonymized test data
+- Avoid hardcoded test data when possible
+- Implement test data versioning
+
+## Testing Patterns
+
+### Test Fixtures
+- Use setup/teardown methods appropriately
+- Share common test setup code
+- Ensure fixtures don't create test dependencies
+- Clean up resources after tests
+
+### Parameterized Tests
+- Use data-driven tests for multiple similar scenarios
+- Test multiple inputs with same logic
+- Reduce test code duplication
+- Ensure all scenarios are covered
+
+## CI/CD Integration
+- Run tests automatically on every commit
+- Implement test gates for deployments
+- Parallel test execution for faster feedback
+- Generate test reports and metrics
+- Fail builds on test failures
+
+## Test Maintenance
+- Keep tests up-to-date with code changes
+- Refactor tests alongside production code
+- Remove obsolete tests regularly
+- Monitor and fix flaky tests immediately
+- Document complex test scenarios
+
+## Error Testing Best Practices
+- Test error conditions explicitly
+- Verify error messages and codes
+- Test error handling at boundaries
+- Ensure graceful degradation
+- Test timeout and retry mechanisms
+
+## Test Environment Management
+- Use consistent test environments
+- Isolate tests from external dependencies
+- Implement environment-specific configurations
+- Use containers for test environment consistency
+- Clean state between test runs
+
+## Documentation & Reporting
+- Document testing strategy and standards
+- Generate meaningful test reports
+- Track test metrics over time
+- Communicate test results to stakeholders
+- Document known test limitations
