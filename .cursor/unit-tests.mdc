@@ -1,19 +1,5 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
-i want you to fix (or remove) failing tests in this repo. the process to go about this should be as follows:
-
-1. run the entire test suite with yarn test to see which files need to be worked on
-2. move to the first failing test FILE. until you are done with it, you are only running this test file, not the whole suite
-2a. read the corresponding source code file you are writing tests for.
-3. work on the first failing test BLOCK. in this codebase that would be a singular it block. if the block no longer reflects the functionality of the component, update the test accordingly.
-4. try to fix that one it block up to 3 times. after 3 attempts the it block is still failing, delete it from the file
-5. go to step 3, using the next failing test BLOCK. repeat until all test BLOCKS in this file have been fixed or deleted.
-6. move to the next failing test FILE
-7. repeat 1-6 until all tests are passing or removed.
-
-please keep in mind that all components are working as intended, and it is only the tests that may be out of date. so do not make changes to the components unless absolutely necessary. definitely do not change functionality.
-
-do not explain to me what youre doing or ask me to continue, just go through it until i stop you. only fix failures, not warnings
