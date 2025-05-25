@@ -27,6 +27,20 @@ alwaysApply: true
 - Write full JSDoc atop every function you touch. If JSDoc exists, just check it is correct and update it if necessary
 - Don't use comments inside the function unless it seems really necessary to grok what's going on. You can leave "section divider" comments in the code
 
+# Linting & Code Quality Enforcement
+- Always run and fix linting errors before considering a task complete
+- Use Cursor's "Iterate on Lints" feature when available - let it automatically detect and fix linting issues
+- Respect existing project linting configuration (ESLint, Prettier, TSConfig, etc.)
+- When encountering linting errors, fix them immediately rather than ignoring or bypassing them
+- If linting rules conflict with functionality, discuss the conflict and suggest rule adjustments rather than disabling rules
+- Run build commands (tsc, npm run build) to catch type errors and fix them systematically
+- Use consistent formatting - let Prettier handle formatting, don't manually format code
+- For TypeScript projects, ensure strict mode compliance and fix all type errors
+- Organize imports consistently - remove unused imports, group them logically
+- Follow established naming conventions and casing rules from the project's linting config
+- When adding new dependencies, ensure they don't introduce linting conflicts
+- If you need to disable a linting rule, always include a comment explaining why
+
 # File & Project Management
 - Avoid having files over 200–300 lines of code. Refactor at that point
 - Avoid writing scripts in files if possible, especially if the script is likely only to be run once
