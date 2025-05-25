@@ -1,0 +1,196 @@
+---
+description: Security Guidelines
+globs:
+alwaysApply: false
+---
+## Core Security Principles
+- Security by design, not as an afterthought
+- Apply principle of least privilege
+- Implement defense in depth
+- Validate all inputs, sanitize all outputs
+- Fail securely - secure defaults, graceful degradation
+- Keep security simple and maintainable
+
+## Input Validation & Sanitization
+- Validate all user inputs at multiple layers
+- Use allowlists instead of blocklists when possible
+- Sanitize data before processing or storage
+- Implement proper data type checking
+- Use parameterized queries to prevent injection attacks
+- Validate file uploads thoroughly
+
+### Validation Patterns
+- Server-side validation is mandatory (client-side is UX only)
+- Use established validation libraries
+- Implement length, format, and range checks
+- Validate against expected data types
+- Reject unexpected input formats
+- Log validation failures for monitoring
+
+## Authentication & Authorization
+- Implement strong password policies
+- Use multi-factor authentication (MFA) where possible
+- Implement proper session management
+- Use secure token-based authentication (JWT with proper validation)
+- Implement account lockout mechanisms
+- Use secure password storage (bcrypt, Argon2)
+
+### Session Security
+- Use secure, random session identifiers
+- Implement session timeout
+- Invalidate sessions on logout
+- Use secure session storage
+- Implement CSRF protection
+- Use SameSite cookie attributes
+
+## Data Protection
+- Encrypt sensitive data at rest and in transit
+- Use HTTPS everywhere (TLS 1.2+)
+- Implement proper key management
+- Hash passwords with salt
+- Avoid storing sensitive data unnecessarily
+- Implement data classification policies
+
+### Encryption Guidelines
+- Use established encryption libraries
+- Never implement custom cryptography
+- Use appropriate key lengths
+- Implement proper key rotation
+- Secure key storage and access
+- Use authenticated encryption (AES-GCM)
+
+## API Security
+- Implement proper authentication for all endpoints
+- Use rate limiting to prevent abuse
+- Validate and sanitize all API inputs
+- Implement proper error handling (no sensitive data in errors)
+- Use CORS policies appropriately
+- Implement API versioning securely
+
+### REST API Security
+- Use HTTPS for all API communications
+- Implement proper HTTP methods (GET, POST, PUT, DELETE)
+- Use appropriate HTTP status codes
+- Implement request size limits
+- Use API keys or tokens for authentication
+- Log API access and anomalies
+
+## Database Security
+- Use parameterized queries/prepared statements
+- Implement database access controls
+- Encrypt sensitive database fields
+- Regular database security audits
+- Implement database connection pooling securely
+- Use database firewalls where appropriate
+
+### SQL Injection Prevention
+- Never concatenate user input into SQL queries
+- Use ORM/query builders with parameterized queries
+- Validate and sanitize database inputs
+- Implement stored procedures where appropriate
+- Use database user accounts with minimal privileges
+- Regular security testing of database queries
+
+## Secrets Management
+- Never commit secrets to version control
+- Use environment variables for configuration
+- Implement secret rotation policies
+- Use dedicated secret management tools (Vault, AWS Secrets Manager)
+- Encrypt secrets at rest
+- Implement access logging for secrets
+
+### Environment Security
+- Use different secrets for different environments
+- Implement secret scanning in CI/CD pipelines
+- Use short-lived tokens where possible
+- Implement secret expiration and renewal
+- Monitor secret access patterns
+- Use least privilege for secret access
+
+## Error Handling & Logging
+- Implement secure error handling
+- Don't expose sensitive information in error messages
+- Log security events for monitoring
+- Implement proper log rotation and storage
+- Use structured logging for security events
+- Implement alerting for security anomalies
+
+### Security Logging
+- Log authentication attempts (success and failure)
+- Log authorization failures
+- Log data access patterns
+- Log configuration changes
+- Implement tamper-evident logging
+- Use centralized logging systems
+
+## Dependency Security
+- Regularly audit and update dependencies
+- Use dependency scanning tools
+- Implement Software Bill of Materials (SBOM)
+- Monitor for known vulnerabilities
+- Use package lock files
+- Verify package integrity
+
+### Vulnerability Management
+- Implement automated vulnerability scanning
+- Prioritize critical and high-severity vulnerabilities
+- Test updates in staging before production
+- Implement emergency patching procedures
+- Document dependency security policies
+- Use private package registries where appropriate
+
+## Web Application Security
+- Implement Content Security Policy (CSP)
+- Use security headers (HSTS, X-Frame-Options, etc.)
+- Prevent clickjacking attacks
+- Implement XSS protection
+- Use secure cookie settings
+- Implement CSRF protection
+
+### OWASP Top 10 Prevention
+- Injection flaws prevention
+- Broken authentication prevention
+- Sensitive data exposure prevention
+- XML external entities (XXE) prevention
+- Broken access control prevention
+- Security misconfiguration prevention
+- Cross-site scripting (XSS) prevention
+- Insecure deserialization prevention
+- Using components with known vulnerabilities prevention
+- Insufficient logging and monitoring prevention
+
+## Infrastructure Security
+- Implement network segmentation
+- Use firewalls and intrusion detection systems
+- Regular security updates and patches
+- Implement backup and disaster recovery
+- Use secure configuration baselines
+- Implement monitoring and alerting
+
+## Security Testing
+- Implement automated security testing in CI/CD
+- Conduct regular penetration testing
+- Use static application security testing (SAST)
+- Use dynamic application security testing (DAST)
+- Implement dependency scanning
+- Conduct security code reviews
+
+## Incident Response
+- Develop incident response procedures
+- Implement security monitoring and alerting
+- Conduct regular security drills
+- Document incident response processes
+- Implement communication procedures
+- Conduct post-incident reviews
+
+## Security Anti-Patterns to Avoid
+- Security through obscurity
+- Hardcoded credentials or secrets
+- Trusting user input without validation
+- Using deprecated cryptographic algorithms
+- Ignoring security headers
+- Exposing internal system information
+- Using default or weak passwords
+- Insufficient logging and monitoring
+- Not implementing proper error handling
+- Storing sensitive data unnecessarily

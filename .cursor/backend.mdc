@@ -1,0 +1,337 @@
+---
+description: Backend Development Guidelines
+globs:
+alwaysApply: false
+---
+## Core Backend Principles
+- Design for scalability from the start
+- Implement proper separation of concerns
+- Use consistent error handling patterns
+- Follow REST or GraphQL conventions
+- Implement proper logging and monitoring
+- Design with failure in mind
+
+## API Design Best Practices
+
+### RESTful API Design
+- Use nouns for resource names, not verbs
+- Use HTTP methods appropriately (GET, POST, PUT, DELETE, PATCH)
+- Implement proper HTTP status codes
+- Use consistent URL patterns (/api/v1/resources)
+- Implement API versioning strategy
+- Use pagination for large datasets
+
+### HTTP Status Codes
+- **200 OK**: Successful GET, PUT, PATCH
+- **201 Created**: Successful POST
+- **204 No Content**: Successful DELETE
+- **400 Bad Request**: Client error, invalid request
+- **401 Unauthorized**: Authentication required
+- **403 Forbidden**: Access denied
+- **404 Not Found**: Resource doesn't exist
+- **500 Internal Server Error**: Server error
+
+### API Response Format
+- Use consistent response structure
+- Include metadata (pagination, timestamps)
+- Implement proper error response format
+- Use JSON as default format
+- Include request IDs for tracing
+- Implement HATEOAS where appropriate
+
+```json
+{
+  "data": {},
+  "meta": {
+    "pagination": {},
+    "timestamp": "2024-01-01T00:00:00Z"
+  },
+  "errors": []
+}
+```
+
+### GraphQL API Design
+- Design schema-first approach
+- Implement proper type definitions
+- Use resolvers efficiently
+- Implement DataLoader for N+1 prevention
+- Design mutations carefully
+- Implement proper error handling
+
+## Database Management
+
+### Database Design Principles
+- Normalize data to reduce redundancy
+- Use appropriate data types
+- Implement proper indexing strategy
+- Design for query performance
+- Consider data growth patterns
+- Implement proper constraints
+
+### Schema Design
+- Use meaningful table and column names
+- Implement foreign key constraints
+- Use appropriate primary key strategies
+- Consider denormalization for read-heavy workloads
+- Implement soft deletes where appropriate
+- Version schema changes properly
+
+### Query Optimization
+- Use indexes strategically
+- Avoid N+1 query problems
+- Use query profiling tools
+- Implement query caching
+- Use database connection pooling
+- Monitor slow query logs
+
+### Data Migration Strategies
+- Make migrations reversible
+- Test migrations thoroughly
+- Implement zero-downtime deployments
+- Use feature flags for schema changes
+- Backup data before migrations
+- Document migration procedures
+
+## Data Access Layer
+
+### ORM/ODM Best Practices
+- Use consistent naming conventions
+- Implement proper relationship mappings
+- Use lazy loading appropriately
+- Implement proper transaction handling
+- Use database-specific optimizations
+- Monitor query performance
+
+### Repository Pattern
+- Implement consistent repository interfaces
+- Separate business logic from data access
+- Use dependency injection
+- Implement proper error handling
+- Use async/await patterns appropriately
+- Implement proper testing strategies
+
+## Authentication & Authorization
+
+### Authentication Strategies
+- Implement JWT token-based authentication
+- Use secure password hashing (bcrypt, Argon2)
+- Implement proper session management
+- Use refresh token rotation
+- Implement account lockout mechanisms
+- Support multi-factor authentication
+
+### Authorization Patterns
+- Implement role-based access control (RBAC)
+- Use attribute-based access control (ABAC) for complex scenarios
+- Implement resource-level permissions
+- Use middleware for authorization checks
+- Implement proper permission hierarchies
+- Audit authorization decisions
+
+## Error Handling
+
+### Error Response Strategy
+- Use consistent error response format
+- Include error codes and messages
+- Provide helpful error descriptions
+- Log errors with appropriate detail
+- Implement error tracking
+- Don't expose sensitive information
+
+### Exception Handling
+- Use custom exception types
+- Implement global exception handlers
+- Handle different error types appropriately
+- Use circuit breaker patterns for external services
+- Implement retry mechanisms with backoff
+- Log exceptions with context
+
+## Logging & Monitoring
+
+### Logging Best Practices
+- Use structured logging (JSON format)
+- Implement appropriate log levels
+- Include correlation IDs for request tracing
+- Log important business events
+- Implement log rotation and retention
+- Use centralized logging systems
+
+### Monitoring & Observability
+- Implement health check endpoints
+- Monitor key performance indicators
+- Use distributed tracing
+- Implement alerting for critical issues
+- Monitor resource usage
+- Track business metrics
+
+## Caching Strategies
+
+### Cache Types
+- **Application Cache**: In-memory caching (Redis, Memcached)
+- **Database Cache**: Query result caching
+- **HTTP Cache**: Response caching with proper headers
+- **CDN Cache**: Static asset caching
+- **Object Cache**: Serialized object caching
+
+### Cache Implementation
+- Use appropriate cache keys
+- Implement cache invalidation strategies
+- Set proper expiration times
+- Handle cache failures gracefully
+- Monitor cache hit rates
+- Implement cache warming strategies
+
+## Microservices Architecture
+
+### Service Design
+- Design services around business capabilities
+- Implement proper service boundaries
+- Use API contracts between services
+- Implement service discovery
+- Use event-driven communication
+- Design for independent deployment
+
+### Inter-Service Communication
+- Use HTTP/REST for synchronous communication
+- Use message queues for asynchronous communication
+- Implement circuit breaker patterns
+- Use service mesh for complex topologies
+- Implement proper timeout handling
+- Use bulkhead pattern for isolation
+
+## Background Jobs & Queue Management
+
+### Job Processing
+- Use appropriate queue systems (Redis, RabbitMQ, Kafka)
+- Implement job retry mechanisms
+- Use dead letter queues for failed jobs
+- Implement job prioritization
+- Monitor job processing metrics
+- Implement job result storage
+
+### Async Processing Patterns
+- Use worker processes for CPU-intensive tasks
+- Implement proper job scheduling
+- Use batch processing for bulk operations
+- Implement job progress tracking
+- Handle job failures gracefully
+- Use event sourcing where appropriate
+
+## File Management
+
+### File Upload Handling
+- Validate file types and sizes
+- Use secure file storage
+- Implement virus scanning
+- Generate unique file names
+- Use cloud storage services
+- Implement proper access controls
+
+### File Processing
+- Use background jobs for file processing
+- Implement file conversion services
+- Use streaming for large files
+- Implement proper error handling
+- Monitor file processing performance
+- Implement file cleanup policies
+
+## Configuration Management
+
+### Environment Configuration
+- Use environment variables for configuration
+- Implement configuration validation
+- Use configuration management tools
+- Separate secrets from configuration
+- Implement configuration hot reloading
+- Document configuration options
+
+
+## Testing Strategies
+
+### Backend Testing Patterns
+- Unit tests for business logic
+- Integration tests for data layer
+- API tests for endpoints
+- Contract tests for service boundaries
+- Load tests for performance validation
+- Security tests for vulnerabilities
+
+### Test Data Management
+- Use test fixtures and factories
+- Implement database seeding
+- Use transaction rollback for test isolation
+- Implement test data cleanup
+- Use realistic test data
+- Implement test data versioning
+
+## Performance Optimization
+
+### Database Performance
+- Optimize database queries
+- Use appropriate indexing
+- Implement connection pooling
+- Use read replicas for scaling
+- Implement database sharding
+- Monitor database performance
+
+### Application Performance
+- Use profiling tools regularly
+- Implement caching strategies
+- Optimize algorithm complexity
+- Use asynchronous processing
+- Implement resource pooling
+- Monitor application metrics
+
+## Security Considerations
+
+### API Security
+- Implement proper authentication
+- Use HTTPS everywhere
+- Validate all inputs
+- Implement rate limiting
+- Use CORS policies appropriately
+- Implement API key management
+
+### Data Security
+- Encrypt sensitive data at rest
+- Use secure communication protocols
+- Implement proper access controls
+- Audit data access
+- Implement data classification
+- Use secure backup procedures
+
+## Deployment & DevOps
+
+### Deployment Strategies
+- Implement blue-green deployments
+- Use rolling deployments for zero downtime
+- Implement proper health checks
+- Use infrastructure as code
+- Implement automated rollback
+- Monitor deployment metrics
+
+### Container Best Practices
+- Use multi-stage Docker builds
+- Implement proper security scanning
+- Use minimal base images
+- Implement proper secrets management
+- Use orchestration platforms (Kubernetes)
+- Monitor container resources
+
+## Documentation
+
+### API Documentation
+- Use OpenAPI/Swagger specifications
+- Include code examples
+- Document error responses
+- Provide testing endpoints
+- Keep documentation up-to-date
+- Include authentication examples
+
+### Code Documentation
+- Document complex business logic
+- Use consistent commenting standards
+- Document API contracts
+- Maintain architectural decision records
+- Document deployment procedures
+- Create runbooks for operations

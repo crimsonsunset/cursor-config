@@ -1,0 +1,142 @@
+---
+description: Performance & Optimization Rules
+globs:
+alwaysApply: false
+---
+## Core Performance Principles
+- Profile before optimizing - measure, don't guess
+- Optimize for the common case, not edge cases
+- Prefer simple solutions that perform well over complex micro-optimizations
+- Consider performance implications early in design phase
+- Use appropriate data structures for the use case
+
+## Benchmarking & Profiling
+- Always benchmark before and after optimization changes
+- Use realistic data sets and user scenarios for testing
+- Profile in production-like environments
+- Document performance baselines and targets
+- Automate performance regression testing in CI/CD
+
+### Tools & Commands
+- Use browser dev tools for web performance analysis
+- Implement automated performance monitoring
+- Set up alerts for performance degradation
+- Track Core Web Vitals (LCP, FID, CLS) for web apps
+- Use application-specific profiling tools
+
+## Memory Management
+- Avoid memory leaks through proper cleanup
+- Use weak references where appropriate
+- Implement object pooling for frequently created objects
+- Monitor memory usage patterns
+- Clear event listeners and subscriptions on cleanup
+- Use appropriate data structures (Map vs Object, Set vs Array)
+
+### Best Practices
+- Prefer primitive types over wrapper objects
+- Minimize deep object nesting
+- Use streaming for large data processing
+- Implement proper garbage collection awareness
+- Avoid accidental global variable creation
+
+## Database & Query Optimization
+- Index frequently queried columns
+- Avoid N+1 query problems
+- Use database query profiling tools
+- Implement proper pagination for large datasets
+- Use database connection pooling
+- Optimize JOIN operations and subqueries
+
+### Query Guidelines
+- Write explicit SELECT statements (avoid SELECT *)
+- Use LIMIT/OFFSET appropriately
+- Implement query caching where beneficial
+- Monitor slow query logs
+- Use prepared statements for repeated queries
+- Consider read replicas for heavy read workloads
+
+## Caching Strategies
+- Implement multiple levels of caching (browser, CDN, application, database)
+- Use appropriate cache invalidation strategies
+- Set proper cache headers for static assets
+- Consider cache warming for critical data
+- Monitor cache hit rates and effectiveness
+
+### Cache Types
+- Browser caching for static assets
+- Application-level caching (Redis, Memcached)
+- Database query result caching
+- CDN caching for global distribution
+- Service worker caching for offline support
+
+## Network & API Optimization
+- Minimize HTTP requests
+- Use compression (gzip, brotli)
+- Implement HTTP/2 and HTTP/3 where possible
+- Optimize payload sizes
+- Use connection keep-alive
+- Implement proper timeout handling
+
+### API Performance
+- Design efficient API endpoints
+- Use GraphQL to reduce over-fetching
+- Implement API response caching
+- Use pagination for large result sets
+- Consider API rate limiting
+- Optimize serialization/deserialization
+
+## Frontend Performance
+- Implement code splitting and lazy loading
+- Optimize images (WebP, proper sizing, lazy loading)
+- Minimize and compress JavaScript/CSS bundles
+- Use efficient CSS selectors
+- Implement virtual scrolling for large lists
+- Optimize re-renders in React/Vue components
+
+### Bundle Optimization
+- Analyze bundle size regularly
+- Implement tree shaking
+- Use dynamic imports for route-based code splitting
+- Optimize third-party library usage
+- Consider using lighter weight alternatives
+
+## Concurrency & Async Performance
+- Use async/await appropriately
+- Implement proper error handling in async code
+- Avoid blocking operations on main thread
+- Use worker threads for CPU-intensive tasks
+- Implement proper backpressure handling
+- Consider event-driven architectures
+
+## Performance Monitoring
+- Set up real-time performance monitoring
+- Track performance metrics over time
+- Implement performance budgets
+- Monitor resource usage (CPU, memory, disk)
+- Set up alerting for performance degradation
+- Use synthetic monitoring for critical user journeys
+
+## Performance Testing
+- Implement load testing in CI/CD pipeline
+- Test with realistic data volumes
+- Simulate various network conditions
+- Test on different devices and browsers
+- Monitor performance during stress tests
+- Document performance test results
+
+## Optimization Guidelines
+- Optimize algorithms before optimizing code
+- Use appropriate time complexity for operations
+- Minimize I/O operations
+- Batch operations where possible
+- Use efficient sorting and searching algorithms
+- Consider trade-offs between memory and CPU usage
+
+## Performance Anti-Patterns to Avoid
+- Premature optimization without measurement
+- Ignoring Big O complexity implications
+- Synchronous operations in async environments
+- Memory leaks through uncleaned references
+- Excessive DOM manipulation
+- Inefficient regular expressions
+- Blocking the main thread with heavy computations
