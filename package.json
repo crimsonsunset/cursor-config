@@ -1,6 +1,6 @@
 {
   "name": "@crimsonsunset/cursor-config",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Shared Cursor rules configuration",
   "main": "index.js",
   "scripts": {
