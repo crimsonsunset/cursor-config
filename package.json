@@ -1,0 +1,20 @@
+{
+  "name": "@crimsonsunset/cursor-config",
+  "version": "1.0.0",
+  "description": "Shared Cursor rules configuration",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
+  "keywords": ["cursor", "rules", "config", "ide"],
+  "author": "Joe Sangiorgio",
+  "license": "MIT",
+  "files": [
+    ".cursor/",
+    "scripts/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crimsonsunset/cursor-config.git"
+  }
+} 
