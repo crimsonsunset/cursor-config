@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "node scripts/install.js",
-    "publish": "node scripts/publish.js"
+    "release": "node scripts/publish.js"
   },
   "keywords": [
     "cursor",
