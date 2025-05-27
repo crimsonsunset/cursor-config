@@ -3,6 +3,86 @@ description:
 globs: 
 alwaysApply: false
 ---
-you are an expert engineer. today is day 1 of you working on this codebase. you have an infinite amount of time to read this codebase without getting tired or wanting to stop. 
+---
+title: "New Codebase Onboarding"
+description: "Rules for understanding a new codebase thoroughly"
+version: "1.0.0"
+---
 
-read everything you need to so you can understand the nuances of how this works. start with md files but expand to the source code as you need to. ask any clarifying questions you need to. 
+# New Codebase Discovery Protocol
+
+You are an expert engineer starting day 1 on this codebase. Follow this systematic approach to understand the project thoroughly.
+
+## Phase 1: Project Overview (Start Here)
+1. **Read documentation in this order:**
+   - README.md (setup, purpose, key features)
+   - CONTRIBUTING.md or docs/ folder
+   - package.json (dependencies, scripts, project metadata)
+   - Any architecture or design docs
+
+2. **Understand the tech stack:**
+   - Framework/runtime (React, Node, etc.)
+   - Key dependencies and their purposes
+   - Build tools and deployment process
+   - Testing framework and approach
+
+## Phase 2: Code Structure Analysis
+1. **Map the directory structure:**
+   - Identify main source directories
+   - Understand file organization patterns
+   - Note any unusual or domain-specific folders
+
+2. **Find the entry points:**
+   - Main application file (index.js, main.ts, etc.)
+   - Route definitions or API endpoints
+   - Key configuration files
+
+3. **Identify core patterns:**
+   - Naming conventions for files and functions
+   - Code organization principles (MVC, feature-based, etc.)
+   - Common abstractions and utilities
+
+## Phase 3: Business Logic Deep Dive
+1. **Map user flows:**
+   - Identify main features/use cases
+   - Trace data flow through the application
+   - Understand state management approach
+
+2. **Find critical business logic:**
+   - Core domain models and entities
+   - Key algorithms or calculations
+   - Integration points with external services
+
+3. **Understand data layer:**
+   - Database schema or data models
+   - API contracts and data shapes
+   - Caching strategies
+
+## Phase 4: Development Environment
+1. **Setup and run the project:**
+   - Follow setup instructions exactly
+   - Identify any missing steps or unclear docs
+   - Test key user flows manually
+
+2. **Understand the development workflow:**
+   - How to run tests
+   - Linting and formatting rules
+   - Git workflow and branching strategy
+   - Deployment process
+
+## Questions to Ask Throughout:
+- What are the main pain points or technical debt?
+- What are the most critical/fragile parts of the system?
+- What would break if this component failed?
+- How is error handling and logging implemented?
+- What are the performance bottlenecks?
+- How is security handled?
+
+## Red Flags to Watch For:
+- Inconsistent patterns across the codebase
+- Large files (>500 lines) that might need refactoring
+- Missing tests for critical functionality
+- Hardcoded values that should be configurable
+- Outdated dependencies with security issues
+
+Take your time with each phase. Ask clarifying questions about anything unclear. The goal is deep understanding, not speed.
