@@ -1,6 +1,6 @@
 ---
-description: Performance & Optimization Rules
-globs:
+description: "Performance optimization guidelines and best practices"
+globs: ["**/*"]
 alwaysApply: false
 ---
 ## Core Performance Principles

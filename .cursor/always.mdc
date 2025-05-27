@@ -1,6 +1,6 @@
 ---
-description: baseline rules for running cursor against codebases
-globs:
+description: "Baseline rules for running cursor against codebases"
+globs: ["**/*"]
 alwaysApply: true
 ---
 # Core Principles

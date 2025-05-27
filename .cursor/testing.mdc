@@ -1,6 +1,6 @@
 ---
-description: Comprehensive Testing Guidelines
-globs:
+description: "Comprehensive testing strategy and debugging guidelines"
+globs: ["**/*"]
 alwaysApply: false
 ---
 ## Test Fixing Process

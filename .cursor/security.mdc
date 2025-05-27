@@ -1,6 +1,6 @@
 ---
-description: Security Guidelines
-globs:
+description: "Security best practices and guidelines for secure development"
+globs: ["**/*"]
 alwaysApply: false
 ---
 ## Core Security Principles

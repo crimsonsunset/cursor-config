@@ -1,8 +1,9 @@
 ---
-description: Backend Development Guidelines
-globs:
+description: "Backend development best practices and API design guidelines"
+globs: ["**/*"]
 alwaysApply: false
 ---
+
 ## Core Backend Principles
 - Design for scalability from the start
 - Implement proper separation of concerns

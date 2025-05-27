@@ -1,12 +1,7 @@
 ---
-description: 
-globs: 
+description: "Systematic approach for understanding a new codebase thoroughly"
+globs: ["**/*"]
 alwaysApply: false
----
----
-title: "New Codebase Onboarding"
-description: "Rules for understanding a new codebase thoroughly"
-version: "1.0.0"
 ---
 
 # New Codebase Discovery Protocol
