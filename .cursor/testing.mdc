@@ -1,8 +1,16 @@
 ---
+description: Comprehensive Testing Guidelines
+globs: 
+alwaysApply: false
+---
+---
 description: "Comprehensive testing strategy and debugging guidelines"
 globs: ["**/*"]
 alwaysApply: false
 ---
+
+# Testing Strategy & Guidelines
+
 ## Test Fixing Process
 When encountering failing tests, follow this systematic approach:
 

@@ -1,8 +1,15 @@
 ---
+description: Backend Development Guidelines
+globs: 
+alwaysApply: false
+---
+---
 description: "Backend development best practices and API design guidelines"
 globs: ["**/*"]
 alwaysApply: false
 ---
+
+# Backend Development Guidelines
 
 ## Core Backend Principles
 - Design for scalability from the start

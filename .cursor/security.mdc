@@ -1,8 +1,16 @@
 ---
+description: Security Guidelines
+globs: 
+alwaysApply: false
+---
+---
 description: "Security best practices and guidelines for secure development"
 globs: ["**/*"]
 alwaysApply: false
 ---
+
+# Security Best Practices
+
 ## Core Security Principles
 - Security by design, not as an afterthought
 - Apply principle of least privilege

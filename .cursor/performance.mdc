@@ -1,8 +1,16 @@
 ---
+description: Performance & Optimization Rules
+globs: 
+alwaysApply: false
+---
+---
 description: "Performance optimization guidelines and best practices"
 globs: ["**/*"]
 alwaysApply: false
 ---
+
+# Performance Optimization Guidelines
+
 ## Core Performance Principles
 - Profile before optimizing - measure, don't guess
 - Optimize for the common case, not edge cases
