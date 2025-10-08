@@ -1,0 +1,550 @@
+---
+alwaysApply: false
+---
+# Performance & Scalability Quality Check
+
+Identify every performance bottleneck and scalability issue.
+
+## Review Mindset
+
+**Assume we're about to 10x our traffic. What breaks first?**
+
+For each issue, estimate:
+- Current impact at X users
+- Breaking point (when does this fail?)
+- Quick wins vs. major refactors needed
+
+## Performance Analysis Areas
+
+### 1. Frontend/Mobile Performance
+
+#### Rendering Performance
+
+**React/React Native specific:**
+- [ ] Unnecessary re-renders identified
+- [ ] Missing React.memo() on expensive components
+- [ ] Missing useMemo() for expensive calculations
+- [ ] Missing useCallback() causing child re-renders
+- [ ] Large lists without virtualization
+- [ ] Heavy computations on main thread
+
+**Identify issues:**
+```javascript
+// ❌ Problem: Component re-renders on every parent render
+function ExpensiveComponent({ data }) {
+  const processed = expensiveOperation(data); // Recalculates every render
+  return <View>{processed}</View>;
+}
+
+// ✅ Should be:
+function ExpensiveComponent({ data }) {
+  const processed = useMemo(() => expensiveOperation(data), [data]);
+  return <View>{processed}</View>;
+}
+```
+
+**Re-render hotspots:**
+| Component | Renders/second | Reason | Fix |
+|-----------|----------------|--------|-----|
+|           |                |        |     |
+
+#### Bundle Size
+
+**JavaScript bundle analysis:**
+- Total bundle size: ___KB/MB
+- Largest dependencies: 
+  1. 
+  2. 
+  3. 
+
+**Targets:**
+- Mobile: <5MB
+- Web (First load): <200KB
+- Web (Total): <1MB
+
+**Issues identified:**
+- Entire libraries imported for 1 function
+- No code splitting
+- No tree shaking
+- Large images not optimized
+
+**Bundle optimization opportunities:**
+- Lazy load routes: ___ KB saved
+- Split vendor bundle: ___ KB saved
+- Remove unused deps: ___ KB saved
+- Optimize images: ___ KB saved
+
+#### Image/Asset Performance
+
+- [ ] Images optimized (compressed)
+- [ ] Responsive images (multiple sizes)
+- [ ] Lazy loading implemented
+- [ ] Modern formats used (WebP, AVIF)
+- [ ] CDN for static assets
+
+**Issues:**
+- Serving 5MB images in thumbnails
+- No lazy loading
+- No image compression
+- No CDN
+
+#### Network Performance
+
+**API call patterns:**
+- [ ] Batching where possible
+- [ ] Caching strategy implemented
+- [ ] Request deduplication
+- [ ] Retry logic with backoff
+- [ ] Timeout configuration
+
+**Network waterfalls identified:**
+```
+Component Mount
+  ├─ Fetch User (200ms)
+  │   └─ Fetch User Posts (300ms)
+  │       └─ Fetch Post Comments (250ms)
+  │           └─ Fetch Comment Authors (200ms)
+  └─ Total: 950ms 😱
+```
+
+**Should be:**
+```
+Component Mount
+  ├─ Fetch User + Posts + Comments + Authors (parallel)
+  └─ Total: 300ms ✅
+```
+
+**Waterfall locations:**
+1. 
+2. 
+3. 
+
+#### Loading States
+
+- [ ] Skeleton screens implemented
+- [ ] Progressive loading
+- [ ] Optimistic updates
+- [ ] Loading indicators
+
+**User experience during loads:**
+- Time to first content: ___ ms
+- Time to interactive: ___ ms
+- Target: <2000ms
+
+### 2. Backend/API Performance
+
+#### Database Queries
+
+**N+1 query patterns:**
+```javascript
+// ❌ N+1 Problem
+const users = await User.findAll(); // 1 query
+for (const user of users) {
+  user.posts = await Post.findByUser(user.id); // N queries
+}
+
+// ✅ Solution
+const users = await User.findAll({
+  include: [Post] // 1 query with JOIN
+});
+```
+
+**N+1 locations identified:**
+1. 
+2. 
+3. 
+
+**Unindexed queries:**
+```sql
+-- Slow: table scan without index
+SELECT * FROM users WHERE email = 'user@example.com';
+
+-- Missing index on email column
+```
+
+**Missing indexes:**
+1. 
+2. 
+3. 
+
+**Query performance:**
+| Query | Avg Time | p95 Time | Calls/sec | Needs Index |
+|-------|----------|----------|-----------|-------------|
+|       |          |          |           |             |
+
+#### API Response Times
+
+**Target SLAs:**
+- p50: <100ms
+- p95: <200ms
+- p99: <500ms
+
+**Current performance:**
+- p50: ___ ms
+- p95: ___ ms
+- p99: ___ ms
+
+**Slow endpoints:**
+| Endpoint | p95 Time | Reason | Fix |
+|----------|----------|--------|-----|
+|          |          |        |     |
+
+#### Caching Strategy
+
+- [ ] HTTP caching headers set
+- [ ] API response caching
+- [ ] Database query caching
+- [ ] Redis/Memcached for sessions
+- [ ] CDN for static assets
+
+**Missing caching:**
+1. Frequently accessed data not cached
+2. No cache invalidation strategy
+3. No CDN setup
+
+**Caching opportunities:**
+- Cache user sessions: ___ req/s offloaded
+- Cache API responses: ___ req/s offloaded
+- Cache database queries: ___ req/s offloaded
+
+#### Connection Pooling
+
+- [ ] Database connection pool configured
+- [ ] Pool size appropriate
+- [ ] Connection timeout set
+- [ ] Max connections not exceeded
+
+**Current configuration:**
+- Pool size: ___
+- Max connections: ___
+- Timeout: ___
+
+**Issues:**
+- Pool size too small (exhausting connections)
+- No timeout (hanging connections)
+- Not monitoring pool usage
+
+### 3. Algorithm Efficiency
+
+#### Big O Analysis
+
+**For each complex function, analyze:**
+
+**Function:** `calculateRecommendations()`
+- **Current complexity:** O(n²) or worse
+- **Input size:** n = ___
+- **Current time:** ___ ms
+- **At 10x input:** ___ ms
+- **Problem:** Nested loops, should use hash map
+
+**Inefficient algorithms found:**
+| Function | Current O() | Better O() | Effort |
+|----------|-------------|------------|--------|
+|          |             |            |        |
+
+**Example improvement:**
+```javascript
+// ❌ O(n²)
+function findDuplicates(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] === arr[j]) return true;
+    }
+  }
+  return false;
+}
+
+// ✅ O(n)
+function findDuplicates(arr) {
+  const seen = new Set();
+  for (const item of arr) {
+    if (seen.has(item)) return true;
+    seen.add(item);
+  }
+  return false;
+}
+```
+
+#### Memory Efficiency
+
+**Memory leaks identified:**
+- Event listeners not cleaned up
+- Intervals/timeouts not cleared
+- Large arrays/objects not released
+- Circular references
+
+**Memory issues:**
+1. 
+2. 
+3. 
+
+**Memory profiling:**
+- Heap size at start: ___ MB
+- Heap size after use: ___ MB
+- Memory growth: ___ MB/hour
+- Acceptable: <10MB/hour
+
+### 4. Scalability Analysis
+
+#### 10x Traffic Scenario
+
+**Current load:**
+- Requests/sec: ___
+- Concurrent users: ___
+- Database connections: ___
+
+**At 10x traffic:**
+- Requests/sec: ___
+- Concurrent users: ___
+- Database connections: ___
+
+**What breaks first?**
+1. 
+2. 
+3. 
+
+#### Database Scalability
+
+**Breaking points:**
+- Table size: ___ rows (breaks at ___ million?)
+- Query performance: ___ ms (breaks at ___ rows?)
+- Connection limit: ___ (exhausts at ___ users?)
+- Disk space: ___ GB (runs out when?)
+
+**Scaling strategies needed:**
+- [ ] Read replicas
+- [ ] Sharding
+- [ ] Partitioning
+- [ ] Archive old data
+
+**Tables that will explode:**
+1. 
+2. 
+3. 
+
+#### Application Scalability
+
+**Horizontal scaling:**
+- Can we run multiple instances? Yes/No
+- Stateless or stateful?
+- Session management approach?
+- File uploads handled how?
+
+**Issues preventing scale:**
+- In-memory state (doesn't scale horizontally)
+- File system dependencies
+- No load balancing
+- Single point of failure
+
+#### Resource Limits
+
+**Current limits:**
+- Max file upload: ___ MB
+- Max request body: ___ MB
+- Connection timeout: ___ sec
+- Request timeout: ___ sec
+
+**What happens when exceeded?**
+- 
+
+**Need adjustment?**
+- 
+
+### 5. Mobile-Specific Performance
+
+#### App Startup Time
+
+- Cold start: ___ ms (target: <2000ms)
+- Warm start: ___ ms (target: <500ms)
+
+**Startup bottlenecks:**
+1. 
+2. 
+3. 
+
+#### Memory Usage
+
+- Memory usage: ___ MB (target: <100MB)
+- Peak memory: ___ MB
+- Memory warnings: Yes/No
+
+**Memory issues:**
+- 
+
+#### Battery Usage
+
+- Heavy battery drain? Yes/No
+- Background processing optimized? Yes/No
+- Location services efficient? Yes/No
+
+**Battery concerns:**
+- 
+
+#### Offline Performance
+
+- [ ] App works offline
+- [ ] Data cached locally
+- [ ] Sync strategy implemented
+- [ ] Conflict resolution
+
+**Offline issues:**
+- 
+
+### 6. Build Performance
+
+**Build times:**
+- Development build: ___ sec/min
+- Production build: ___ sec/min
+- Test run: ___ sec/min
+
+**Targets:**
+- Dev build: <30 sec
+- Prod build: <5 min
+- Tests: <2 min
+
+**Build bottlenecks:**
+1. 
+2. 
+3. 
+
+## Performance Metrics
+
+### Current Baseline
+
+**Load time metrics:**
+- First Contentful Paint (FCP): ___ ms
+- Largest Contentful Paint (LCP): ___ ms
+- Time to Interactive (TTI): ___ ms
+- Cumulative Layout Shift (CLS): ___
+- First Input Delay (FID): ___ ms
+
+**Targets (Web Vitals):**
+- LCP: <2.5s (Good), 2.5-4s (Needs Improvement), >4s (Poor)
+- FID: <100ms (Good), 100-300ms (Needs Improvement), >300ms (Poor)
+- CLS: <0.1 (Good), 0.1-0.25 (Needs Improvement), >0.25 (Poor)
+
+### Throughput Metrics
+
+**API throughput:**
+- Requests/second: ___
+- Error rate: ___%
+- Avg response time: ___ ms
+
+### Resource Utilization
+
+**Server resources:**
+- CPU usage: ___%
+- Memory usage: ___%
+- Disk I/O: ___
+- Network I/O: ___
+
+## Output Template
+
+### Performance Score: ___/5
+
+### Critical Performance Issues (P0)
+1. **N+1 query in user feed endpoint**
+   - Location: `src/api/feed.js:45`
+   - Impact: 500ms → 5000ms at 10x users
+   - Fix: Add JOIN, use eager loading
+   - Effort: 2 hours
+
+### Major Performance Issues (P1)
+1. **No caching on frequently accessed data**
+   - Impact: 1000 req/s hitting database
+   - Fix: Add Redis cache
+   - Savings: 80% database load reduction
+   - Effort: 1 day
+
+### Performance Optimizations (P2)
+1. **Missing React.memo on expensive component**
+   - Impact: Unnecessary re-renders
+   - Fix: Add memoization
+   - Savings: ~30% render time
+   - Effort: 1 hour
+
+### Breaking Points Identified
+
+**At current scale (X users):**
+- Everything works: ✅
+
+**At 10x scale:**
+- Database connections exhausted: ❌
+- API response times >1s: ❌
+- Bundle size causes slow loads: ❌
+
+**At 100x scale:**
+- Complete system failure: ❌
+
+### Quick Wins (High impact, low effort)
+
+1. **Add index on users.email** - 2 min, 90% query speedup
+2. **Enable gzip compression** - 5 min, 60% bandwidth savings
+3. **Add React.memo to ExpensiveList** - 15 min, 30% fewer renders
+
+### Major Performance Investments
+
+1. **Implement caching layer**
+   - Effort: 3 days
+   - Impact: 80% load reduction
+   - Priority: High
+
+2. **Database query optimization**
+   - Effort: 1 week
+   - Impact: 5x faster queries
+   - Priority: High
+
+3. **Code splitting and lazy loading**
+   - Effort: 2 days
+   - Impact: 50% smaller initial bundle
+   - Priority: Medium
+
+### Scalability Roadmap
+
+**Phase 1: 0-10x (Critical)**
+- Add indexes
+- Implement caching
+- Fix N+1 queries
+- Add connection pooling
+
+**Phase 2: 10-100x (Important)**
+- Add read replicas
+- Implement CDN
+- Code splitting
+- Background job processing
+
+**Phase 3: 100x+ (Future)**
+- Sharding strategy
+- Microservices architecture
+- Advanced caching layers
+- Geographic distribution
+
+### Performance Budget
+
+**Set and monitor:**
+- Bundle size budget: ___KB
+- API response time: ___ms (p95)
+- Database query time: ___ms (p95)
+- Memory usage: ___MB
+
+## Testing Recommendations
+
+**Performance testing needed:**
+- [ ] Load testing (10x traffic simulation)
+- [ ] Stress testing (find breaking point)
+- [ ] Profiling (identify hotspots)
+- [ ] Memory leak testing
+- [ ] Database query analysis
+
+**Tools to use:**
+- Load testing: k6, Artillery, JMeter
+- Profiling: Chrome DevTools, React Profiler
+- Database: EXPLAIN ANALYZE, Query analyzer
+- Bundle: webpack-bundle-analyzer
+
+## Be Specific
+- Provide exact measurements, not guesses
+- Show actual Big O complexity
+- Calculate real breaking points
+- Estimate actual effort and impact
+- Prioritize by pain at scale

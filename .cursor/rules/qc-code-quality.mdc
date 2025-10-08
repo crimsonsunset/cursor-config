@@ -1,0 +1,389 @@
+---
+alwaysApply: false
+---
+
+# Code Quality Deep Dive
+
+Perform a harsh code quality review. Look for code smells, SOLID violations, and complexity issues.
+
+## Review Focus
+
+For EACH issue found, provide:
+1. **Exact location** - file:line
+2. **Why it's a problem** - real consequences
+3. **Severity rating** - critical/major/minor
+4. **Concrete refactoring suggestion** - specific fix
+
+## Code Smells to Identify
+
+### 1. Bloaters
+**Long Method**
+- Functions >50 lines
+- Functions doing multiple things
+- Deep nesting (>3 levels)
+
+**Example finding:**
+```
+❌ Problem at src/components/UserProfile.jsx:45-180
+- 135-line function handling authentication, validation, and UI
+- Severity: Major
+- Fix: Extract into authenticateUser(), validateInput(), renderUI()
+```
+
+**Large Class/Module**
+- Files >300 lines
+- Classes/modules with too many responsibilities
+- God objects
+
+**Primitive Obsession**
+- Using primitives instead of domain objects
+- Magic numbers without constants
+- String parsing everywhere
+
+**Long Parameter List**
+- Functions with >4 parameters
+- Configuration objects without structure
+- Boolean flags as parameters
+
+**Data Clumps**
+- Same group of variables appearing together
+- Should be extracted into object/class
+
+### 2. Object-Orientation Abusers
+
+**Switch Statements**
+- Long switch/case blocks
+- Should use polymorphism or lookup tables
+
+**Temporary Field**
+- Class fields only used sometimes
+- Indicates class doing too much
+
+**Refused Bequest**
+- Subclass not using inherited methods
+- Wrong inheritance hierarchy
+
+**Alternative Classes with Different Interfaces**
+- Similar classes with different method names
+- Should unify interface
+
+### 3. Change Preventers
+
+**Divergent Change**
+- One class changed for many reasons
+- Violates Single Responsibility Principle
+
+**Shotgun Surgery**
+- One change requires touching many files
+- Tight coupling problem
+
+**Parallel Inheritance Hierarchies**
+- Every time you subclass A, you must subclass B
+- Wrong abstraction
+
+### 4. Dispensables
+
+**Comments**
+- Comments explaining what code does (should be obvious)
+- Commented-out code still in codebase
+- Outdated comments
+
+**Duplicate Code**
+- Copy-pasted logic
+- Same pattern repeated
+- Should be extracted/abstracted
+
+**Dead Code**
+- Unused functions/variables
+- Unreachable code
+- Legacy code not deleted
+
+**Speculative Generality**
+- Abstract interfaces with one implementation
+- Flexibility that's never used
+- YAGNI violations
+
+**Lazy Class**
+- Class that doesn't do enough to justify existence
+- Should be merged or deleted
+
+### 5. Couplers
+
+**Feature Envy**
+- Method uses more of another class than its own
+- Should be moved to other class
+
+**Inappropriate Intimacy**
+- Classes knowing too much about each other's internals
+- Should use proper interfaces
+
+**Message Chains**
+- `a.getB().getC().getD()`
+- Violates Law of Demeter
+- Tight coupling
+
+**Middle Man**
+- Class that just delegates to another class
+- Should be removed or justified
+
+## SOLID Principles Violations
+
+### Single Responsibility Principle
+**Definition:** A class/module should have only one reason to change.
+
+**Look for:**
+- Components handling state + display + API calls
+- Modules doing validation + business logic + formatting
+- Files with multiple unrelated exports
+
+**Example violation:**
+```javascript
+// ❌ UserManager does too much
+class UserManager {
+  authenticateUser() { }
+  validateEmail() { }
+  sendNotification() { }
+  formatUserName() { }
+  logAnalytics() { }
+}
+```
+
+**Should be:**
+```javascript
+// ✅ Split responsibilities
+class UserAuthenticator { }
+class EmailValidator { }
+class NotificationService { }
+class UserFormatter { }
+class AnalyticsLogger { }
+```
+
+### Open/Closed Principle
+**Definition:** Open for extension, closed for modification.
+
+**Look for:**
+- Long if/else or switch statements
+- Hardcoded type checks
+- Adding new feature requires modifying existing code
+
+**Example violation:**
+```javascript
+// ❌ Must modify to add payment methods
+function processPayment(type, amount) {
+  if (type === 'credit') { /* ... */ }
+  else if (type === 'debit') { /* ... */ }
+  else if (type === 'paypal') { /* ... */ }
+}
+```
+
+**Should use:**
+- Strategy pattern
+- Polymorphism
+- Dependency injection
+
+### Liskov Substitution Principle
+**Definition:** Subtypes must be substitutable for base types.
+
+**Look for:**
+- Subclasses throwing "not implemented" errors
+- Subclasses changing expected behavior
+- Overridden methods with different contracts
+
+### Interface Segregation Principle
+**Definition:** Many specific interfaces > one general interface.
+
+**Look for:**
+- Large interfaces with many methods
+- Components implementing interfaces but only using few methods
+- Components with many unused props
+
+### Dependency Inversion Principle
+**Definition:** Depend on abstractions, not concretions.
+
+**Look for:**
+- Direct instantiation of classes throughout code
+- Hardcoded dependencies
+- No use of dependency injection
+- Tightly coupled to specific implementations
+
+## Complexity Analysis
+
+### Cyclomatic Complexity
+**Threshold:** >10 is concerning, >15 is critical
+
+**Calculate branches:**
+- Each if/else: +1
+- Each case: +1
+- Each loop: +1
+- Each logical operator (&&, ||): +1
+
+**Example:**
+```javascript
+// Cyclomatic Complexity: 12 (too high!)
+function validateUser(user) {
+  if (user.age < 18 || user.age > 100) return false;      // +2
+  if (!user.email || !user.email.includes('@')) return false; // +3
+  if (user.role === 'admin' || user.role === 'moderator') {  // +2
+    if (user.verified) return true;                        // +1
+    else return false;                                     // +1
+  }
+  // ... more branches
+}
+```
+
+**Identify functions with complexity >10 and suggest simplification.**
+
+### Nesting Depth
+**Threshold:** >3 levels is concerning
+
+**Example:**
+```javascript
+// ❌ Too deeply nested
+if (user) {
+  if (user.isActive) {
+    if (user.hasPermission) {
+      if (user.role === 'admin') {
+        if (condition) {
+          // deeply nested logic
+        }
+      }
+    }
+  }
+}
+```
+
+**Fix:** Early returns, extraction, guard clauses
+
+### Cognitive Complexity
+**Beyond cyclomatic - consider:**
+- Nested conditionals (worse than sequential)
+- Recursion
+- Breaks in flow (continue, break, goto)
+- Jumping around (callbacks, promises chains)
+
+## Naming Quality
+
+### Poor Naming Examples
+- `data`, `info`, `temp`, `x`, `foo`, `manager`, `helper`, `util`
+- Single letter variables (except loop counters)
+- Abbreviations without clear meaning
+- Inconsistent naming across codebase
+
+### Good Naming Patterns
+- Verbs for functions: `getUserById`, `calculateTotal`, `validateInput`
+- Nouns for variables: `activeUsers`, `totalAmount`, `validationError`
+- Boolean names: `isActive`, `hasPermission`, `canEdit`, `shouldRetry`
+- Consistent terminology across codebase
+
+**Identify naming issues:**
+- Unclear names that obscure intent
+- Names that lie about what they do
+- Inconsistent naming patterns
+
+## Code Organization Issues
+
+### File Organization
+- [ ] Related code grouped together
+- [ ] Clear file naming convention
+- [ ] Consistent directory structure
+- [ ] No giant "utils" dump files
+
+### Import Organization
+- [ ] Imports grouped logically
+- [ ] No unused imports
+- [ ] Consistent import order
+- [ ] Relative vs. absolute paths consistent
+
+### Function Organization
+- [ ] Public functions at top
+- [ ] Helper functions near usage
+- [ ] Related functions grouped
+- [ ] Logical flow top-to-bottom
+
+## Refactoring Opportunities
+
+For each major refactoring opportunity, document:
+
+### Pattern: [Name of refactoring needed]
+**Location:** [file:line]
+
+**Current code:** (simplified example)
+```javascript
+// Problematic code here
+```
+
+**Problem:**
+- 
+
+**Proposed refactoring:**
+```javascript
+// Improved code here
+```
+
+**Effort:** ___ hours
+**Impact:** High/Medium/Low
+**Risk:** High/Medium/Low
+
+## Output Template
+
+### Code Quality Score: ___/5
+
+### Critical Issues (Blocks production)
+1. **God class at `src/services/UserService.js`**
+   - 850 lines, handles auth + validation + formatting + logging
+   - Severity: P0 - Untestable, causes bugs
+   - Fix: Split into 4 separate services (8 hours)
+
+### Major Issues (Causes incidents)
+1. **Cyclomatic complexity 23 at `src/utils/validator.js:45`**
+   - 23 branches, impossible to reason about
+   - Severity: P1 - Bug-prone, hard to maintain
+   - Fix: Extract validation rules, use lookup table (4 hours)
+
+### Code Smells (Accumulates debt)
+1. **Duplicate code: same validation logic in 8 files**
+   - Copy-pasted email validation
+   - Severity: P2 - Will cause inconsistency
+   - Fix: Create shared validator (2 hours)
+
+### SOLID Violations
+- SRP: [list violations]
+- OCP: [list violations]
+- LSP: [list violations]
+- ISP: [list violations]
+- DIP: [list violations]
+
+### Complexity Hotspots
+| File | Function | Complexity | Lines | Recommended Action |
+|------|----------|------------|-------|-------------------|
+|      |          |            |       |                   |
+
+### Top 5 Files Needing Refactoring
+1. `path/to/file.js` - [reason]
+2. `path/to/file.js` - [reason]
+3. `path/to/file.js` - [reason]
+4. `path/to/file.js` - [reason]
+5. `path/to/file.js` - [reason]
+
+### Quick Wins (Low effort, high impact)
+1. 
+2. 
+3. 
+
+### Major Refactors (High effort, high impact)
+1. 
+2. 
+3. 
+
+### Total Estimated Refactoring Effort
+- P0 fixes: ___ hours
+- P1 fixes: ___ hours
+- P2 fixes: ___ hours
+- **Total:** ___ hours (___ days)
+
+## Remember
+- Don't just identify problems - explain WHY they matter
+- Provide specific locations and examples
+- Estimate effort to fix
+- Prioritize ruthlessly
+- Be brutal but constructive

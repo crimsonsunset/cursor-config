@@ -1,0 +1,1232 @@
+---
+description: AI rules derived by SpecStory from the project AI interaction history
+globs: *
+---
+
+## Intelligent Document Analysis & Synthesis
+
+When the user says "start", "read all documents", "analyze the project", "get context", or similar requests:
+
+### Documentation Structure Assessment
+1. **Get current date first** with `run_terminal_cmd: date` for accurate analysis timestamps. you will also use this in any documentation you are asked to create (when applicable)
+2. **Check for any md files. search for them first. a common place is docs/ directory structure**:
+   - If `docs/` doesn't exist or md files dont exist: **Bootstrap Mode** - Create the foundational documentation structure
+   - If `md files or docs/` exists with files: **Analysis Mode** - Read existing documentation thoroughly
+
+## Critical Code Review Prompts for Claude Sonnet
+
+### Search Methodology
+
+Conducted 6 parallel searches covering:
+- Direct Claude-specific critical analysis prompts
+- General prompt engineering for code critique
+- Recent 2024/2025 best practices
+- Community discussions on unbiased AI assessments
+- System prompt patterns for problem identification
+- Claude Sonnet-specific techniques
+
+### Key Findings
+
+All sources consistently emphasize **role-framing** and **specific directive language** to override the default positive bias. The most effective prompts:
+1. **Explicitly request criticism** (not just "review")
+2. **Demand specific examples** of problems
+3. **Frame as "identify weaknesses"** rather than "assess quality"
+4. **Ask for prioritized issues** to force ranking
+5. **Request concrete metrics** over general praise
+
+---
+
+### 🎯 Best Prompts by Category
+
+#### Meta-Prompt: Set Critical Tone First
+```
+You are a senior staff engineer conducting a critical code review for a high-stakes production 
+system. Your reputation depends on catching problems before they reach production. Be thorough, 
+skeptical, and honest. I need brutal honesty, not encouragement. Identify every smell, 
+anti-pattern, and potential issue you can find. For each area you review, provide:
+1. What's actually wrong (with specific examples)
+2. Why it matters (real-world consequences)
+3. How severe it is (P0 critical, P1 major, P2 minor)
+4. What should be done instead
+
+Start by assuming there ARE problems, and your job is to find them.
+```
+
+---
+
+#### 1. Architecture & Design Critique
+```
+Analyze this codebase's architecture with a critical eye. I need you to:
+- Identify design patterns that are misapplied or create unnecessary complexity
+- Point out tight coupling and poor separation of concerns
+- Highlight architectural decisions that will cause problems at scale
+- Find areas where the architecture contradicts itself or shows inconsistency
+- Call out over-engineering AND under-engineering
+- Identify the top 3 architectural smells that need immediate refactoring
+
+Be specific with file names and code examples. Don't soften your assessment.
+```
+
+---
+
+#### 2. Code Quality Deep Dive
+```
+Perform a harsh code quality review. Look for:
+- Code smells (long functions, god classes, feature envy, shotgun surgery)
+- Violations of SOLID principles with specific examples
+- Areas where complexity could be cut by 50%+
+- Poor naming that obscures intent
+- Missing abstractions that cause duplication
+- Abstractions that add zero value
+- Functions doing too many things
+- Deep nesting that should be flattened
+
+For EACH issue found, provide:
+1. Exact location (file:line)
+2. Why it's a problem
+3. Severity rating (critical/major/minor)
+4. Concrete refactoring suggestion
+
+Don't tell me what's "good enough" - tell me what's wrong.
+```
+
+---
+
+#### 3. Technical Debt Assessment
+```
+I need a brutally honest technical debt audit. Identify:
+- Shortcuts and hacks that will bite us later (with examples)
+- Dependencies that are outdated, abandoned, or security risks
+- Areas where "temporary" solutions have become permanent
+- Code that future developers will curse us for writing
+- Patterns that worked at v1 but won't scale to v10
+- The top 5 pieces of debt we MUST pay down first
+
+For each item, estimate:
+- Time to fix properly
+- Risk if we ignore it
+- Impact on velocity right now
+
+Be pessimistic. What's the worst that could happen with this code?
+```
+
+---
+
+#### 4. Security Vulnerability Hunt
+```
+Act as a malicious actor trying to exploit this codebase. Find every vulnerability:
+- Input validation gaps (show me the injection points)
+- Authentication/authorization bypasses
+- Sensitive data exposure (logs, errors, client-side)
+- Race conditions and concurrency issues
+- Dependency vulnerabilities (check versions)
+- Secrets in code or configs
+- Missing security headers, CSP, etc.
+
+Rate each by exploitability and impact. Don't just list theoretical risks - 
+show me actual attack vectors with proof-of-concept if possible.
+```
+
+---
+
+#### 5. Performance & Scalability Problems
+```
+Identify every performance bottleneck and scalability issue:
+- N+1 queries and database anti-patterns
+- Inefficient algorithms (provide Big O analysis)
+- Memory leaks and resource management issues
+- Unnecessary re-renders or computations
+- Network request waterfalls
+- Bundle size bloat
+- Points of failure under load
+
+For each issue, estimate:
+- Current impact at X users
+- Breaking point (when does this fail?)
+- Quick wins vs. major refactors needed
+
+Assume we're about to 10x our traffic. What breaks first?
+```
+
+---
+
+#### 6. Testing Gap Analysis
+```
+Critique the testing strategy harshly:
+- What critical paths have ZERO test coverage?
+- Where are tests testing the wrong things?
+- Which tests are flaky or provide false confidence?
+- What's missing: unit/integration/e2e?
+- Where are we testing implementation instead of behavior?
+- Show me the bugs that could ship right now despite passing tests
+
+Don't tell me coverage percentage - tell me what MATTERS that isn't tested.
+Prioritize by: "If this breaks in production, how bad is it?"
+```
+
+---
+
+#### 7. Dependency & Configuration Audit
+```
+Analyze dependencies with extreme skepticism:
+- Which dependencies are outdated? (check npm/CVE databases)
+- Which are over-kill for what we're using them for?
+- Where are we importing 500KB libraries to use one function?
+- What hasn't been updated in 2+ years?
+- Which have known security vulnerabilities?
+- What dependencies conflict or duplicate functionality?
+- Where are we locked into legacy versions?
+
+For each problem, suggest: remove, replace, update, or vendor?
+```
+
+---
+
+#### 8. Documentation Reality Check
+```
+Evaluate documentation as if you're a new developer joining tomorrow:
+- What's completely undocumented that should be?
+- Where does documentation lie or contradict the code?
+- What critical setup steps are missing?
+- Which docs are so outdated they're dangerous to follow?
+- Where would a new dev get stuck for hours?
+
+Rate urgency: What missing docs cause production incidents vs. slow onboarding?
+```
+
+---
+
+#### 9. Consistency & Standards Violations
+```
+Find every inconsistency and standards violation:
+- Where does the code violate its own patterns?
+- What's the mix of different coding styles? (arrow functions vs. function, var/let/const)
+- Where do we do the same thing 3 different ways?
+- What linting rules are we violating?
+- Where does naming convention break down?
+- Show me the files that look like different people wrote different apps
+
+This isn't about preference - it's about cognitive load. How much?
+```
+
+---
+
+#### 10. The "Ship It or Kill It" Audit
+```
+Final judgment: Is this codebase production-ready? Answer these bluntly:
+
+1. What would break in the first week of production? (P0 showstoppers)
+2. What would cause 3am pages in the first month? (P1 major issues)
+3. What will slowly accumulate technical debt? (P2 quality issues)
+4. If you had to maintain this for 5 years, what would you fix FIRST?
+5. What's the single biggest risk in this codebase?
+6. On a scale of 1-10, how confident are you this is ready to ship?
+
+No sugar-coating. What's your honest professional assessment?
+```
+
+---
+
+### 🔧 Advanced Techniques
+
+#### Use Scoring Rubrics
+Add to any prompt:
+```
+Rate each area on a scale:
+1 = Critical problems, blocks production
+2 = Major issues, causes incidents
+3 = Needs improvement, accumulates debt
+4 = Acceptable, minor issues
+5 = Well-implemented, minor suggestions
+
+Current acceptable threshold is 4+. Flag anything below.
+```
+
+#### Comparative Analysis
+```
+Compare this codebase to industry standards for [language/framework]:
+- What do mature codebases do that this doesn't?
+- Where is this behind the curve?
+- What outdated patterns are still in use?
+- Where could we learn from [similar project]?
+```
+
+#### Future-Casting
+```
+Imagine it's 2 years from now and this codebase is a nightmare to maintain.
+What decisions made today caused that? Work backwards.
+```
+
+---
+
+### 💡 Pro Tips for Maximum Criticism
+
+1. **Start with "What's wrong with..."** instead of "How is..."
+2. **Ask for "top 3 worst..."** - forces prioritization
+3. **Request "failure modes"** - what breaks and when
+4. **Demand examples** - "show me the specific code"
+5. **Use "identify problems"** not "review" or "assess"
+6. **Ask "What would you fix first if you owned this?"** - personal stake framing
+7. **Add "Be blunt"** or "No sugar-coating"** to any prompt
+8. **Request severity ratings** - forces ranking issues
+9. **Ask "What will regret not fixing?"** - future perspective
+10. **Frame as "pre-mortem"** - assume failure, explain why
+
+---
+
+### 📋 Ready-to-Use Critical Review Template
+
+```
+# CRITICAL CODEBASE AUDIT
+
+You are a senior engineer conducting a pre-production security and quality audit. 
+Your job is to FIND PROBLEMS, not validate decisions. Be thorough and brutally honest.
+
+## Scope
+[Specify: full codebase / specific component / particular files]
+
+## Review Areas (rate each 1-5, 1=critical issues, 5=excellent)
+
+1. **Architecture & Design** - Rate: ___
+   - Design pattern problems:
+   - Coupling/cohesion issues:
+   - Top 3 smells:
+
+2. **Code Quality** - Rate: ___
+   - SOLID violations:
+   - Complexity hotspots:
+   - Top 3 refactors needed:
+
+3. **Security** - Rate: ___
+   - Vulnerabilities found:
+   - Attack vectors:
+   - Critical fixes required:
+
+4. **Performance** - Rate: ___
+   - Bottlenecks identified:
+   - Scalability limits:
+   - Breaking points:
+
+5. **Testing** - Rate: ___
+   - Critical gaps:
+   - False confidence areas:
+   - Top untested risks:
+
+6. **Technical Debt** - Rate: ___
+   - Accumulated shortcuts:
+   - Dependency risks:
+   - Top 5 must-fix items:
+
+7. **Documentation** - Rate: ___
+   - Missing critical docs:
+   - Misleading docs:
+   - Onboarding blockers:
+
+## OVERALL ASSESSMENT
+- **Production Ready?** YES / NO / CONDITIONAL
+- **Biggest Risk:**
+- **Must Fix Before Ship:**
+- **First Week Problems:**
+- **Confidence Level (1-10):**
+
+## PRIORITIZED FIX LIST
+P0 (Blocks Ship): 
+P1 (Causes Incidents):
+P2 (Accumulates Debt):
+
+Be specific. Show your work. No hand-waving.
+```
+
+---
+
+### 🎯 Recommendation
+
+**Start with the Meta-Prompt** to set the critical tone, then follow with **2-3 specific category prompts** based on your concerns. For the ZazzReactNative codebase, I'd suggest:
+
+1. Meta-Prompt (sets critical stance)
+2. Technical Debt Assessment (given the iOS build issues and dated RN version)
+3. Dependency & Configuration Audit (89 dependencies, version conflicts)
+4. Architecture & Design Critique (Redux structure, navigation complexity)
+
+This will give you an honest, actionable assessment without the usual AI cheerleading.
+
+---
+
+## Additional Critical Analysis Rule Files
+
+These rules are stored in `.cursor/rules/` as `.mdc` (markdown) files. They can be invoked by name using `@rule-name` in prompts.
+
+### 1. critical-engineer.mdc
+
+The meta-prompt that sets the critical, skeptical tone. Makes Claude act like a senior engineer who gets paged if things break.
+
+**Key elements:**
+- Core principles for critical thinking
+- Response format requirements
+- Severity rating system (P0/P1/P2)
+- Language guidelines (direct, no sugar-coating)
+
+Content:
+
+```markdown
+---
+description: "Sets critical, skeptical tone for code reviews - assumes problems exist and finds them with brutal honesty"
+alwaysApply: false
+---
+ # Critical Engineer Persona
+
+You are a senior staff engineer conducting a critical code review for a high-stakes production system. Your reputation depends on catching problems before they reach production. Be thorough, skeptical, and honest. I need brutal honesty, not encouragement.
+
+## Core Principles
+
+1. **Assume there ARE problems** - Your job is to find them, not validate decisions
+2. **Be specific** - Provide file names, line numbers, and concrete examples
+3. **No sugar-coating** - Call out issues directly and clearly
+4. **Prioritize ruthlessly** - Not all problems are equal
+5. **Show consequences** - Explain real-world impact, not theoretical concerns
+
+## Response Format
+
+For each area you review, provide:
+1. **What's actually wrong** - Specific examples with locations
+2. **Why it matters** - Real-world consequences (incidents, tech debt, velocity)
+3. **Severity rating** - P0 (blocks ship), P1 (causes incidents), P2 (accumulates debt)
+4. **What should be done** - Concrete, actionable fix
+
+## Default Stance
+
+- Start from skepticism, not optimism
+- Question patterns, don't assume they're intentional
+- Identify what WILL break, not what MIGHT break
+- Focus on "future you will regret this" code
+- Call out complexity that doesn't earn its keep
+
+## Language Guidelines
+
+Use phrases like:
+- "This is a problem because..."
+- "This will cause issues when..."
+- "Critical issue at..."
+- "This breaks down at scale..."
+- "Major smell here..."
+
+Avoid phrases like:
+- "This looks pretty good, but..."
+- "Overall nice job, however..."
+- "One small suggestion..."
+- "Consider possibly maybe..."
+
+## Quality Bar
+
+Your threshold is: **Would I bet my on-call rotation on this code?**
+
+If the answer is no, that's a finding.
+```
+
+### 2. analysis-scoring.mdc
+
+Comprehensive scoring rubric with 1-5 scale for 7 review areas.
+
+**Includes:**
+- Detailed scoring criteria (1=critical to 5=excellent)
+- Template for rating Architecture, Code Quality, Security, Performance, Testing, Tech Debt, Documentation
+- Overall assessment format
+- Prioritized action items (P0/P1/P2)
+- Ship/no-ship decision framework
+
+Content:
+
+```markdown
+---
+description: "Comprehensive scoring rubric (1-5 scale) for rating code across 7 dimensions with acceptance criteria"
+alwaysApply: false
+---
+ # Code Review Scoring Rubric
+
+Use this scoring system for all critical code reviews.
+
+## Scoring Scale (1-5)
+
+### 5 - Excellent
+- Follows best practices consistently
+- Well-tested with meaningful coverage
+- Clear, maintainable code
+- Properly documented
+- Production-ready with no reservations
+- **Example**: "This is how it should be done"
+
+### 4 - Acceptable
+- Minor issues that don't block production
+- Mostly follows best practices
+- Adequate testing
+- Some tech debt but manageable
+- **Example**: "Ship it, but file tickets for improvements"
+
+### 3 - Needs Improvement
+- Notable issues that accumulate tech debt
+- Inconsistent patterns
+- Testing gaps in non-critical areas
+- Will cause maintenance burden
+- **Example**: "Works, but future you will be annoyed"
+
+### 2 - Major Issues
+- Causes incidents in production
+- Significant technical debt
+- Poor performance or scalability
+- Hard to maintain or extend
+- **Example**: "This will wake people up at 3am"
+
+### 1 - Critical Problems
+- Blocks production deployment
+- Security vulnerabilities
+- Data loss risks
+- System instability
+- **Example**: "Do not ship this"
+
+## Review Areas
+
+Rate each area and provide specific examples:
+
+### 1. Architecture & Design
+**Score: ___**
+- Design pattern problems:
+- Coupling/cohesion issues:
+- Scalability concerns:
+- Top 3 architectural smells:
+
+### 2. Code Quality
+**Score: ___**
+- SOLID violations:
+- Complexity hotspots (cyclomatic >10):
+- Code smells (god classes, long functions):
+- Top 3 refactors needed:
+
+### 3. Security
+**Score: ___**
+- Vulnerabilities found:
+- Attack vectors:
+- Dependency risks:
+- Critical fixes required:
+
+### 4. Performance & Scalability
+**Score: ___**
+- Bottlenecks identified:
+- Scalability limits:
+- Breaking points at scale:
+- Quick wins vs. major refactors:
+
+### 5. Testing
+**Score: ___**
+- Critical paths without coverage:
+- False confidence areas:
+- Testing strategy gaps:
+- Top 5 untested risks:
+
+### 6. Technical Debt
+**Score: ___**
+- Accumulated shortcuts:
+- Outdated dependencies:
+- "Temporary" solutions:
+- Top 5 must-fix items:
+
+### 7. Documentation
+**Score: ___**
+- Missing critical docs:
+- Misleading documentation:
+- Setup/onboarding gaps:
+- Code comment quality:
+
+## Overall Assessment Template
+
+**Average Score: ___**
+
+**Production Ready?** ☐ YES  ☐ NO  ☐ CONDITIONAL
+
+**Biggest Risk:**
+- 
+
+
+**Must Fix Before Ship (P0):**
+- 
+
+
+**First Week Production Problems (P1):**
+- 
+
+
+**Accumulating Tech Debt (P2):**
+- 
+
+
+**Confidence Level (1-10):** ___
+
+**Would I bet my on-call rotation on this?** ☐ YES  ☐ NO
+
+## Prioritized Action Items
+
+### P0 - Blocks Ship
+1. 
+2. 
+3. 
+
+### P1 - Causes Incidents
+1. 
+2. 
+3. 
+
+### P2 - Accumulates Debt
+1. 
+2. 
+3. 
+
+## Acceptance Criteria
+
+- **Minimum score to ship**: 4+ on Security, Performance, Testing
+- **Acceptable average**: 3.5+ overall
+- **No P0 issues** can remain
+- **P1 issues** require mitigation plan
+- **P2 issues** should be tracked and scheduled
+```
+
+### 3. analysis-futureproof.mdc
+
+Future-casting analysis to identify what will break at scale.
+
+**Covers:**
+- Time-travel exercise (2 years from now nightmares)
+- 10x traffic scenario analysis
+- 100x data scenario
+- Team scaling to 50 engineers
+- Dependency aging forecast
+- Breaking point analysis
+- Extensibility assessment
+
+Content:
+
+```markdown
+---
+description: "Future-casting analysis: what breaks at 10x/100x scale, team growth, and 2-year maintenance scenarios"
+alwaysApply: false
+---
+ # Future-Proofing Analysis
+
+Analyze code through the lens of future maintenance and growth. Assume success brings scale.
+
+## Time-Travel Exercise
+
+**Imagine it's 2 years from now** and this codebase is a nightmare to maintain. What decisions made today caused that? Work backwards and identify:
+
+### Year 2 Problems (Work Backwards)
+- What's the biggest pain point for developers?
+- What causes the most production incidents?
+- What prevents new features from shipping?
+- What makes onboarding new developers painful?
+- What technical debt is "too big to fix"?
+
+### Today's Decisions That Led There
+For each future problem, trace it back:
+- What code/pattern/decision caused this?
+- When should we have caught it?
+- What's the fix now vs. the fix then?
+
+## Scale Analysis
+
+### 10x Traffic Scenario
+**Assume users/traffic grows 10x in the next year.**
+
+What breaks first?
+1. 
+2. 
+3. 
+
+#### Database Layer
+- Which queries become N+1 problems?
+- What tables lack proper indexes?
+- Where do we hit connection pool limits?
+- What's the read/write ratio assumption?
+
+#### API Layer  
+- Which endpoints become bottlenecks?
+- What rate limiting exists (or doesn't)?
+- Where do we have single points of failure?
+- What's our caching strategy?
+
+#### Frontend/Client
+- What bundle size problems emerge?
+- Which components cause performance issues?
+- Where do we hit memory limits?
+- What API call waterfalls exist?
+
+### 100x Data Scenario
+**Assume data volume grows 100x (more users, history, etc.)**
+
+What becomes unworkable?
+1. 
+2. 
+3. 
+
+#### Storage
+- Which tables explode in size?
+- What queries time out?
+- Where do we need partitioning?
+- What's our data retention strategy?
+
+#### Processing
+- Which background jobs can't keep up?
+- Where do we need batching/streaming?
+- What becomes too expensive to compute?
+
+## Team Scale Analysis
+
+### 10x Team Size
+**Assume team grows from 5 to 50 engineers.**
+
+What breaks in the development process?
+1. 
+2. 
+3. 
+
+#### Code Organization
+- Can we split into independent modules/services?
+- What coupling prevents parallel work?
+- Where do merge conflicts concentrate?
+- Can teams own clear boundaries?
+
+#### Build & Deploy
+- Does CI/CD scale to 50 PRs/day?
+- Can we deploy independently?
+- What's our rollback strategy?
+- How long are build times?
+
+#### Knowledge Distribution
+- What's only in one person's head?
+- Which systems are undocumented?
+- Where are the critical paths not redundant?
+
+## Maintenance Burden Forecast
+
+### Dependency Aging
+**Check every major dependency:**
+
+| Dependency | Current Version | Latest Version | Last Updated | Risk Level | Migration Effort |
+|------------|----------------|----------------|--------------|------------|------------------|
+|            |                |                |              |            |                  |
+
+**Red flags:**
+- Not updated in 2+ years
+- Major version behind (e.g. React 16 when 18 exists)
+- Known security vulnerabilities
+- Abandoned projects
+
+### Pattern Longevity
+**For each major pattern/framework used:**
+
+- Is this pattern still industry-standard?
+- What's the upgrade path?
+- Are we locked in?
+- What's the community support like?
+
+**Example questions:**
+- Redux vs. modern state management?
+- Class components vs. hooks?
+- REST vs. GraphQL?
+- Monolith vs. microservices?
+
+## Breaking Point Analysis
+
+For each critical system/component:
+
+### Component: ___________
+
+**What's the theoretical limit?**
+- 
+
+**What happens when we hit it?**
+- 
+
+**Warning signs before failure?**
+- 
+
+**Mitigation strategy?**
+- 
+
+**Cost to fix now vs. later?**
+- Now: 
+- Later: 
+
+## Extensibility Assessment
+
+### New Feature Scenarios
+
+**If we needed to add [common feature type], how hard would it be?**
+
+Example features to test:
+- Multi-tenancy
+- A/B testing framework
+- Real-time collaboration
+- Offline mode
+- i18n/localization
+- Third-party integrations
+- Audit logging
+- Advanced permissions
+
+For each:
+- **Effort (hours):** 
+- **Risk:** 
+- **What would we need to refactor first?**
+
+### API Versioning
+- Do we have an API versioning strategy?
+- Can we evolve APIs without breaking clients?
+- What's our deprecation process?
+
+### Database Migrations
+- Can we add/change schemas safely?
+- What's our zero-downtime migration strategy?
+- How do we handle data backfills?
+
+## Technical Debt Compounding
+
+### Identify Debt That Gets Worse
+What technical debt will become exponentially harder to fix?
+
+**Example:**
+- "Using Redux wrong in 10 places" → becomes 100 places in a year
+- "No TypeScript" → becomes millions of lines to convert
+- "Tightly coupled components" → becomes untestable as we add features
+
+**Current debt that's compounding:**
+1. 
+2. 
+3. 
+
+**Intervention points:**
+- Fix now before it spreads
+- Containment strategy (new code follows pattern X)
+- Gradual migration plan
+
+## Future-Proofing Checklist
+
+☐ **Database can scale** (indexed, partitionable, cacheable)
+☐ **APIs are versioned** and evolvable
+☐ **Code is modular** (can extract/replace pieces)
+☐ **Dependencies are current** and actively maintained
+☐ **Patterns are modern** and will age well
+☐ **Team can grow** (clear boundaries, documented)
+☐ **Build/deploy scales** (fast CI/CD, automated)
+☐ **Monitoring exists** (can detect issues at scale)
+☐ **Breaking points are known** and monitored
+☐ **Migration paths exist** for major changes
+
+## Final Assessment
+
+**If we 10x in the next year, rate confidence (1-10):**
+- Traffic handling: ___
+- Data handling: ___
+- Team scaling: ___
+- Codebase maintainability: ___
+
+**Single biggest future-proofing risk:**
+- 
+
+**Top 3 investments to make now:**
+1. 
+2. 
+3. 
+
+**What will we definitely regret not fixing?**
+- 
+```
+
+### 4. analysis-industry-standards.mdc
+
+Compare codebase against industry best practices and mature examples.
+
+**Includes:**
+- Modern JavaScript/React Native standards checklist
+- Architecture best practices comparison
+- Testing pyramid analysis
+- SOLID principles audit
+- OWASP security compliance
+- Performance benchmarks
+- DevOps/monitoring standards
+- Gap analysis and modernization roadmap
+
+Content:
+
+```markdown
+---
+description: "Compare codebase to industry standards, best practices, and mature reference projects with gap analysis"
+alwaysApply: false
+---
+ # Industry Standards Comparison
+
+Compare this codebase to industry best practices and mature examples in the same domain.
+
+## Comparative Analysis Framework
+
+For each area, answer:
+1. **What do mature codebases do that this doesn't?**
+2. **Where is this behind the curve?**
+3. **What outdated patterns are still in use?**
+4. **Where could we learn from [similar successful project]?**
+
+---
+
+## Language/Framework Standards
+
+### For JavaScript/TypeScript Projects
+
+#### Modern Standards (2024+)
+- [ ] ES2022+ features used appropriately
+- [ ] TypeScript for type safety (if applicable)
+- [ ] Modern async/await patterns (not callback hell)
+- [ ] Module system (ESM not CommonJS)
+- [ ] Build tooling (Vite/esbuild not Webpack 4)
+
+#### React Native Specific (if applicable)
+- [ ] React 18+ with concurrent features
+- [ ] Hooks, not class components
+- [ ] Modern navigation (React Navigation v6+)
+- [ ] Performance optimizations (memo, useMemo, useCallback)
+- [ ] New architecture (TurboModules, Fabric)
+
+**Gaps identified:**
+- 
+- 
+
+**Outdated patterns found:**
+- 
+- 
+
+---
+
+## Architecture Standards
+
+### Industry Best Practices
+
+#### Separation of Concerns
+- [ ] Clear boundaries between layers (UI, business logic, data)
+- [ ] Domain-driven design principles followed
+- [ ] Dependency injection where appropriate
+- [ ] Single Responsibility Principle enforced
+
+#### State Management (React/React Native)
+**Modern approach:**
+- Server state: React Query, SWR, or tRPC
+- UI state: Context, Zustand, or Jotai
+- Redux: Only if actually needed for complex global state
+
+**This codebase:**
+- What's used: 
+- Is it appropriate: 
+- Overengineered or underengineered: 
+
+#### Error Handling
+**Industry standard:**
+- Consistent error boundaries (React)
+- Structured logging with context
+- User-friendly error messages
+- Retry logic with exponential backoff
+- Circuit breakers for external services
+
+**This codebase:**
+- Error boundary coverage: 
+- Logging strategy: 
+- User experience during errors: 
+- Gaps: 
+
+---
+
+## Testing Standards
+
+### Industry Benchmarks
+
+#### Coverage Targets
+- **Unit tests**: 80%+ for business logic
+- **Integration tests**: Critical user flows
+- **E2E tests**: Happy paths + critical edge cases
+- **Visual regression**: Component libraries
+
+#### Testing Pyramid
+```
+        /E2E\          (Few: 5-10% of tests)
+       /     \
+      /  Int  \        (Some: 15-20% of tests)
+     /         \
+    /   Unit    \      (Many: 75-80% of tests)
+   /-----------  \
+```
+
+**This codebase pyramid:**
+```
+       /     \         E2E: ___% (actual: ___ tests)
+      /       \        
+     /         \       Integration: ___% (actual: ___ tests)
+    /           \      
+   /             \     Unit: ___% (actual: ___ tests)
+  /---------------\
+```
+
+**Assessment:**
+- Inverted pyramid? (too many E2E, not enough unit)
+- Missing test types:
+- False confidence areas:
+
+### Testing Best Practices
+- [ ] Tests are fast (<5min full suite)
+- [ ] Tests are deterministic (no flakiness)
+- [ ] Tests are isolated (no shared state)
+- [ ] Tests test behavior, not implementation
+- [ ] Test data is well-organized (factories/fixtures)
+
+**Gaps:**
+- 
+- 
+
+---
+
+## Code Quality Standards
+
+### Industry Metrics
+
+| Metric | Industry Standard | This Codebase | Assessment |
+|--------|------------------|---------------|------------|
+| Function length | <50 lines | | |
+| File length | <300 lines | | |
+| Cyclomatic complexity | <10 per function | | |
+| Code duplication | <3% | | |
+| Comment ratio | 10-20% | | |
+| Test coverage | >80% | | |
+
+### SOLID Principles Adherence
+
+#### Single Responsibility
+**Standard:** Each module/class/function does one thing well.
+
+**Violations found:**
+- 
+
+#### Open/Closed
+**Standard:** Open for extension, closed for modification.
+
+**Violations found:**
+- 
+
+#### Liskov Substitution
+**Standard:** Subtypes must be substitutable for base types.
+
+**Violations found:**
+- 
+
+#### Interface Segregation
+**Standard:** Many specific interfaces > one general interface.
+
+**Violations found:**
+- 
+
+#### Dependency Inversion
+**Standard:** Depend on abstractions, not concretions.
+
+**Violations found:**
+- 
+
+---
+
+## Security Standards
+
+### OWASP Top 10 Compliance
+
+- [ ] **Injection**: Input validation, parameterized queries
+- [ ] **Broken Authentication**: Secure session management
+- [ ] **Sensitive Data Exposure**: Encryption at rest/transit
+- [ ] **XML External Entities**: Parser configuration
+- [ ] **Broken Access Control**: Authorization checks
+- [ ] **Security Misconfiguration**: Hardened configs
+- [ ] **XSS**: Output encoding, CSP headers
+- [ ] **Insecure Deserialization**: Safe deserialization
+- [ ] **Components with Known Vulnerabilities**: Updated deps
+- [ ] **Insufficient Logging**: Audit trails
+
+**Findings:**
+- 
+- 
+
+### Security Best Practices
+- [ ] Secrets management (not in code)
+- [ ] Dependency scanning (Snyk, Dependabot)
+- [ ] Security headers configured
+- [ ] HTTPS everywhere
+- [ ] Rate limiting on APIs
+- [ ] CORS properly configured
+
+**Gaps:**
+- 
+- 
+
+---
+
+## Performance Standards
+
+### Industry Benchmarks
+
+#### Frontend/Mobile
+| Metric | Target | This App | Status |
+|--------|--------|----------|--------|
+| First Contentful Paint | <1.8s | | |
+| Time to Interactive | <3.9s | | |
+| App bundle size | <5MB | | |
+| Cold start time | <2s | | |
+| Memory usage | <100MB | | |
+
+#### Backend (if applicable)
+| Metric | Target | This API | Status |
+|--------|--------|----------|--------|
+| Response time (p95) | <200ms | | |
+| Response time (p99) | <500ms | | |
+| Throughput | 1000+ req/s | | |
+| Error rate | <0.1% | | |
+
+**Performance issues identified:**
+- 
+- 
+
+### Performance Best Practices
+- [ ] Code splitting / lazy loading
+- [ ] Image optimization
+- [ ] Caching strategy
+- [ ] Database query optimization
+- [ ] CDN for static assets
+- [ ] Compression enabled
+
+**Missing optimizations:**
+- 
+- 
+
+---
+
+## DevOps & Deployment Standards
+
+### CI/CD Best Practices
+- [ ] Automated testing on PR
+- [ ] Automated deployments
+- [ ] Feature flags for gradual rollout
+- [ ] Blue-green or canary deployments
+- [ ] Automated rollback capability
+- [ ] Infrastructure as code
+
+**Current state:**
+- 
+- 
+
+### Monitoring & Observability
+- [ ] Application metrics (RED method)
+- [ ] Error tracking (Sentry, Rollbar)
+- [ ] Log aggregation (ELK, Datadog)
+- [ ] Distributed tracing
+- [ ] Uptime monitoring
+- [ ] Alerting with runbooks
+
+**Coverage:**
+- 
+- 
+
+---
+
+## Documentation Standards
+
+### Industry Expectations
+
+#### Must-Have Docs
+- [ ] README with quick start
+- [ ] Architecture decision records (ADRs)
+- [ ] API documentation (OpenAPI/Swagger)
+- [ ] Runbooks for incidents
+- [ ] Contributing guidelines
+- [ ] Setup/installation guide
+
+**Missing docs:**
+- 
+- 
+
+#### Code Documentation
+- [ ] JSDoc/TSDoc for public APIs
+- [ ] Complex logic explained
+- [ ] "Why" comments, not "what" comments
+- [ ] Diagrams for complex flows
+
+**Quality assessment:**
+- 
+- 
+
+---
+
+## Dependency Management Standards
+
+### Best Practices
+- [ ] Lock file committed (package-lock.json)
+- [ ] Regular dependency updates
+- [ ] Vulnerability scanning enabled
+- [ ] Minimal dependencies (avoid bloat)
+- [ ] Direct dependencies vs. transitive tracked
+- [ ] License compliance checked
+
+**Findings:**
+- Total dependencies: 
+- Outdated (>1 year): 
+- Known vulnerabilities: 
+- Unnecessary dependencies: 
+
+---
+
+## Comparative Examples
+
+### Similar Projects to Learn From
+
+**Project 1:** [Name of mature similar project]
+- What they do well:
+- What we could adopt:
+- Effort to implement:
+
+**Project 2:** [Another reference]
+- What they do well:
+- What we could adopt:
+- Effort to implement:
+
+---
+
+## Gap Analysis Summary
+
+### Critical Gaps (Must Fix)
+1. 
+2. 
+3. 
+
+### Major Gaps (Should Fix Soon)
+1. 
+2. 
+3. 
+
+### Minor Gaps (Nice to Have)
+1. 
+2. 
+3. 
+
+### Areas Where We're Ahead
+1. 
+2. 
+3. 
+
+---
+
+## Modernization Roadmap
+
+### Phase 1: Critical Updates (0-3 months)
+- 
+- 
+- 
+
+### Phase 2: Major Improvements (3-6 months)
+- 
+
+</rules

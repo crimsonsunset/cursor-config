@@ -1,0 +1,511 @@
+---
+alwaysApply: false
+---
+# Complete Codebase Audit
+
+Comprehensive quality check across all dimensions.
+
+## Audit Scope
+
+This is the complete, systematic review. Use individual qc-* rules for focused analysis, or use this for a full assessment.
+
+## Audit Execution Order
+
+Follow this sequence for a thorough audit:
+
+### Phase 1: Quick Wins & Critical Issues (30 minutes)
+1. **Security scan**
+   - Run `npm audit`
+   - Check for secrets in code
+   - Review authentication/authorization
+   - **Use:** `@qc-security-vulns`
+
+2. **Dependency audit**
+   - Check for outdated packages
+   - Identify abandoned dependencies
+   - Review bundle size
+   - **Use:** `@qc-deps-config`
+
+3. **Standards check**
+   - Linting errors
+   - Formatting consistency
+   - Code style violations
+   - **Use:** `@qc-standards`
+
+### Phase 2: Code Quality Deep Dive (1-2 hours)
+4. **Code quality review**
+   - Code smells
+   - SOLID violations
+   - Complexity analysis
+   - **Use:** `@qc-code-quality`
+
+5. **Architecture assessment**
+   - Design patterns
+   - Separation of concerns
+   - Coupling/cohesion
+   - **Use:** `@qc-arch`
+
+6. **Technical debt inventory**
+   - TODOs and FIXMEs
+   - Shortcuts and hacks
+   - Duplicated code
+   - **Use:** `@qc-tech-debt`
+
+### Phase 3: Testing & Documentation (1 hour)
+7. **Testing analysis**
+   - Coverage gaps
+   - Test quality
+   - False confidence tests
+   - **Use:** `@qc-testing`
+
+8. **Documentation review**
+   - Setup instructions
+   - Architecture docs
+   - API documentation
+   - **Use:** `@qc-docs`
+
+### Phase 4: Performance & Scale (1 hour)
+9. **Performance audit**
+   - Bottlenecks
+   - Algorithm efficiency
+   - Memory leaks
+   - **Use:** `@qc-perf`
+
+### Phase 5: Final Assessment (30 minutes)
+10. **Ship/No-Ship decision**
+    - Production readiness
+    - Risk assessment
+    - Go/no-go verdict
+    - **Use:** `@qc-shipit-killit`
+
+## Complete Audit Template
+
+### Executive Summary
+
+**Date:** ___
+**Auditor:** ___
+**Codebase:** ___
+**Version:** ___
+
+**Overall Score:** ___/50 (sum of all category scores)
+
+**Overall Grade:** 
+- A (45-50): Excellent, ship with confidence
+- B (40-44): Good, ship with minor fixes
+- C (35-39): Acceptable, fix P0 issues first
+- D (30-34): Poor, significant work needed
+- F (<30): Critical issues, do not ship
+
+**Recommendation:** SHIP / CONDITIONAL / NO-SHIP
+
+### Category Scores
+
+| Category | Score | Grade | Status |
+|----------|-------|-------|--------|
+| Security | ___/5 | ___ | ❌✅⚠️ |
+| Dependencies | ___/5 | ___ | ❌✅⚠️ |
+| Code Quality | ___/5 | ___ | ❌✅⚠️ |
+| Architecture | ___/5 | ___ | ❌✅⚠️ |
+| Performance | ___/5 | ___ | ❌✅⚠️ |
+| Testing | ___/5 | ___ | ❌✅⚠️ |
+| Documentation | ___/5 | ___ | ❌✅⚠️ |
+| Standards | ___/5 | ___ | ❌✅⚠️ |
+| Tech Debt | ___/5 | ___ | ❌✅⚠️ |
+| Reliability | ___/5 | ___ | ❌✅⚠️ |
+
+### Issue Summary
+
+**P0 - Critical (Blocks Ship):** ___
+**P1 - Major (Causes Incidents):** ___
+**P2 - Minor (Tech Debt):** ___
+
+**Total Issues:** ___
+
+### Top 10 Issues (Prioritized)
+
+1. **[P0] Issue Title**
+   - Category: Security/Performance/Quality/etc.
+   - Impact: Critical
+   - Effort: ___ hours
+   - Status: ❌
+
+2. 
+3. 
+4. 
+5. 
+6. 
+7. 
+8. 
+9. 
+10. 
+
+### Quick Wins (High Impact, Low Effort)
+
+1. **Enable Prettier** - 30 min, eliminates all format inconsistency
+2. 
+3. 
+4. 
+5. 
+
+### Major Investments Needed
+
+1. **Refactor god component** - 3 days, +20% velocity
+2. 
+3. 
+
+### Strengths to Celebrate
+
+1. 
+2. 
+3. 
+
+### Critical Weaknesses
+
+1. 
+2. 
+3. 
+
+## Detailed Findings
+
+### 1. Security Assessment
+
+**Score:** ___/5
+
+**Critical vulnerabilities:** ___
+**High severity:** ___
+**Medium severity:** ___
+
+**Top 3 security issues:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-security-vulns` output
+
+### 2. Dependency Health
+
+**Score:** ___/5
+
+**Outdated (>1 year):** ___
+**Vulnerable:** ___
+**Abandoned:** ___
+
+**Top 3 dependency issues:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-deps-config` output
+
+### 3. Code Quality
+
+**Score:** ___/5
+
+**Files >300 lines:** ___
+**Functions >50 lines:** ___
+**Complexity >10:** ___
+**Duplicated code:** ___
+
+**Top 3 code smells:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-code-quality` output
+
+### 4. Architecture
+
+**Score:** ___/5
+
+**God components:** ___
+**Tight coupling:** ___
+**Missing abstractions:** ___
+
+**Top 3 architecture issues:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-arch` output
+
+### 5. Performance
+
+**Score:** ___/5
+
+**Bundle size:** ___ (target: <5MB)
+**Cold start:** ___ ms (target: <2000ms)
+**API p95:** ___ ms (target: <200ms)
+
+**Top 3 performance issues:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-perf` output
+
+### 6. Testing
+
+**Score:** ___/5
+
+**Coverage:** ___%
+**Critical paths without tests:** ___
+**Flaky tests:** ___
+
+**Top 3 testing gaps:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-testing` output
+
+### 7. Documentation
+
+**Score:** ___/5
+
+**Setup docs:** Complete/Partial/Missing
+**Architecture docs:** Complete/Partial/Missing
+**API docs:** Complete/Partial/Missing
+
+**Top 3 documentation gaps:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-docs` output
+
+### 8. Standards & Consistency
+
+**Score:** ___/5
+
+**Code style issues:** ___
+**Naming inconsistencies:** ___
+**Pattern violations:** ___
+
+**Top 3 consistency issues:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-standards` output
+
+### 9. Technical Debt
+
+**Score:** ___/5
+
+**TODOs:** ___ (oldest: ___ months)
+**Hacks/workarounds:** ___
+**Duplicated code:** ___ locations
+
+**Top 3 debt items:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-tech-debt` output
+
+### 10. Production Readiness
+
+**Score:** ___/5
+
+**Confidence:** ___/10
+**Will break in week 1:** ___
+**Can rollback:** Yes/No
+
+**Top 3 risks:**
+1. 
+2. 
+3. 
+
+**Full report:** See `@qc-shipit-killit` output
+
+## Risk Assessment
+
+### High Risk Areas
+
+**Code that scares you:**
+1. 
+2. 
+3. 
+
+**Single points of failure:**
+1. 
+2. 
+3. 
+
+**Undocumented tribal knowledge:**
+1. 
+2. 
+3. 
+
+### Mitigation Plan
+
+**For each high risk:**
+1. **Risk:** ___
+   - **Likelihood:** High/Medium/Low
+   - **Impact:** Critical/High/Medium/Low
+   - **Mitigation:** 
+   - **Owner:** 
+   - **ETA:** 
+
+## Effort Estimates
+
+### Fix P0 Issues
+- Total P0 issues: ___
+- Estimated effort: ___ hours/days
+- With team of ___: ___ calendar days
+- Priority: Immediate
+
+### Fix P1 Issues
+- Total P1 issues: ___
+- Estimated effort: ___ hours/days
+- With team of ___: ___ calendar days
+- Priority: This quarter
+
+### Address P2 Issues
+- Total P2 issues: ___
+- Estimated effort: ___ hours/days
+- With team of ___: ___ calendar days
+- Priority: This year
+
+### Total Effort
+- All issues: ___ hours/days
+- Realistic timeline: ___ months
+- Budget 20% per sprint: ___ sprints
+
+## Velocity Impact
+
+**Current state:**
+- Features per sprint: ___
+- % time on technical debt: ___%
+- % time on features: ___%
+
+**After fixing P0/P1:**
+- Features per sprint: ___ (+___%)
+- % time on technical debt: ___%
+- % time on features: ___%
+
+**ROI:**
+- Investment: ___ weeks
+- Payback: ___ months
+- Long-term gain: +___% velocity
+
+## Comparison to Industry Standards
+
+**How does this compare to mature codebases?**
+
+| Metric | Industry Standard | This Codebase | Gap |
+|--------|------------------|---------------|-----|
+| Test coverage | 80% | ___% | ___ |
+| Dependency age | <6 months | ___ | ___ |
+| Build time | <5 min | ___ | ___ |
+| Deploy frequency | Daily | ___ | ___ |
+
+**Where are we:**
+- ✅ Ahead of curve: 
+- ⚠️ Meeting expectations: 
+- ❌ Behind curve: 
+
+## Recommendations
+
+### Immediate Actions (This Week)
+1. 
+2. 
+3. 
+
+### Short-term (This Month)
+1. 
+2. 
+3. 
+
+### Long-term (This Quarter)
+1. 
+2. 
+3. 
+
+### Strategic (This Year)
+1. 
+2. 
+3. 
+
+## Conclusion
+
+### The Good
+**Strengths:**
+- 
+- 
+- 
+
+### The Bad
+**Weaknesses:**
+- 
+- 
+- 
+
+### The Ugly
+**Critical issues:**
+- 
+- 
+- 
+
+### Final Verdict
+
+**Overall assessment:**
+- 
+
+**Production readiness:** READY / NOT READY / CONDITIONAL
+
+**Confidence level:** ___/10
+
+**Recommendation:**
+- 
+
+**Timeline to production-ready:** ___
+
+**Would you bet your on-call rotation on this?** Yes/No
+**Why:** 
+
+## Appendix: Detailed Reports
+
+**Full detailed reports available via individual qc-* rules:**
+
+- Security: `@qc-security-vulns`
+- Dependencies: `@qc-deps-config`
+- Code Quality: `@qc-code-quality`
+- Architecture: `@qc-arch`
+- Performance: `@qc-perf`
+- Testing: `@qc-testing`
+- Documentation: `@qc-docs`
+- Standards: `@qc-standards`
+- Technical Debt: `@qc-tech-debt`
+- Ship/No-Ship: `@qc-shipit-killit`
+
+## How to Use This Audit
+
+**For quick assessment:**
+1. Run Phase 1 only (30 min)
+2. Get security, dependency, and standards snapshot
+3. Identify critical blockers
+
+**For thorough review:**
+1. Run all phases (4-6 hours)
+2. Generate comprehensive report
+3. Create prioritized fix backlog
+
+**For ongoing maintenance:**
+1. Run quarterly
+2. Track trends over time
+3. Measure improvement
+
+**Frequency:**
+- Quick audit: Before each release
+- Full audit: Quarterly
+- Specific area: As needed
+
+## Remember
+
+- Be honest, not nice
+- Prioritize ruthlessly
+- Focus on impact, not perfection
+- Provide concrete actions
+- Estimate realistic efforts
+- Don't sugarcoat risks

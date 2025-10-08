@@ -1,0 +1,553 @@
+---
+alwaysApply: false
+---
+# Technical Debt Audit
+
+I need a brutally honest technical debt assessment.
+
+## Review Mindset
+
+Be pessimistic. **What's the worst that could happen with this code?**
+
+For each debt item:
+- What will it cost us later?
+- How much harder will it be to fix in 6 months?
+- What's the opportunity cost (velocity impact)?
+
+## Technical Debt Categories
+
+### 1. Code Debt
+
+#### Shortcuts and Hacks
+
+**Look for comments like:**
+- "TODO: Fix this properly"
+- "HACK: Temporary solution"
+- "FIXME: This is broken"
+- "XXX: Quick fix"
+- "NOTE: This should be refactored"
+
+**Find:**
+```bash
+grep -r "TODO\|HACK\|FIXME\|XXX" --include="*.js" --include="*.jsx"
+```
+
+**Shortcuts identified:**
+1. **Location:** `src/utils/payment.js:45`
+   - **Comment:** "HACK: Workaround for race condition"
+   - **Date added:** 6 months ago
+   - **Why it's debt:** Doesn't solve root cause
+   - **Will break when:** Concurrent users increase
+   - **Fix effort now:** 2 hours
+   - **Fix effort later:** 2 days + regression testing
+
+#### Temporary Solutions That Became Permanent
+
+**"This is just temporary" lies:**
+```javascript
+// ❌ "Temporary" code from 2 years ago
+// TODO: Replace with proper state management
+let globalUserData = null;
+
+// ❌ "Quick fix" that never got fixed
+try {
+  // complex logic
+} catch (e) {
+  // Swallow error (TODO: Handle properly)
+}
+```
+
+**Temporary solutions found:**
+1. 
+2. 
+3. 
+
+**For each:**
+- How long has it been "temporary"?
+- What's the proper solution?
+- What problems is it causing?
+- Risk if we don't fix: ___
+
+#### Copy-Paste Code Duplication
+
+**Same logic in multiple places:**
+```bash
+# Find similar functions
+# Look for repeated patterns
+```
+
+**Duplicated code:**
+1. **What:** Email validation logic
+   - **Locations:** 8 files
+   - **Lines:** ~50 lines each
+   - **Problem:** Inconsistent behavior, bugs in 3 versions
+   - **Fix:** Extract to shared utility
+   - **Effort:** 4 hours
+   - **Benefit:** Single source of truth
+
+**Duplication analysis:**
+- Total duplicated lines: ___
+- Number of duplicate blocks: ___
+- Biggest duplication: ___ lines repeated ___ times
+
+### 2. Architecture Debt
+
+#### Wrong Abstractions
+
+**Abstractions that cause more pain than they solve:**
+```javascript
+// ❌ Over-abstraction
+class AbstractFactoryBridgeAdapter {
+  // 500 lines of generalization for 1 use case
+}
+```
+
+**Bad abstractions:**
+1. 
+2. 
+3. 
+
+#### Missing Abstractions
+
+**Should be abstracted but isn't:**
+- Repeated API call patterns
+- Similar component structures
+- Database query patterns
+- Error handling
+
+**Missing abstractions:**
+1. 
+2. 
+3. 
+
+#### Tight Coupling
+
+**Components that know too much about each other:**
+```javascript
+// ❌ Tight coupling
+function ComponentA() {
+  // Reaches into ComponentB's internals
+  ComponentB.state.privateValue = 'x';
+}
+```
+
+**Coupling issues:**
+1. 
+2. 
+3. 
+
+**Impact:**
+- Can't change A without breaking B
+- Can't test A without B
+- Can't reuse A or B independently
+
+#### Monolithic Components
+
+**God components doing too much:**
+- Files >500 lines
+- Components with >20 props
+- Mixed concerns (UI + logic + data)
+
+**Monoliths identified:**
+1. **File:** `src/screens/Dashboard.jsx`
+   - **Lines:** 850
+   - **Responsibilities:** 7 different concerns
+   - **Dependencies:** 25 imports
+   - **Refactor:** Split into 5 components
+   - **Effort:** 3 days
+
+### 3. Dependency Debt
+
+#### Outdated Dependencies
+
+**Technology lag:**
+| Dependency | Current | Latest | Gap | Risk |
+|------------|---------|--------|-----|------|
+| React Native | 0.72.6 | 0.73.x | 1 major | High |
+|            |         |        |     |      |
+
+**Outdated for >1 year:**
+1. 
+2. 
+3. 
+
+**Why haven't we updated?**
+- Breaking changes too costly
+- Fear of breaking things
+- No time allocated
+- Don't know how
+
+**Cost of staying behind:**
+- Missing security patches
+- Missing performance improvements
+- Can't use new features
+- Harder to upgrade later (bigger gap)
+- Hard to hire (old tech stack)
+
+#### Abandoned Dependencies
+
+**No longer maintained:**
+1. **Package:** `old-package@1.0.0`
+   - **Last update:** 3 years ago
+   - **Open issues:** 200+
+   - **Security vulns:** 5 known
+   - **Why still using:** "It works"
+   - **Replacement:** `modern-package`
+   - **Migration effort:** 2 days
+
+#### Version Lock-In
+
+**Stuck on old versions:**
+- Why locked: ___
+- Blocks upgrading: ___
+- Exit strategy: ___
+- Effort: ___
+
+### 4. Infrastructure Debt
+
+#### Manual Processes
+
+**Should be automated but aren't:**
+- [ ] Manual deployments
+- [ ] Manual testing
+- [ ] Manual database migrations
+- [ ] Manual environment setup
+- [ ] Manual dependency updates
+
+**Manual processes:**
+1. **What:** Database migrations
+   - **How long:** 30 minutes per deploy
+   - **Error-prone:** Yes
+   - **Automate effort:** 1 day
+   - **ROI:** 30 min saved per deploy
+
+#### Configuration Debt
+
+**Configuration issues:**
+- Hardcoded values that should be env vars
+- Different configs for dev/staging/prod inconsistent
+- No validation of required config
+- Secrets not properly managed
+
+**Config problems:**
+1. 
+2. 
+3. 
+
+#### Build System Debt
+
+**Build problems:**
+- Build time: ___ minutes (acceptable: <5 min)
+- Using outdated build tools
+- Complex build configuration
+- No caching strategy
+
+**Build debt:**
+- 
+
+### 5. Test Debt
+
+**Testing shortcuts:**
+- Critical paths without tests
+- Skipped tests never re-enabled
+- Flaky tests ignored
+- No test strategy
+
+**Test debt:**
+1. **Area:** Authentication flow
+   - **Coverage:** 20%
+   - **Should be:** 100%
+   - **Risk:** Security bugs
+   - **Effort:** 3 days
+
+### 6. Documentation Debt
+
+**Documentation shortcuts:**
+- Code changes without doc updates
+- Onboarding docs outdated
+- API changes not documented
+- Architecture not documented
+
+**Doc debt:**
+1. 
+2. 
+3. 
+
+**Cost:**
+- New developer onboarding: ___ extra days
+- Bug investigation: ___ extra hours
+- Architecture decisions forgotten
+
+### 7. Data Debt
+
+**Database issues:**
+- Missing indexes (slow queries)
+- Denormalization without cleanup
+- No data retention policy
+- Growing table sizes unmonitored
+
+**Data debt:**
+1. **Table:** `logs`
+   - **Rows:** 50 million
+   - **Growth:** 1M/day
+   - **Problem:** Never cleaned up
+   - **Impact:** Slow queries, disk space
+   - **Solution:** Implement retention policy
+   - **Effort:** 2 days
+
+### 8. Security Debt
+
+**Security shortcuts:**
+- "TODO: Add auth check"
+- "FIXME: Validate input"
+- Using deprecated crypto
+- Secrets in code ("temporary")
+
+**Security debt:**
+1. 
+2. 
+3. 
+
+**Risk level:** Critical/High/Medium/Low
+
+## Debt That's Compounding
+
+**Debt that gets worse over time:**
+
+### Example: Redux Misuse
+- **Current:** 10 places doing it wrong
+- **In 6 months:** 50 places (5x harder to fix)
+- **In 1 year:** 200 places (20x harder to fix)
+
+**Compounding debt:**
+1. 
+2. 
+3. 
+
+**Intervention point:** Fix before it spreads
+
+## Impact on Velocity
+
+**How debt slows us down:**
+
+**Feature that should take 1 day:**
+- Working around bad architecture: +2 hours
+- Dealing with flaky tests: +1 hour  
+- Waiting for slow build: +1 hour
+- Fighting with old dependencies: +2 hours
+- **Total:** 2 days (100% slower)
+
+**Velocity impact:**
+- Current velocity: ___ (points/sprint)
+- If debt fixed: ___ (points/sprint)
+- Lost productivity: ___%
+
+**Time spent on:**
+- Fighting technical debt: __% of time
+- Actual feature work: __% of time
+
+## The "We'll Refactor Later" List
+
+**Things we said we'd fix but never did:**
+1. **Item:** Rewrite user service
+   - **Said:** 2 years ago
+   - **Current state:** Still broken, worse now
+   - **Why never fixed:** "No time"
+   - **Actual reason:** Too big to tackle
+
+**Pattern:** Debt that's too big to fix gets ignored.
+
+## Debt Priority Matrix
+
+| Debt Item | Impact | Effort | Urgency | Priority |
+|-----------|--------|--------|---------|----------|
+|           |        |        |         |          |
+
+**Impact:** High/Medium/Low (business impact)
+**Effort:** Hours/Days/Weeks
+**Urgency:** Critical/Soon/Eventually
+**Priority:** P0/P1/P2/P3
+
+## Output Template
+
+### Technical Debt Score: ___/5
+
+### Critical Debt (P0 - Must Fix Before Ship)
+
+1. **Security: Passwords hashed with MD5**
+   - **Age:** Since launch (2 years)
+   - **Impact:** Critical - Trivial to crack
+   - **Why not fixed:** "Too hard to migrate"
+   - **Actual effort:** 1 week (including migration)
+   - **Cost if ignored:** Data breach, reputation damage
+   - **Priority:** P0
+
+### Major Debt (P1 - Fix This Quarter)
+
+1. **Architecture: God component (850 lines)**
+   - **Location:** `src/screens/Dashboard.jsx`
+   - **Impact:** High - Blocks feature work
+   - **Velocity cost:** 20% slower development
+   - **Effort:** 3 days
+   - **ROI:** 20% velocity increase
+   - **Priority:** P1
+
+### Accumulating Debt (P2 - Plan to Fix)
+
+1. **Code: Duplicate validation logic (8 locations)**
+   - **Impact:** Medium - Inconsistent behavior
+   - **Spreading:** Yes (found in 2 new files this month)
+   - **Effort:** 4 hours
+   - **Intervention:** Before it doubles again
+   - **Priority:** P2
+
+### Debt by Category
+
+**Code Debt:**
+- TODOs: ___ (oldest: ___ months)
+- Duplicated code: ___ locations
+- Temporary fixes: ___ still in place
+
+**Architecture Debt:**
+- God components: ___
+- Tight coupling: ___ locations
+- Missing abstractions: ___
+
+**Dependency Debt:**
+- Outdated (>1 year): ___
+- Abandoned packages: ___
+- Security vulnerabilities: ___
+
+**Infrastructure Debt:**
+- Manual processes: ___
+- Build issues: ___
+- Config problems: ___
+
+**Test Debt:**
+- Coverage gaps: ___%
+- Skipped tests: ___
+- Flaky tests: ___
+
+**Documentation Debt:**
+- Outdated docs: ___
+- Missing docs: ___
+
+**Data Debt:**
+- Missing indexes: ___
+- Unbounded tables: ___
+
+**Security Debt:**
+- Known issues: ___
+- Risk level: ___
+
+### Velocity Impact
+
+**Current state:**
+- Features per sprint: ___
+- % time on debt: ___%
+- % time on features: ___%
+
+**If P0/P1 debt fixed:**
+- Features per sprint: ___ (+___%)
+- % time on debt: ___%
+- % time on features: ___%
+
+**ROI of paying down debt:**
+- Investment: ___ weeks
+- Payback period: ___ months
+- Long-term gain: +___% velocity
+
+### Compounding Debt
+
+**Debt spreading like cancer:**
+1. 
+2. 
+3. 
+
+**Take action before:** It's too big to fix
+
+### Oldest Debt
+
+**Ancient TODOs:**
+1. **"TODO: Fix this" from 2022**
+   - Still not fixed
+   - Worse now
+   - Blocking: ___
+
+### Most Expensive Debt
+
+**Highest velocity tax:**
+1. **Slow build (10 minutes)**
+   - Cost: 2 hours/week per developer
+   - Team of 5: 10 hours/week
+   - Fix effort: 2 days
+   - Payback: 3 weeks
+
+### Debt Roadmap
+
+**Phase 1: Stop the Bleeding (This Month)**
+- Fix critical security debt
+- Stop spreading anti-patterns
+- Add missing tests for critical paths
+- **Effort:** 2 weeks
+
+**Phase 2: Major Refactors (This Quarter)**
+- Break up god components
+- Migrate to bcrypt
+- Update React Native
+- Implement proper caching
+- **Effort:** 6 weeks
+
+**Phase 3: Clean Up (This Half)**
+- Consolidate duplicate code
+- Remove temporary solutions
+- Improve test coverage
+- Update all dependencies
+- **Effort:** 8 weeks
+
+### Total Debt Estimate
+
+**Time to fix all debt:**
+- P0 (critical): ___ weeks
+- P1 (major): ___ weeks
+- P2 (nice to have): ___ weeks
+- **Total:** ___ weeks
+
+**Realistic plan:**
+- 20% of sprint on debt reduction
+- ___ sprints to clear P0/P1
+- ___ months to healthy state
+
+## Debt Prevention
+
+**How to prevent new debt:**
+- [ ] Require tests for new code
+- [ ] Code review for architecture
+- [ ] Automated dependency updates
+- [ ] Refactor budget (20% of sprint)
+- [ ] "Boy scout rule" (leave better than found)
+- [ ] Tech debt tickets tracked
+
+## The Hard Truth
+
+**Questions to answer honestly:**
+
+**Are we creating debt faster than fixing it?** Yes/No
+
+**Will this codebase be maintainable in 2 years?** Yes/No
+
+**Would we want to work in this codebase?** Yes/No
+
+**If starting fresh, what would we do differently?**
+- 
+- 
+- 
+
+## Be Specific
+
+- Point to exact code locations
+- Calculate real costs (time, velocity, risk)
+- Show debt growing over time
+- Estimate fix efforts realistically
+- Explain business impact clearly
+- Don't soften the assessment

@@ -1,0 +1,618 @@
+---
+alwaysApply: false
+---
+# Testing Strategy Quality Check
+
+Critique the testing strategy harshly. Find what's missing and what provides false confidence.
+
+## Review Mindset
+
+**Don't tell me coverage percentage - tell me what MATTERS that isn't tested.**
+
+Prioritize by: **"If this breaks in production, how bad is it?"**
+
+## Testing Assessment Areas
+
+### 1. Test Coverage Analysis
+
+#### Critical Path Coverage
+
+**Identify critical user flows:**
+1. User authentication/registration
+2. Core business transactions
+3. Payment processing
+4. Data modification operations
+5. Third-party integrations
+
+**For each critical path:**
+| Flow | Has Tests | Coverage | Edge Cases Covered | Priority |
+|------|-----------|----------|-------------------|----------|
+|      |           |          |                   |          |
+
+**Critical paths WITHOUT tests:**
+1. **User password reset**
+   - Why critical: Account security
+   - Current coverage: 0%
+   - Risk if breaks: Users locked out
+   - Priority: P0
+
+#### Coverage Metrics
+
+**Current coverage:**
+- Overall: ___%
+- Critical paths: ___%
+- Business logic: ___%
+- UI components: ___%
+- API endpoints: ___%
+
+**Targets:**
+- Critical paths: 100%
+- Business logic: 80%+
+- Overall: 70%+
+
+**Coverage gaps:**
+- High risk, no tests: 
+- Medium risk, low coverage: 
+- Low risk, over-tested: 
+
+#### What's NOT Tested
+
+**Zero test coverage in:**
+1. 
+2. 
+3. 
+
+**Why is this bad?**
+- What bugs could ship?
+- What will break in production?
+- What incidents will this cause?
+
+### 2. Test Quality Assessment
+
+#### Tests Testing Wrong Things
+
+**Implementation vs. Behavior:**
+```javascript
+// ❌ Bad: Testing implementation
+test('useState is called', () => {
+  const spy = jest.spyOn(React, 'useState');
+  render(<Component />);
+  expect(spy).toHaveBeenCalled();
+});
+
+// ✅ Good: Testing behavior
+test('counter increments when button clicked', () => {
+  render(<Counter />);
+  fireEvent.click(screen.getByText('Increment'));
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+```
+
+**Tests testing implementation found:**
+1. 
+2. 
+3. 
+
+#### False Confidence Tests
+
+**Tests that pass but don't catch bugs:**
+
+**Example:**
+```javascript
+// ❌ False confidence
+test('API call succeeds', async () => {
+  const result = await api.fetchUser();
+  expect(result).toBeDefined(); // Always passes, even on error!
+});
+
+// ✅ Actually validates
+test('API returns valid user data', async () => {
+  const result = await api.fetchUser('123');
+  expect(result).toMatchObject({
+    id: '123',
+    email: expect.stringMatching(/^.+@.+$/),
+    name: expect.any(String)
+  });
+});
+```
+
+**False confidence tests:**
+1. 
+2. 
+3. 
+
+#### Flaky Tests
+
+**Tests that sometimes pass, sometimes fail:**
+- Tests with timing issues
+- Tests with race conditions
+- Tests depending on external services
+- Tests with random data
+
+**Flaky tests identified:**
+1. 
+2. 
+3. 
+
+**Impact of flaky tests:**
+- CI/CD unreliable
+- Developers ignore failures
+- Real bugs missed
+- Time wasted debugging
+
+#### Brittle Tests
+
+**Tests that break on refactoring:**
+- Tightly coupled to implementation
+- Testing internal state
+- Too many mocks
+- Hardcoded selectors
+
+**Brittle tests:**
+1. 
+2. 
+3. 
+
+### 3. Testing Pyramid Analysis
+
+**Ideal pyramid:**
+```
+        /E2E\          (Few: 5-10%)
+       /     \
+      /  Int  \        (Some: 15-20%)
+     /         \
+    /   Unit    \      (Many: 75-80%)
+   /-----------  \
+```
+
+**Current pyramid:**
+```
+       /     \         E2E: ___% (actual: ___ tests)
+      /       \        
+     /         \       Integration: ___% (actual: ___ tests)
+    /           \      
+   /             \     Unit: ___% (actual: ___ tests)
+  /---------------\
+```
+
+**Issues:**
+- Inverted pyramid? (Too many E2E, not enough unit)
+- Missing integration tests?
+- Over-reliance on one test type?
+
+**Symptoms of bad pyramid:**
+- Tests take >10 minutes to run
+- Tests are flaky
+- Hard to identify failures
+- Slow feedback loop
+
+### 4. Test Type Assessment
+
+#### Unit Tests
+
+**What should be unit tested:**
+- Pure functions
+- Business logic
+- Utility functions
+- Data transformations
+- Validators
+
+**Unit test gaps:**
+1. **Missing:** `calculateDiscount()` function
+   - Complexity: High (multiple tiers, edge cases)
+   - Risk: Incorrect pricing
+   - Priority: P0
+
+**Unit test quality:**
+- Fast (<1ms per test): Yes/No
+- Isolated (no DB/network): Yes/No
+- Focused (one thing): Yes/No
+- Readable: Yes/No
+
+#### Integration Tests
+
+**What should be integration tested:**
+- API endpoints
+- Database operations
+- Third-party integrations
+- Service interactions
+- Authentication flows
+
+**Integration test gaps:**
+1. **Missing:** Payment processing flow
+   - Why critical: Money involved
+   - Current coverage: 0%
+   - Priority: P0
+
+**Integration issues:**
+- Using real services (should mock)
+- No database cleanup
+- Tests interfere with each other
+- Too slow (>30s)
+
+#### End-to-End Tests
+
+**What should be E2E tested:**
+- Critical user journeys
+- Happy path scenarios
+- Key conversion flows
+
+**E2E test gaps:**
+1. **Missing:** Complete checkout flow
+   - Impact: Orders might fail
+   - Priority: P0
+
+**E2E issues:**
+- Too many E2E tests (slow)
+- No page object pattern
+- Hardcoded waits
+- No retry logic
+- Flaky selectors
+
+#### Component/UI Tests
+
+**Component testing:**
+- [ ] All critical components tested
+- [ ] User interactions tested
+- [ ] Edge cases covered
+- [ ] Accessibility tested
+- [ ] Error states tested
+
+**Component test gaps:**
+1. 
+2. 
+3. 
+
+### 5. Test Data Strategy
+
+**Test data quality:**
+- [ ] Realistic test data
+- [ ] Edge cases covered
+- [ ] Factories/fixtures used
+- [ ] Data generation automated
+- [ ] Test data isolated
+
+**Issues:**
+- Hardcoded test data (brittle)
+- Sharing test data (interference)
+- Not covering edge cases
+- Unrealistic data
+
+**Example:**
+```javascript
+// ❌ Bad: Hardcoded, doesn't test edges
+const testUser = { id: 1, name: 'John' };
+
+// ✅ Good: Factory with variations
+const createUser = (overrides) => ({
+  id: faker.datatype.uuid(),
+  name: faker.name.fullName(),
+  email: faker.internet.email(),
+  ...overrides
+});
+
+// Test edge cases
+test('handles very long names', () => {
+  const user = createUser({ name: 'A'.repeat(1000) });
+  // ...
+});
+```
+
+### 6. Mocking Strategy
+
+**Mocking assessment:**
+- [ ] External services mocked
+- [ ] Database mocked in unit tests
+- [ ] Mocks maintained and updated
+- [ ] Not over-mocking
+
+**Mocking issues:**
+```javascript
+// ❌ Over-mocking: Testing mock, not code
+jest.mock('./userService', () => ({
+  getUser: jest.fn(() => ({ id: 1, name: 'Test' }))
+}));
+
+test('displays user name', () => {
+  // This test passes even if component is broken!
+  // Mock always returns data
+});
+```
+
+**Over-mocked areas:**
+1. 
+2. 
+3. 
+
+**Under-mocked areas:**
+1. 
+2. 
+3. 
+
+### 7. Edge Cases and Error Handling
+
+**Edge cases that should be tested:**
+- Empty states
+- Null/undefined values
+- Very large inputs
+- Very long strings
+- Boundary values
+- Concurrent operations
+- Network failures
+- Slow responses
+
+**Untested edge cases:**
+1. **What if API returns empty array?**
+   - Component shows: ___
+   - Should show: Empty state
+   - Tested: No
+
+2. **What if name is 1000 characters?**
+   - Breaks UI: Yes/No
+   - Tested: No
+
+**Error handling coverage:**
+- Network errors: ___%
+- Validation errors: ___%
+- Authentication errors: ___%
+- 500 errors: ___%
+
+**Error scenarios NOT tested:**
+1. 
+2. 
+3. 
+
+### 8. Test Performance
+
+**Test suite performance:**
+- Total test time: ___
+- Unit tests: ___
+- Integration tests: ___
+- E2E tests: ___
+
+**Targets:**
+- Unit: <5 seconds
+- Integration: <30 seconds
+- E2E: <5 minutes
+- Total: <10 minutes
+
+**Slow tests:**
+| Test File | Time | Reason | Fix |
+|-----------|------|--------|-----|
+|           |      |        |     |
+
+**Performance issues:**
+- Not running in parallel
+- Not cleaning up properly
+- Too many E2E tests
+- Hitting real services
+
+### 9. Test Maintenance
+
+**Test health indicators:**
+- Last test added: ___ (days/months ago)
+- Skipped tests: ___
+- Disabled tests: ___
+- TODO tests: ___
+
+**Test debt:**
+```javascript
+// ❌ Test debt accumulating
+test.skip('should handle race condition', () => {
+  // TODO: Fix flaky test
+});
+
+test.skip('should validate input', () => {
+  // Broken since refactor
+});
+```
+
+**Skipped/disabled tests:**
+1. 
+2. 
+3. 
+
+**Why are they skipped?**
+- Flaky
+- Broken after refactor
+- Too hard to write
+- Takes too long
+
+### 10. Testing Tools and Infrastructure
+
+**Testing stack:**
+- Test runner: ___ (Jest, Vitest, etc.)
+- Assertion library: ___
+- Mocking: ___
+- E2E: ___ (Cypress, Playwright, etc.)
+- Coverage: ___
+
+**Infrastructure issues:**
+- [ ] Tests in CI/CD
+- [ ] Coverage reporting
+- [ ] Parallel execution
+- [ ] Test isolation
+- [ ] Easy to run locally
+
+**Missing testing infrastructure:**
+1. 
+2. 
+3. 
+
+## Specific Bug Scenarios
+
+**Bugs that COULD ship with current tests:**
+
+### Scenario 1: Silent Data Loss
+**Bug:** Saving user data returns 200 but doesn't actually save
+**Why tests don't catch it:** Mock always succeeds
+**Impact:** Critical
+**How to test:** Integration test with real DB
+
+### Scenario 2: [Your scenario]
+**Bug:** 
+**Why tests don't catch it:** 
+**Impact:** 
+**How to test:** 
+
+## Output Template
+
+### Testing Score: ___/5
+
+### Critical Testing Gaps (P0)
+
+1. **No tests for payment processing**
+   - **Risk:** Money lost, angry customers
+   - **Likelihood:** High - complex logic
+   - **Impact:** Critical
+   - **Effort to fix:** 2 days
+   - **Priority:** P0 - Block ship
+
+### Major Testing Issues (P1)
+
+1. **Authentication flow only has happy path tests**
+   - **Risk:** Security bypass, unauthorized access
+   - **Missing:** Error cases, edge cases, concurrent logins
+   - **Effort:** 1 day
+   - **Priority:** P1
+
+### Testing Improvements (P2)
+
+1. **Component tests missing for 30% of UI**
+   - **Risk:** UI regressions
+   - **Impact:** Medium - UX issues
+   - **Effort:** 1 week
+   - **Priority:** P2
+
+### Top 5 Untested Critical Paths
+
+1. **User registration flow**
+   - Why critical: User acquisition
+   - Current coverage: 0%
+   - Priority: P0
+
+2. 
+3. 
+4. 
+5. 
+
+### Bugs That Could Ship Today
+
+1. **Silent failure on save**
+   - Returns success but doesn't save
+   - No integration test to catch
+   - Impact: Data loss
+
+2. **Race condition in checkout**
+   - Double charge possible
+   - No concurrent test
+   - Impact: Financial
+
+3. 
+
+### Testing Pyramid Issues
+
+**Current state:**
+- ❌ Too many E2E tests (slow, flaky)
+- ❌ Not enough unit tests (fast feedback)
+- ❌ Missing integration tests (API coverage)
+
+**Recommended rebalancing:**
+- Move ___ E2E tests → integration tests
+- Add ___ unit tests for business logic
+- Add ___ integration tests for APIs
+
+### False Confidence Tests
+
+**Tests that provide false security:**
+1. 
+2. 
+3. 
+
+**Recommendation:** Delete or rewrite
+
+### Flaky Tests
+
+**Tests to fix or delete:**
+1. 
+2. 
+3. 
+
+**Impact:** ___ hours/week wasted on flaky tests
+
+### Test Performance Improvements
+
+**Quick wins:**
+- Run tests in parallel: ___ minutes saved
+- Mock external services: ___ minutes saved
+- Remove E2E tests: ___ minutes saved
+
+**Target test time:** < 5 minutes (currently: ___ minutes)
+
+### Testing Roadmap
+
+**Phase 1: Critical Gaps (This Sprint)**
+- Add tests for payment processing
+- Test authentication error cases
+- Cover API error handling
+- **Effort:** 1 week
+
+**Phase 2: Improve Coverage (Next Sprint)**
+- Increase unit test coverage to 80%
+- Add integration tests for all APIs
+- Test critical UI components
+- **Effort:** 2 weeks
+
+**Phase 3: Test Quality (Following Sprint)**
+- Fix flaky tests
+- Remove false confidence tests
+- Improve test performance
+- **Effort:** 1 week
+
+### Testing Infrastructure Needs
+
+**Missing:**
+- [ ] Visual regression testing
+- [ ] Performance testing
+- [ ] Load testing
+- [ ] Security testing
+- [ ] Accessibility testing
+
+**Recommendations:**
+1. 
+2. 
+3. 
+
+## Confidence Assessment
+
+**Would you bet your on-call rotation on these tests?** Yes/No
+
+**Why or why not?**
+- 
+
+**What gives you confidence:**
+- 
+
+**What worries you:**
+- 
+
+## Test Coverage Requirements
+
+**Set requirements:**
+- Critical paths: 100% coverage required
+- Business logic: 80% minimum
+- New code: 80% minimum
+- Overall: 70% minimum
+
+**Enforce in CI/CD:**
+- [ ] Coverage thresholds configured
+- [ ] PR fails if coverage drops
+- [ ] Coverage report visible
+
+## Be Specific
+
+- List exact functions/components without tests
+- Show code examples of what's untested
+- Explain real bugs that could ship
+- Prioritize by business impact
+- Estimate effort to fix gaps

@@ -1,0 +1,561 @@
+---
+alwaysApply: false
+---
+# Security Vulnerability Assessment
+
+Act as a malicious actor trying to exploit this codebase. Find every vulnerability.
+
+## Review Mindset
+
+**Think like an attacker:**
+- How can I gain unauthorized access?
+- How can I steal data?
+- How can I break the system?
+- How can I escalate privileges?
+- Where are the secrets?
+
+Rate each vulnerability by:
+- **Exploitability:** Easy/Medium/Hard
+- **Impact:** Critical/High/Medium/Low
+- **CVSS Score:** (if applicable)
+
+## OWASP Top 10 Assessment
+
+### 1. Injection Vulnerabilities
+
+#### SQL Injection
+
+**Look for:**
+- String concatenation in SQL queries
+- User input directly in queries
+- No parameterized queries
+- ORM bypassed with raw SQL
+
+**Example vulnerability:**
+```javascript
+// ❌ CRITICAL: SQL Injection
+const query = `SELECT * FROM users WHERE email = '${userInput}'`;
+db.query(query);
+
+// Attacker input: ' OR '1'='1' --
+// Result: Bypass authentication, dump all users
+```
+
+**Check every location where:**
+- User input touches database queries
+- Dynamic SQL is constructed
+- Raw queries are used
+
+**SQL injection locations:**
+1. 
+2. 
+3. 
+
+#### NoSQL Injection
+
+**Check MongoDB/similar queries:**
+```javascript
+// ❌ NoSQL Injection
+db.users.find({ username: req.body.username });
+
+// Attacker input: { $gt: "" }
+// Result: Returns all users
+```
+
+#### Command Injection
+
+**Look for:**
+- `exec()`, `spawn()`, `eval()` with user input
+- System commands constructed from user data
+
+**Example:**
+```javascript
+// ❌ CRITICAL: Command Injection
+exec(`ping -c 4 ${userInput}`);
+
+// Attacker input: 8.8.8.8; cat /etc/passwd
+// Result: Execute arbitrary commands
+```
+
+**Command injection risks:**
+1. 
+2. 
+3. 
+
+#### XSS (Cross-Site Scripting)
+
+**Look for:**
+- Rendering unsanitized user input
+- `dangerouslySetInnerHTML` usage
+- URL parameters rendered directly
+- No output encoding
+
+**Example:**
+```javascript
+// ❌ XSS Vulnerability
+<div>{userComment}</div> // If user comment contains <script>
+
+// ✅ Safe (React auto-escapes)
+// But check for dangerouslySetInnerHTML
+<div dangerouslySetInnerHTML={{ __html: userInput }} /> // DANGER!
+```
+
+**XSS locations:**
+1. 
+2. 
+3. 
+
+### 2. Broken Authentication
+
+**Authentication issues:**
+- [ ] Password stored in plaintext
+- [ ] Weak password hashing (MD5, SHA1)
+- [ ] No rate limiting on login
+- [ ] Session tokens in URL
+- [ ] No session timeout
+- [ ] Predictable session IDs
+- [ ] No MFA support
+
+**Check:**
+```javascript
+// ❌ CRITICAL: Plaintext password
+const user = { password: req.body.password };
+
+// ❌ CRITICAL: Weak hashing
+const hash = md5(password);
+
+// ✅ Should use bcrypt/argon2
+const hash = await bcrypt.hash(password, 12);
+```
+
+**Authentication vulnerabilities:**
+1. 
+2. 
+3. 
+
+**Session management:**
+- Session ID predictable? Yes/No
+- Session fixation possible? Yes/No
+- Session not invalidated on logout? Yes/No
+- Session stored insecurely? Yes/No
+
+### 3. Sensitive Data Exposure
+
+**Look for sensitive data:**
+- [ ] Passwords/tokens in logs
+- [ ] PII in error messages
+- [ ] Credentials in source code
+- [ ] Sensitive data in URLs
+- [ ] Data transmitted without encryption
+- [ ] API keys in frontend code
+- [ ] Sensitive data in localStorage
+
+**Secrets in code:**
+```bash
+# Search for common patterns
+grep -r "password.*=.*" .
+grep -r "api.*key.*=.*" .
+grep -r "secret.*=.*" .
+```
+
+**Secrets found:**
+1. 
+2. 
+3. 
+
+**Data exposure in:**
+- Error messages: 
+- Logs: 
+- Client-side storage: 
+- URLs: 
+- API responses: 
+
+### 4. XML External Entities (XXE)
+
+**Check XML parsing:**
+- [ ] External entity processing disabled
+- [ ] Input validation on XML
+- [ ] Using secure XML parser
+
+**If XML parsing exists:**
+- Vulnerable: Yes/No
+- Parser: 
+- Configuration: 
+
+### 5. Broken Access Control
+
+**Authorization issues:**
+- [ ] Endpoint protection missing
+- [ ] Horizontal privilege escalation
+- [ ] Vertical privilege escalation
+- [ ] IDOR (Insecure Direct Object Reference)
+- [ ] Client-side authorization only
+
+**Example IDOR:**
+```javascript
+// ❌ IDOR Vulnerability
+app.get('/api/user/:id', async (req, res) => {
+  // No check if logged-in user can access this user's data!
+  const user = await User.findById(req.params.id);
+  res.json(user);
+});
+
+// Attacker: Change URL from /api/user/123 to /api/user/456
+// Result: Access other users' data
+```
+
+**Authorization gaps:**
+1. **Endpoint:** `/api/users/:id`
+   - Missing check: User owns resource
+   - Exploitable: Change ID in URL
+   - Impact: Access any user's data
+
+2. 
+
+**Role-based access:**
+- [ ] Roles defined and enforced
+- [ ] Role checks on backend (not just frontend)
+- [ ] Admin functions protected
+- [ ] No privilege escalation possible
+
+**IDOR locations:**
+1. 
+2. 
+3. 
+
+### 6. Security Misconfiguration
+
+**Configuration issues:**
+- [ ] Default credentials used
+- [ ] Debug mode enabled in production
+- [ ] Detailed error messages exposed
+- [ ] Unnecessary services running
+- [ ] Missing security headers
+- [ ] CORS misconfigured
+- [ ] Directory listing enabled
+
+**Security headers check:**
+```http
+# Required headers
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000
+Content-Security-Policy: default-src 'self'
+```
+
+**Missing headers:**
+1. 
+2. 
+3. 
+
+**CORS configuration:**
+- `Access-Control-Allow-Origin: *` (Too permissive?)
+- Credentials allowed from any origin?
+- Pre-flight requests handled correctly?
+
+**Environment configuration:**
+- Debug mode in production: Yes/No
+- Stack traces exposed: Yes/No
+- Default credentials: Yes/No
+
+### 7. Cross-Site Request Forgery (CSRF)
+
+**CSRF protection:**
+- [ ] CSRF tokens implemented
+- [ ] SameSite cookie attribute set
+- [ ] State-changing requests protected
+- [ ] GET requests don't modify state
+
+**Vulnerable endpoints:**
+```javascript
+// ❌ CSRF Vulnerable
+app.post('/api/transfer-money', (req, res) => {
+  // No CSRF token check!
+  transferMoney(req.user, req.body.to, req.body.amount);
+});
+```
+
+**CSRF vulnerabilities:**
+1. 
+2. 
+3. 
+
+### 8. Using Components with Known Vulnerabilities
+
+**Run security audit:**
+```bash
+npm audit
+# or
+yarn audit
+```
+
+**Vulnerability summary:**
+- Critical: ___
+- High: ___
+- Moderate: ___
+- Low: ___
+
+**Critical vulnerabilities:**
+| Package | Version | CVE | Severity | Fix Available |
+|---------|---------|-----|----------|---------------|
+|         |         |     |          |               |
+
+**Outdated dependencies:**
+- React Native: 0.72.6 (latest: ___)
+- Express: ___ (latest: ___)
+- Others: 
+
+### 9. Insufficient Logging & Monitoring
+
+**Logging gaps:**
+- [ ] Authentication failures logged
+- [ ] Authorization failures logged
+- [ ] Input validation failures logged
+- [ ] Security events logged
+- [ ] Logs protected from tampering
+- [ ] Log aggregation configured
+- [ ] Alerting on suspicious activity
+
+**Not logged:**
+1. 
+2. 
+3. 
+
+**Monitoring gaps:**
+- No intrusion detection
+- No anomaly detection
+- No security event alerts
+- No audit trail
+
+### 10. Server-Side Request Forgery (SSRF)
+
+**Check URL fetching:**
+```javascript
+// ❌ SSRF Vulnerability
+app.get('/fetch', async (req, res) => {
+  const response = await fetch(req.query.url);
+  res.send(await response.text());
+});
+
+// Attacker: /fetch?url=http://localhost:6379/
+// Result: Access internal services
+```
+
+**SSRF risks:**
+1. 
+2. 
+3. 
+
+## Additional Security Checks
+
+### Cryptography
+
+**Encryption usage:**
+- [ ] Strong algorithms (AES-256, RSA-2048+)
+- [ ] Secure random number generation
+- [ ] No hardcoded encryption keys
+- [ ] Proper key management
+- [ ] TLS 1.2+ enforced
+
+**Crypto issues:**
+- Weak algorithms: 
+- Predictable randomness: 
+- Key management: 
+
+### File Upload Security
+
+**File upload checks:**
+- [ ] File type validation (not just extension)
+- [ ] File size limits enforced
+- [ ] Uploaded files not executable
+- [ ] Malware scanning
+- [ ] Stored outside webroot
+
+**File upload vulnerabilities:**
+- No type validation: Can upload PHP shell
+- No size limit: DoS via large files
+- Stored in webroot: Direct execution
+
+### API Security
+
+**API vulnerabilities:**
+- [ ] Rate limiting implemented
+- [ ] API authentication required
+- [ ] Input validation on all endpoints
+- [ ] Output encoding
+- [ ] Mass assignment protected
+
+**Missing rate limiting:**
+1. 
+2. 
+3. 
+
+**Mass assignment:**
+```javascript
+// ❌ Mass Assignment Vulnerability
+app.post('/api/users', async (req, res) => {
+  const user = await User.create(req.body);
+  // Attacker can set isAdmin: true in body!
+});
+```
+
+### Client-Side Security
+
+**Mobile app security:**
+- [ ] Code obfuscation enabled
+- [ ] Certificate pinning implemented
+- [ ] No sensitive data in storage
+- [ ] Jailbreak/root detection
+- [ ] Secure inter-app communication
+
+**Web app security:**
+- [ ] Subresource Integrity (SRI)
+- [ ] Content Security Policy (CSP)
+- [ ] No inline scripts
+- [ ] HTTPS enforced
+
+### Third-Party Integrations
+
+**Third-party security:**
+- [ ] API keys not in frontend code
+- [ ] Webhook signature verification
+- [ ] OAuth2 properly implemented
+- [ ] Third-party scripts reviewed
+
+**Integration issues:**
+1. 
+2. 
+3. 
+
+## Threat Modeling
+
+### Attack Scenarios
+
+**Scenario 1: Data Breach**
+- Entry point: 
+- Exploit: 
+- Impact: 
+- Mitigation: 
+
+**Scenario 2: Account Takeover**
+- Entry point: 
+- Exploit: 
+- Impact: 
+- Mitigation: 
+
+**Scenario 3: Privilege Escalation**
+- Entry point: 
+- Exploit: 
+- Impact: 
+- Mitigation: 
+
+## Output Template
+
+### Security Score: ___/5
+
+### Critical Vulnerabilities (P0 - Immediate Fix)
+
+1. **SQL Injection in login endpoint**
+   - **Location:** `src/api/auth.js:45`
+   - **Exploitability:** Easy
+   - **Impact:** Critical - Full database compromise
+   - **Proof of Concept:**
+     ```
+     POST /api/login
+     { "email": "' OR '1'='1' --", "password": "anything" }
+     ```
+   - **Fix:** Use parameterized queries
+   - **Effort:** 2 hours
+
+### High Severity (P1 - Fix This Week)
+
+1. **Weak password hashing (MD5)**
+   - **Location:** `src/services/auth.js:23`
+   - **Exploitability:** Medium (requires DB access)
+   - **Impact:** High - Passwords easily cracked
+   - **Fix:** Migrate to bcrypt with salt rounds ≥12
+   - **Effort:** 1 day (includes migration)
+
+### Medium Severity (P2 - Fix This Month)
+
+1. **Missing rate limiting on API**
+   - **Location:** All API endpoints
+   - **Exploitability:** Easy
+   - **Impact:** Medium - DoS, brute force attacks
+   - **Fix:** Add express-rate-limit middleware
+   - **Effort:** 4 hours
+
+### Security Improvements (P3)
+
+1. **Add security headers**
+   - **Impact:** Defense in depth
+   - **Fix:** Add helmet.js middleware
+   - **Effort:** 30 minutes
+
+## Dependency Vulnerabilities
+
+**Critical vulnerabilities requiring immediate attention:**
+1. 
+2. 
+3. 
+
+**Effort to fix all vulnerabilities:** ___ hours/days
+
+## Compliance Considerations
+
+**Regulations to consider:**
+- [ ] GDPR (if EU users)
+- [ ] CCPA (if CA users)
+- [ ] HIPAA (if health data)
+- [ ] PCI DSS (if payment data)
+- [ ] SOC 2 (if B2B)
+
+**Compliance gaps:**
+1. 
+2. 
+3. 
+
+## Security Recommendations
+
+### Immediate Actions (This Week)
+1. 
+2. 
+3. 
+
+### Short-term (This Month)
+1. 
+2. 
+3. 
+
+### Long-term (This Quarter)
+1. 
+2. 
+3. 
+
+### Security Tools to Implement
+- [ ] Automated security scanning (Snyk, Dependabot)
+- [ ] Static analysis (SonarQube, ESLint security rules)
+- [ ] Penetration testing
+- [ ] Security monitoring (Sentry, LogRocket)
+- [ ] WAF (Web Application Firewall)
+
+## Testing Security
+
+**Security testing needed:**
+- [ ] Penetration testing
+- [ ] Vulnerability scanning
+- [ ] Security code review
+- [ ] Threat modeling
+- [ ] Security regression tests
+
+**Last security audit:** Never / ___ months ago
+
+## Be Specific
+
+For each vulnerability:
+- Show actual exploit code/steps
+- Explain real-world impact
+- Provide concrete fix with code examples
+- Estimate effort to remediate
+- Consider compliance implications

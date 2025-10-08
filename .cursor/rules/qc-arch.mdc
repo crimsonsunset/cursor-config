@@ -1,0 +1,250 @@
+---
+alwaysApply: false
+---
+# Architecture & Design Quality Check
+
+Analyze this codebase's architecture with a critical eye.
+
+## Review Scope
+
+Identify and document:
+- Design patterns that are misapplied or create unnecessary complexity
+- Tight coupling and poor separation of concerns
+- Architectural decisions that will cause problems at scale
+- Areas where the architecture contradicts itself or shows inconsistency
+- Over-engineering AND under-engineering
+- The top 3 architectural smells that need immediate refactoring
+
+## Specific Analysis Areas
+
+### 1. Design Patterns
+**For each pattern used:**
+- Is it appropriate for the problem?
+- Is it implemented correctly?
+- Does it add value or just complexity?
+- Where is it misapplied?
+
+**Common anti-patterns to identify:**
+- God objects (classes/modules doing too much)
+- Circular dependencies
+- Leaky abstractions
+- Golden hammer (using same pattern everywhere)
+- Architecture astronaut (over-abstraction)
+
+### 2. Separation of Concerns
+**Evaluate boundaries between:**
+- Presentation layer (UI components)
+- Business logic layer
+- Data access layer
+- External service integration
+
+**Questions to answer:**
+- Is business logic leaking into UI components?
+- Is data fetching mixed with display logic?
+- Are concerns properly isolated?
+- Can I test business logic without UI?
+
+### 3. Module Boundaries
+**For each major module/feature:**
+- Does it have a clear single purpose?
+- What are its dependencies?
+- Is it tightly coupled to other modules?
+- Could it be extracted/replaced easily?
+- What's the cyclomatic complexity?
+
+**Coupling analysis:**
+```
+Module A → Module B (dependencies)
+├─ Direct coupling (imports/requires)
+├─ Data coupling (shared data structures)
+├─ Control coupling (shared state/flags)
+└─ Content coupling (reaching into internals)
+```
+
+### 4. State Management Architecture
+**Evaluate the state management approach:**
+- Is there a clear state management strategy?
+- Is state properly scoped (global vs. local)?
+- Can state be easily reasoned about?
+- Is state immutable where it should be?
+- Are there competing state management approaches?
+
+**Red flags:**
+- State scattered across many places
+- Prop drilling 5+ levels deep
+- Shared mutable state
+- No single source of truth
+- Multiple state management libraries competing
+
+### 5. Data Flow
+**Trace how data moves through the system:**
+- Is data flow unidirectional and predictable?
+- Where does data transform?
+- Is there unnecessary data copying/transformation?
+- Are there circular data flows?
+
+**Diagram the flow:**
+```
+[User Input] → [Component] → [Action] → [Reducer] → [Store]
+     ↑                                                  ↓
+     └──────────────── [Re-render] ←───────────────────┘
+```
+
+**Issues to identify:**
+- Data fetched in wrong places
+- Transformations happening multiple times
+- Inconsistent data formats
+- Missing validation layers
+
+### 6. Error Handling Architecture
+**System-wide error handling strategy:**
+- Is there a consistent approach?
+- Are errors caught at appropriate boundaries?
+- Is there a centralized error reporting system?
+- How are errors surfaced to users?
+
+**Questions:**
+- What happens when API call fails?
+- How are network errors handled?
+- What's the retry strategy?
+- Are errors logged properly?
+
+### 7. Scalability Concerns
+**Identify architectural bottlenecks:**
+- Single points of failure
+- Components that don't scale horizontally
+- Hardcoded limits or assumptions
+- Tight coupling preventing scaling
+
+**At 10x scale, what breaks?**
+- 
+- 
+- 
+
+### 8. Navigation/Routing Architecture
+**For web/mobile apps:**
+- Is navigation logic centralized?
+- Can we deep link anywhere?
+- Is back button handled correctly?
+- Is state preserved during navigation?
+
+**Issues:**
+- Navigation logic scattered
+- Broken back button behavior
+- Lost state on navigate
+- No deep linking support
+
+### 9. Component Architecture
+**Evaluate component design:**
+- Are components single-purpose?
+- Is there a clear hierarchy?
+- Are components reusable?
+- Is there proper composition?
+
+**Component smells:**
+- Components >300 lines
+- Components with >10 props
+- Components that do too many things
+- Components that are never reused
+- Components tightly coupled to global state
+
+### 10. API/Integration Architecture
+**External service integration:**
+- Is there an API abstraction layer?
+- Are third-party services properly isolated?
+- Can we swap providers easily?
+- What happens when external service is down?
+
+**Anti-patterns:**
+- Third-party code spread throughout app
+- No circuit breakers
+- No fallback strategies
+- Hard-coded endpoints/config
+
+## Architecture Review Checklist
+
+### Layer Separation
+- [ ] Clear boundaries between UI, logic, and data
+- [ ] Business logic not in components
+- [ ] Data access abstracted
+- [ ] External services isolated
+
+### Modularity
+- [ ] Modules have single responsibility
+- [ ] Low coupling between modules
+- [ ] High cohesion within modules
+- [ ] Can extract/replace modules easily
+
+### State Management
+- [ ] Clear state management strategy
+- [ ] Single source of truth
+- [ ] Predictable state updates
+- [ ] No competing approaches
+
+### Error Handling
+- [ ] Consistent error handling strategy
+- [ ] Errors caught at boundaries
+- [ ] User-friendly error messages
+- [ ] Proper error logging
+
+### Scalability
+- [ ] No single points of failure
+- [ ] Can scale horizontally
+- [ ] No hardcoded limits
+- [ ] Performance considered
+
+### Testability
+- [ ] Business logic testable in isolation
+- [ ] Dependencies can be mocked
+- [ ] No global state preventing testing
+- [ ] Clear component boundaries
+
+## Output Format
+
+### Architecture Score: ___/5
+
+### Critical Issues (P0)
+1. **[Issue]** at `file:line`
+   - **Problem:** 
+   - **Impact:** 
+   - **Fix:** 
+
+### Major Issues (P1)
+1. **[Issue]** 
+   - **Problem:** 
+   - **Impact:** 
+   - **Fix:** 
+
+### Design Smells (P2)
+1. **[Issue]** 
+   - **Problem:** 
+   - **Impact:** 
+   - **Fix:** 
+
+### Top 3 Architectural Refactors Needed
+1. 
+2. 
+3. 
+
+### Estimated Refactor Effort
+- P0 issues: ___ hours/days
+- P1 issues: ___ hours/days
+- P2 issues: ___ hours/days
+
+### Architecture Diagram Issues
+**Draw or describe the current architecture problems:**
+```
+[Describe or ASCII diagram showing problematic dependencies/flows]
+```
+
+### Recommended Architecture
+**What should it look like instead?**
+```
+[Describe or ASCII diagram showing improved architecture]
+```
+
+## Be Specific
+- Provide file names and line numbers
+- Show code examples of problems
+- Explain real-world consequences
+- Don't just say "refactor" - explain exactly what to do

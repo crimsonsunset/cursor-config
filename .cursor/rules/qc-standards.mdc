@@ -1,0 +1,769 @@
+---
+alwaysApply: false
+---
+# Code Standards & Consistency Audit
+
+Find every inconsistency and standards violation.
+
+## Review Mindset
+
+**This isn't about preference - it's about cognitive load.**
+
+Inconsistency forces developers to:
+- Relearn patterns in each file
+- Make decisions that should be automatic
+- Miss bugs hidden by inconsistency
+- Waste time on style instead of logic
+
+## Consistency Analysis
+
+### 1. Code Style Inconsistencies
+
+#### Function Declaration Styles
+
+**Mixing styles throughout codebase:**
+```javascript
+// Style 1: Arrow functions
+const handleClick = () => { };
+
+// Style 2: Function declarations
+function handleClick() { }
+
+// Style 3: Function expressions
+const handleClick = function() { }
+
+// Style 4: Class methods
+class MyClass {
+  handleClick() { }
+}
+```
+
+**Count instances:**
+- Arrow functions: ___
+- Function declarations: ___
+- Function expressions: ___
+- Mixed within same file: ___ files
+
+**Issue:** Developer must decide each time, no standard.
+
+#### Variable Declarations
+
+**Mixing var/let/const:**
+```javascript
+var oldStyle = 'bad';      // Should never use
+let mutableValue = 'ok';   
+const CONSTANT = 'good';   
+```
+
+**Usage:**
+- `var` usage: ___ instances (should be 0)
+- `let` vs `const` inconsistency: ___
+
+**Standard should be:**
+- Default: `const`
+- Only when reassigning: `let`
+- Never: `var`
+
+#### String Quotes
+
+**Inconsistent quote usage:**
+```javascript
+const single = 'single';
+const double = "double";
+const template = `template`;
+```
+
+**Usage:**
+- Single quotes: ___
+- Double quotes: ___
+- Mixed in same file: ___ files
+
+**Pick one:** Single quotes (except when escaping needed)
+
+#### Semicolons
+
+**Inconsistent semicolon usage:**
+- With semicolons: ___ files
+- Without semicolons: ___ files
+- Mixed: ___ files
+
+**ASI issues:** Automatic Semicolon Insertion can cause bugs
+
+#### Async/Await vs Promises vs Callbacks
+
+**Three different async patterns:**
+```javascript
+// Pattern 1: Callbacks (old)
+api.fetchUser(id, (err, user) => { });
+
+// Pattern 2: Promises
+api.fetchUser(id).then(user => { });
+
+// Pattern 3: Async/await (modern)
+const user = await api.fetchUser(id);
+```
+
+**Usage:**
+- Callbacks: ___ instances
+- `.then()` chains: ___ instances
+- Async/await: ___ instances
+- Mixed patterns in same file: ___ files
+
+**Standard should be:** Async/await everywhere
+
+### 2. Naming Inconsistencies
+
+#### Naming Conventions
+
+**Variable naming:**
+```javascript
+// Inconsistent patterns
+const user_name = 'snake_case';
+const userName = 'camelCase';
+const UserName = 'PascalCase';
+const username = 'lowercase';
+```
+
+**Patterns found:**
+- camelCase: ___
+- snake_case: ___
+- PascalCase: ___
+- Inconsistent: ___ files
+
+**Standard:** 
+- Variables/functions: camelCase
+- Components/classes: PascalCase
+- Constants: UPPER_SNAKE_CASE
+- Files: kebab-case
+
+#### Boolean Naming
+
+**Inconsistent boolean names:**
+```javascript
+// Good patterns
+const isActive = true;
+const hasPermission = true;
+const canEdit = true;
+const shouldRetry = false;
+
+// Bad patterns
+const active = true;      // Not clear it's boolean
+const permission = true;  // Ambiguous
+const edit = false;       // What does this mean?
+```
+
+**Boolean naming issues:**
+1. 
+2. 
+3. 
+
+#### Event Handler Naming
+
+**Inconsistent event handler names:**
+```javascript
+// Pattern 1: handle prefix
+const handleClick = () => { };
+
+// Pattern 2: on prefix
+const onClick = () => { };
+
+// Pattern 3: action verb
+const submitForm = () => { };
+
+// Pattern 4: random
+const doIt = () => { };
+```
+
+**Handler naming:**
+- `handle*`: ___ instances
+- `on*`: ___ instances
+- Action verbs: ___ instances
+- Other: ___ instances
+
+**Standard:** Pick one and stick to it
+
+#### File Naming
+
+**Inconsistent file names:**
+```
+UserProfile.jsx    // PascalCase
+user-profile.jsx   // kebab-case
+user_profile.jsx   // snake_case
+userprofile.jsx    // lowercase
+```
+
+**File naming patterns:**
+- PascalCase: ___ files
+- kebab-case: ___ files
+- snake_case: ___ files
+- Mixed: Yes/No
+
+**Standard:** 
+- Components: PascalCase (UserProfile.jsx)
+- Utilities: kebab-case (date-utils.js)
+- Consistent suffix: .jsx vs .js
+
+### 3. Component Patterns
+
+#### Component Definition Styles
+
+**Multiple component patterns:**
+```javascript
+// Pattern 1: Functional component (modern)
+function UserProfile({ user }) {
+  return <div>{user.name}</div>;
+}
+
+// Pattern 2: Arrow function component
+const UserProfile = ({ user }) => {
+  return <div>{user.name}</div>;
+};
+
+// Pattern 3: Class component (legacy)
+class UserProfile extends React.Component {
+  render() {
+    return <div>{this.props.user.name}</div>;
+  }
+}
+```
+
+**Component styles:**
+- Functional components: ___ files
+- Arrow function components: ___ files
+- Class components: ___ files
+- Mixed in codebase: Yes/No
+
+**Issues:**
+- Class components should be migrated to functional
+- Pick functional OR arrow, not both
+
+#### Props Patterns
+
+**Inconsistent prop handling:**
+```javascript
+// Pattern 1: Destructured in parameter
+function Component({ name, age }) { }
+
+// Pattern 2: Destructured in body
+function Component(props) {
+  const { name, age } = props;
+}
+
+// Pattern 3: Using props directly
+function Component(props) {
+  return <div>{props.name}</div>;
+}
+```
+
+**Prop patterns:**
+- Destructured in params: ___
+- Destructured in body: ___
+- Props directly: ___
+- Inconsistent: ___ files
+
+#### State Management Patterns
+
+**Multiple state approaches:**
+```javascript
+// Pattern 1: useState hooks
+const [count, setCount] = useState(0);
+
+// Pattern 2: useReducer
+const [state, dispatch] = useReducer(reducer, initial);
+
+// Pattern 3: Redux
+const count = useSelector(state => state.count);
+
+// Pattern 4: Class state
+this.state = { count: 0 };
+```
+
+**Where is state managed?**
+- Local useState: ___
+- useReducer: ___
+- Redux: ___
+- Class state: ___
+- Context: ___
+
+**Issue:** No clear pattern for when to use what
+
+#### Effect Patterns
+
+**Inconsistent effect usage:**
+```javascript
+// Pattern 1: useEffect
+useEffect(() => {
+  fetchData();
+}, []);
+
+// Pattern 2: componentDidMount (class)
+componentDidMount() {
+  this.fetchData();
+}
+
+// Pattern 3: useLayoutEffect
+useLayoutEffect(() => {
+  measureElement();
+}, []);
+```
+
+**Effect usage consistency:**
+- Clear guidelines: Yes/No
+- Mixed patterns: Yes/No
+
+### 4. Import/Export Patterns
+
+#### Import Ordering
+
+**Inconsistent import order:**
+```javascript
+// File 1 order
+import React from 'react';
+import { View } from 'react-native';
+import Button from './Button';
+import { styles } from './styles';
+
+// File 2 order (different!)
+import { styles } from './styles';
+import Button from './Button';
+import React from 'react';
+import { View } from 'react-native';
+```
+
+**Import organization:**
+- Consistent order: Yes/No
+- Grouped logically: Yes/No
+- Auto-sorted by tool: Yes/No
+
+**Standard order should be:**
+1. React/React Native
+2. Third-party libraries
+3. Internal modules
+4. Relative imports
+5. Styles/assets
+
+#### Export Patterns
+
+**Named vs default exports:**
+```javascript
+// Default export
+export default UserProfile;
+
+// Named exports
+export { UserProfile, UserSettings };
+
+// Mixed
+export default UserProfile;
+export { UserSettings };
+```
+
+**Export patterns:**
+- Default exports: ___
+- Named exports: ___
+- Mixed: ___ files
+
+**Issue:** No clear guideline on when to use which
+
+#### Import Paths
+
+**Relative vs absolute:**
+```javascript
+// Relative
+import Button from '../../components/Button';
+
+// Absolute (configured)
+import Button from '@/components/Button';
+
+// Mixed in codebase
+```
+
+**Path styles:**
+- Relative: ___ imports
+- Absolute: ___ imports
+- Inconsistent: Yes/No
+
+### 5. Error Handling Patterns
+
+**Inconsistent error handling:**
+```javascript
+// Pattern 1: Try-catch
+try {
+  await api.fetchUser();
+} catch (error) {
+  console.error(error);
+}
+
+// Pattern 2: .catch()
+api.fetchUser().catch(error => {
+  console.error(error);
+});
+
+// Pattern 3: No error handling
+await api.fetchUser(); // What if it fails?
+
+// Pattern 4: Error boundaries (React)
+<ErrorBoundary>
+  <Component />
+</ErrorBoundary>
+```
+
+**Error handling:**
+- Consistent approach: Yes/No
+- Try-catch: ___ locations
+- .catch(): ___ locations
+- No handling: ___ locations
+- Error boundaries: ___ components
+
+### 6. Styling Patterns
+
+#### Multiple styling approaches
+
+**CSS/Styling inconsistency:**
+```javascript
+// Pattern 1: StyleSheet (React Native standard)
+const styles = StyleSheet.create({ });
+
+// Pattern 2: Inline styles
+<View style={{ flex: 1 }} />
+
+// Pattern 3: Style objects
+const styles = { container: { flex: 1 } };
+
+// Pattern 4: Styled-components
+const Container = styled.View``;
+```
+
+**Styling approaches:**
+- StyleSheet: ___ files
+- Inline styles: ___ instances
+- Plain objects: ___ files
+- Styled-components: ___ files
+- Multiple approaches per file: ___ files
+
+#### Style Organization
+
+**Where are styles defined?**
+```javascript
+// Pattern 1: Separate styles file
+import { styles } from './styles';
+
+// Pattern 2: Bottom of component file
+const styles = StyleSheet.create({ });
+
+// Pattern 3: Inline throughout
+```
+
+**Style location:**
+- Separate files: ___
+- Bottom of file: ___
+- Inline: ___
+- Inconsistent: Yes/No
+
+### 7. Formatting Inconsistencies
+
+**Without auto-formatter (Prettier):**
+- [ ] Indentation: tabs vs spaces, 2 vs 4
+- [ ] Line length: varies wildly
+- [ ] Trailing commas: sometimes yes, sometimes no
+- [ ] Object/array formatting: inconsistent
+- [ ] Brace style: different patterns
+
+**Formatting issues:**
+```javascript
+// File 1: 2-space indent
+if (condition) {
+  doSomething();
+}
+
+// File 2: 4-space indent
+if (condition) {
+    doSomething();
+}
+
+// File 3: Tabs
+if (condition) {
+	doSomething();
+}
+```
+
+**Formatting:**
+- Prettier configured: Yes/No
+- ESLint auto-fix enabled: Yes/No
+- Pre-commit hooks: Yes/No
+- Consistent across files: Yes/No
+
+### 8. Documentation Patterns
+
+**Comment inconsistency:**
+```javascript
+// Pattern 1: JSDoc
+/**
+ * Fetches user by ID
+ * @param {string} id - User ID
+ * @returns {Promise<User>} User object
+ */
+
+// Pattern 2: Inline comments
+// This fetches the user
+
+// Pattern 3: No comments
+function fetchUser(id) { }
+```
+
+**Documentation:**
+- JSDoc usage: ___%
+- Inline comments: ___%
+- No comments: ___%
+- Consistent: Yes/No
+
+### 9. Testing Patterns
+
+**Test inconsistencies:**
+```javascript
+// Pattern 1: test()
+test('should fetch user', () => { });
+
+// Pattern 2: it()
+it('should fetch user', () => { });
+
+// Pattern 3: Mixed
+describe('UserService', () => {
+  test('fetches user', () => { });
+  it('validates user', () => { });
+});
+```
+
+**Test patterns:**
+- `test()`: ___
+- `it()`: ___
+- Mixed: ___
+- Naming convention: Consistent/Inconsistent
+
+### 10. Configuration Inconsistencies
+
+**Config patterns:**
+- Environment variables: How accessed?
+- Constants: Where defined?
+- Config files: How organized?
+
+**Issues:**
+- Constants in multiple places
+- Config values hardcoded
+- No single source of truth
+
+## Linting & Formatting
+
+### ESLint Configuration
+
+**Linter status:**
+- [ ] ESLint configured
+- [ ] Rules enforced
+- [ ] Auto-fix on save
+- [ ] CI/CD checks
+
+**Disabled rules:**
+```javascript
+/* eslint-disable no-console */
+/* eslint-disable react-hooks/exhaustive-deps */
+```
+
+**Rules disabled:**
+1. Rule: ___ | Reason: ___ | Locations: ___
+2. 
+
+**Why were they disabled?**
+- Legitimate reason or hiding issues?
+
+### Prettier Configuration
+
+**Formatter status:**
+- [ ] Prettier installed
+- [ ] Configuration file exists
+- [ ] Editor integration
+- [ ] Pre-commit hook
+
+**If no Prettier:**
+- Formatting consistency: ___/10
+- Time wasted on format debates: ___
+
+## Standards Violations
+
+### React/React Native Best Practices
+
+**Violations:**
+- [ ] Keys in lists (warnings in console)
+- [ ] Unused state/props
+- [ ] Missing dependency arrays
+- [ ] Direct state mutation
+- [ ] Prop-drilling >3 levels
+
+**Examples:**
+1. 
+2. 
+3. 
+
+### JavaScript Best Practices
+
+**Violations:**
+- [ ] Using `var`
+- [ ] Not using strict mode
+- [ ] Mutating objects/arrays
+- [ ] No error handling
+- [ ] `eval()` usage
+
+**Examples:**
+1. 
+2. 
+3. 
+
+### Accessibility Standards
+
+**A11y violations:**
+- [ ] No accessibility labels
+- [ ] No keyboard navigation
+- [ ] No screen reader support
+- [ ] Poor color contrast
+
+**Impact:** Excluding users with disabilities
+
+## Output Template
+
+### Code Standards Score: ___/5
+
+### Critical Inconsistencies (P1)
+
+1. **Mixing class components and functional components**
+   - Class components: 40 files
+   - Functional: 60 files
+   - Issue: Different patterns for same thing
+   - Impact: Confusion, harder to maintain
+   - Fix: Migrate all to functional
+   - Effort: 2 weeks
+
+### Major Inconsistencies (P2)
+
+1. **Three different state management patterns**
+   - Redux: Some features
+   - useState: Other features
+   - Context: A few places
+   - Issue: No clear pattern
+   - Impact: Harder to onboard, inconsistent behavior
+   - Fix: Standardize on Redux + local useState
+   - Effort: 1 week
+
+### Style Violations
+
+**Inconsistencies:**
+- Function declarations: 3 different styles
+- Variable declarations: Using `var` in 45 places
+- String quotes: Mixed single/double
+- Async patterns: Callbacks + promises + async/await
+
+**Cognitive load:** High - developers must make decisions constantly
+
+### Naming Violations
+
+**Issues:**
+- File naming: 3 different conventions
+- Variable naming: Mixed camelCase/snake_case
+- Boolean naming: Not using is/has/can prefixes
+- Event handlers: No consistent pattern
+
+**Impact:** Hard to find things, unclear intent
+
+### Missing Standards
+
+**No documented standard for:**
+- [ ] When to use Redux vs useState
+- [ ] Component file organization
+- [ ] Testing patterns
+- [ ] Error handling approach
+- [ ] Code review checklist
+
+### Linting Issues
+
+**ESLint problems:**
+- Rules disabled: ___ instances
+- No auto-fix enabled
+- Not running in CI/CD
+- Warnings ignored: ___
+
+**Prettier status:**
+- Not configured: Manual formatting inconsistent
+- Time wasted: ___ hours/week on format debates
+
+### Quick Fixes (Low Effort)
+
+1. **Enable Prettier**
+   - Effort: 30 minutes
+   - Impact: Eliminate all formatting inconsistency
+   - ROI: Immediate
+
+2. **Fix all `var` usage**
+   - Effort: 1 hour (find/replace)
+   - Impact: Remove old pattern
+   - ROI: Immediate
+
+3. **Add ESLint pre-commit hook**
+   - Effort: 15 minutes
+   - Impact: Prevent new violations
+   - ROI: Immediate
+
+### Standardization Roadmap
+
+**Phase 1: Low-Hanging Fruit (This Week)**
+- Enable Prettier
+- Fix var usage
+- Add pre-commit hooks
+- Document naming conventions
+- **Effort:** 1 day
+
+**Phase 2: Patterns (This Month)**
+- Migrate class → functional components
+- Standardize async/await
+- Consistent import ordering
+- File naming convention
+- **Effort:** 2 weeks
+
+**Phase 3: Architecture (This Quarter)**
+- State management patterns
+- Error handling patterns
+- Component structure patterns
+- Testing patterns
+- **Effort:** 4 weeks
+
+### Recommendation: Style Guide
+
+**Create and enforce:**
+- [ ] Code style guide (automated with Prettier/ESLint)
+- [ ] Component patterns guide
+- [ ] State management guide
+- [ ] Testing patterns guide
+- [ ] File organization guide
+
+**Include:**
+- Why each decision
+- Code examples (good vs bad)
+- Auto-enforcement tools
+- Exceptions and when allowed
+
+## Cognitive Load Assessment
+
+**How much mental energy for:**
+- Naming a variable: High/Medium/Low
+- Structuring a component: High/Medium/Low
+- Handling errors: High/Medium/Low
+- Writing a test: High/Medium/Low
+
+**Should all be:** Low (automatic, following pattern)
+
+**Current state:** High (decide every time)
+
+## Be Specific
+
+- Count actual instances of each pattern
+- Show side-by-side inconsistent examples
+- Explain cognitive load impact
+- Provide concrete standards
+- Automate enforcement where possible
+- Don't just say "inconsistent" - show exactly how

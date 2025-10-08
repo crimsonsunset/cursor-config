@@ -1,0 +1,489 @@
+---
+alwaysApply: false
+---
+# Ship It or Kill It - Final Production Readiness Assessment
+
+Final judgment: Is this codebase production-ready?
+
+## Review Mindset
+
+**No sugar-coating. Answer these bluntly:**
+
+You're the engineering lead. Your reputation is on the line. 
+The CEO is asking: "Can we ship this?"
+
+Be honest. Be thorough. Be brutal if needed.
+
+## Critical Questions
+
+### 1. Production Readiness
+
+**On a scale of 1-10, how confident are you this is ready to ship?**
+- Score: ___/10
+
+**Why that score?**
+- 
+
+**What keeps you up at night about shipping this?**
+1. 
+2. 
+3. 
+
+### 2. First Week Prediction
+
+**What WILL break in the first week of production?**
+
+#### Certain to Break (90%+ confidence)
+1. **What:** 
+   - **Why:** 
+   - **Impact:** 
+   - **When:** 
+   - **Mitigation:** 
+
+#### Likely to Break (50-90% confidence)
+1. **What:** 
+   - **Why:** 
+   - **Impact:** 
+   - **When:** 
+   - **Mitigation:** 
+
+#### Might Break (10-50% confidence)
+1. **What:** 
+   - **Why:** 
+   - **Impact:** 
+   - **When:** 
+   - **Mitigation:** 
+
+### 3. 3AM Page Scenarios
+
+**What will cause 3am pages in the first month?**
+
+**Scenario 1:**
+- **What happens:** 
+- **Root cause:** 
+- **How users are impacted:** 
+- **How long to diagnose:** 
+- **How long to fix:** 
+- **How to prevent:** 
+
+**Scenario 2:**
+- 
+
+**Scenario 3:**
+- 
+
+### 4. Data Loss Risks
+
+**Where could we lose user data?**
+
+**Risk 1:**
+- **Location:** 
+- **Scenario:** 
+- **Likelihood:** 
+- **Impact:** 
+- **Mitigation:** 
+
+**Most dangerous data loss scenario:**
+- 
+
+### 5. Security Breach Risks
+
+**Where are we most vulnerable to attack?**
+
+**Vulnerability 1:**
+- **Type:** 
+- **Exploitability:** Easy/Medium/Hard
+- **Impact:** Critical/High/Medium/Low
+- **Status:** Unpatched/Mitigated/Fixed
+
+**Easiest way to hack this system:**
+1. 
+2. 
+3. 
+
+### 6. Scale Breaking Points
+
+**At what point does the system fail?**
+
+#### Users
+- **Current:** ___ users
+- **Breaks at:** ___ users
+- **Why:** 
+- **Warning signs:** 
+
+#### Traffic
+- **Current:** ___ req/sec
+- **Breaks at:** ___ req/sec
+- **Why:** 
+- **Warning signs:** 
+
+#### Data
+- **Current:** ___ GB
+- **Breaks at:** ___ GB / ___ million rows
+- **Why:** 
+- **Warning signs:** 
+
+#### Cost
+- **Current:** $___/month
+- **At 10x:** $___/month
+- **At 100x:** $___/month
+- **Budget:** $___/month
+- **Breaks budget at:** ___ users
+
+### 7. Known Issues
+
+**What issues are we knowingly shipping?**
+
+**Issue 1:**
+- **Description:** 
+- **Impact:** 
+- **Workaround:** 
+- **When will we fix:** 
+- **Why shipping with it:** 
+
+**Issues we're accepting:**
+1. 
+2. 
+3. 
+
+**Issues we're hoping nobody notices:**
+1. 
+2. 
+3. 
+
+### 8. Testing Confidence
+
+**What's NOT tested?**
+
+**Critical paths without tests:**
+1. 
+2. 
+3. 
+
+**How confident are you in the test suite?**
+- Score: ___/10
+
+**What bugs could ship despite passing tests?**
+1. 
+2. 
+3. 
+
+### 9. Monitoring & Observability
+
+**Can you detect and diagnose production issues?**
+
+- [ ] Error tracking configured
+- [ ] Logging aggregation set up
+- [ ] Performance monitoring
+- [ ] Uptime monitoring
+- [ ] Alerting configured
+- [ ] Runbooks for common issues
+- [ ] Access to production logs
+- [ ] Can rollback quickly
+
+**What you CAN'T see in production:**
+1. 
+2. 
+3. 
+
+**When something breaks, can you:**
+- Detect it? Yes/No
+- Diagnose it? Yes/No
+- Fix it? Yes/No
+- Rollback? Yes/No
+
+### 10. Incident Response
+
+**Production is down. Can the on-call engineer:**
+
+- [ ] Access logs
+- [ ] Access monitoring
+- [ ] Understand error messages
+- [ ] Find relevant code
+- [ ] Rollback safely
+- [ ] Know who to escalate to
+- [ ] Fix common issues
+
+**Without you:** Can they handle it? Yes/No
+
+**Undocumented tribal knowledge:**
+1. 
+2. 
+3. 
+
+## P0 Showstoppers
+
+**Issues that MUST be fixed before shipping:**
+
+### Showstopper 1
+- **Issue:** 
+- **Severity:** Blocks production
+- **Why it's a blocker:** 
+- **How to fix:** 
+- **Effort:** 
+- **Status:** Not started/In progress/Done
+
+**Total P0 issues:** ___
+**Total P0 effort:** ___ hours/days
+**ETA if we fix all:** ___
+
+**Can we ship without fixing P0s?** 
+- Answer: No
+- Why: 
+
+## P1 Major Issues
+
+**Issues that WILL cause incidents:**
+
+### Major Issue 1
+- **Issue:** 
+- **Severity:** Will cause incidents
+- **Impact:** 
+- **Frequency:** 
+- **How to fix:** 
+- **Effort:** 
+
+**Total P1 issues:** ___
+
+**Can we ship with P1s?** 
+- Answer: Yes/No/Conditional
+- Conditions: 
+- Risk acceptance: 
+
+## P2 Quality Issues
+
+**Issues that accumulate technical debt:**
+
+### Quality Issue 1
+- **Issue:** 
+- **Impact:** Slower development
+- **When it matters:** 
+- **How to fix:** 
+- **Effort:** 
+
+**Can we ship with P2s?**
+- Answer: Yes (but track them)
+
+## The 5-Year Test
+
+**Imagine it's 5 years from now and you have to maintain this.**
+
+**What decisions will you regret?**
+1. 
+2. 
+3. 
+
+**What did we do right?**
+1. 
+2. 
+3. 
+
+**What should we refactor in the next 6 months?**
+1. 
+2. 
+3. 
+
+## The Honest Assessment
+
+### What's Good
+**Strengths to celebrate:**
+1. 
+2. 
+3. 
+
+### What's Bad
+**Weaknesses to acknowledge:**
+1. 
+2. 
+3. 
+
+### What's Ugly
+**Technical debt we're shipping with:**
+1. 
+2. 
+3. 
+
+## Ship/No-Ship Decision
+
+### SHIP ✅
+**Conditions for shipping:**
+- [ ] All P0 issues fixed
+- [ ] P1 issues mitigated or accepted
+- [ ] Monitoring in place
+- [ ] Rollback plan ready
+- [ ] On-call runbook exists
+- [ ] Team confident
+
+**Confidence level:** ___/10
+
+**Recommendation:** Ship with ___
+
+### CONDITIONAL SHIP ⚠️
+**Can ship IF:**
+- [ ] 
+- [ ] 
+- [ ] 
+
+**With these caveats:**
+- 
+- 
+
+**Confidence level:** ___/10
+
+**Recommendation:** Ship when ___
+
+### DON'T SHIP ❌
+**Blockers:**
+- [ ] 
+- [ ] 
+- [ ] 
+
+**Too risky because:**
+- 
+- 
+
+**Fix first:**
+- 
+- 
+
+**Time needed:** ___
+
+**Confidence level:** ___/10
+
+**Recommendation:** Do NOT ship until ___
+
+## Final Verdict
+
+### Production Readiness: ___/10
+
+### Ship Decision: SHIP / CONDITIONAL / NO-SHIP
+
+### Reasoning
+**Why this decision:**
+- 
+
+**Biggest concerns:**
+1. 
+2. 
+3. 
+
+**Biggest strengths:**
+1. 
+2. 
+3. 
+
+### If Shipping
+
+**Ship with these safeguards:**
+- [ ] Feature flags for rollback
+- [ ] Gradual rollout (5% → 25% → 100%)
+- [ ] Enhanced monitoring during launch
+- [ ] Team on standby first week
+- [ ] Faster rollback process tested
+
+**Launch checklist:**
+- [ ] All P0 issues resolved
+- [ ] Monitoring configured
+- [ ] Alerting tested
+- [ ] Runbooks written
+- [ ] Team trained
+- [ ] Rollback tested
+- [ ] Communication plan ready
+
+### If Not Shipping
+
+**Fix before launch:**
+1. **Issue:** ___ | **Effort:** ___ | **Owner:** ___
+2. **Issue:** ___ | **Effort:** ___ | **Owner:** ___
+3. **Issue:** ___ | **Effort:** ___ | **Owner:** ___
+
+**Timeline:**
+- Total effort: ___
+- With ___ people: ___ weeks
+- Ready to ship: ___ (date)
+
+**Re-assess after fixes**
+
+## Stakeholder Communication
+
+### For Non-Technical Leadership
+
+**Plain English summary:**
+
+"This codebase is [ready/not ready/conditionally ready] for production because [reasons]. 
+
+The biggest risk is [risk]. 
+
+If we ship now, we should expect [outcomes]. 
+
+To ship safely, we need [requirements]."
+
+### For Engineering Team
+
+**Technical summary:**
+
+**Strengths:**
+- 
+
+**Weaknesses:**
+- 
+
+**Risks:**
+- 
+
+**Recommendation:**
+- 
+
+## The Ultimate Question
+
+**Would you bet your on-call rotation on this code?**
+- Answer: Yes/No/Maybe
+- Why: 
+
+**Would you be comfortable with your team shipping this?**
+- Answer: Yes/No/Conditional
+- Why: 
+
+**If this was your startup, would you ship it?**
+- Answer: Yes/No
+- Why: 
+
+## Post-Launch Plan
+
+**After shipping, prioritize:**
+
+**Week 1:**
+- Monitor like crazy
+- Fix critical issues immediately
+- Gather user feedback
+- Track errors/crashes
+
+**Month 1:**
+- Fix P1 issues
+- Address common bugs
+- Improve monitoring
+- Update docs based on reality
+
+**Quarter 1:**
+- Pay down P2 technical debt
+- Refactor pain points
+- Improve test coverage
+- Update dependencies
+
+## Be Brutally Honest
+
+This isn't about being nice. This is about:
+- Protecting users
+- Protecting the business
+- Protecting the team
+- Making an informed decision
+
+**Tell the truth:**
+- What's really ready
+- What's really not
+- What will really break
+- What we're really risking
+
+**No hand-waving. No "should be fine." No "probably works."**
+
+Give a verdict you can stand behind.

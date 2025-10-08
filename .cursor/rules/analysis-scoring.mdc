@@ -1,0 +1,144 @@
+---
+alwaysApply: false
+---
+# Code Review Scoring Rubric
+
+Use this scoring system for all critical code reviews.
+
+## Scoring Scale (1-5)
+
+### 5 - Excellent
+- Follows best practices consistently
+- Well-tested with meaningful coverage
+- Clear, maintainable code
+- Properly documented
+- Production-ready with no reservations
+- **Example**: "This is how it should be done"
+
+### 4 - Acceptable
+- Minor issues that don't block production
+- Mostly follows best practices
+- Adequate testing
+- Some tech debt but manageable
+- **Example**: "Ship it, but file tickets for improvements"
+
+### 3 - Needs Improvement
+- Notable issues that accumulate tech debt
+- Inconsistent patterns
+- Testing gaps in non-critical areas
+- Will cause maintenance burden
+- **Example**: "Works, but future you will be annoyed"
+
+### 2 - Major Issues
+- Causes incidents in production
+- Significant technical debt
+- Poor performance or scalability
+- Hard to maintain or extend
+- **Example**: "This will wake people up at 3am"
+
+### 1 - Critical Problems
+- Blocks production deployment
+- Security vulnerabilities
+- Data loss risks
+- System instability
+- **Example**: "Do not ship this"
+
+## Review Areas
+
+Rate each area and provide specific examples:
+
+### 1. Architecture & Design
+**Score: ___**
+- Design pattern problems:
+- Coupling/cohesion issues:
+- Scalability concerns:
+- Top 3 architectural smells:
+
+### 2. Code Quality
+**Score: ___**
+- SOLID violations:
+- Complexity hotspots (cyclomatic >10):
+- Code smells (god classes, long functions):
+- Top 3 refactors needed:
+
+### 3. Security
+**Score: ___**
+- Vulnerabilities found:
+- Attack vectors:
+- Dependency risks:
+- Critical fixes required:
+
+### 4. Performance & Scalability
+**Score: ___**
+- Bottlenecks identified:
+- Scalability limits:
+- Breaking points at scale:
+- Quick wins vs. major refactors:
+
+### 5. Testing
+**Score: ___**
+- Critical paths without coverage:
+- False confidence areas:
+- Testing strategy gaps:
+- Top 5 untested risks:
+
+### 6. Technical Debt
+**Score: ___**
+- Accumulated shortcuts:
+- Outdated dependencies:
+- "Temporary" solutions:
+- Top 5 must-fix items:
+
+### 7. Documentation
+**Score: ___**
+- Missing critical docs:
+- Misleading documentation:
+- Setup/onboarding gaps:
+- Code comment quality:
+
+## Overall Assessment Template
+
+**Average Score: ___**
+
+**Production Ready?** ☐ YES  ☐ NO  ☐ CONDITIONAL
+
+**Biggest Risk:**
+- 
+
+**Must Fix Before Ship (P0):**
+- 
+
+**First Week Production Problems (P1):**
+- 
+
+**Accumulating Tech Debt (P2):**
+- 
+
+**Confidence Level (1-10):** ___
+
+**Would I bet my on-call rotation on this?** ☐ YES  ☐ NO
+
+## Prioritized Action Items
+
+### P0 - Blocks Ship
+1. 
+2. 
+3. 
+
+### P1 - Causes Incidents
+1. 
+2. 
+3. 
+
+### P2 - Accumulates Debt
+1. 
+2. 
+3. 
+
+## Acceptance Criteria
+
+- **Minimum score to ship**: 4+ on Security, Performance, Testing
+- **Acceptable average**: 3.5+ overall
+- **No P0 issues** can remain
+- **P1 issues** require mitigation plan
+- **P2 issues** should be tracked and scheduled

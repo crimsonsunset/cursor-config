@@ -1,0 +1,231 @@
+---
+alwaysApply: false
+---
+# Future-Proofing Analysis
+
+Analyze code through the lens of future maintenance and growth. Assume success brings scale.
+
+## Time-Travel Exercise
+
+**Imagine it's 2 years from now** and this codebase is a nightmare to maintain. What decisions made today caused that? Work backwards and identify:
+
+### Year 2 Problems (Work Backwards)
+- What's the biggest pain point for developers?
+- What causes the most production incidents?
+- What prevents new features from shipping?
+- What makes onboarding new developers painful?
+- What technical debt is "too big to fix"?
+
+### Today's Decisions That Led There
+For each future problem, trace it back:
+- What code/pattern/decision caused this?
+- When should we have caught it?
+- What's the fix now vs. the fix then?
+
+## Scale Analysis
+
+### 10x Traffic Scenario
+**Assume users/traffic grows 10x in the next year.**
+
+What breaks first?
+1. 
+2. 
+3. 
+
+#### Database Layer
+- Which queries become N+1 problems?
+- What tables lack proper indexes?
+- Where do we hit connection pool limits?
+- What's the read/write ratio assumption?
+
+#### API Layer  
+- Which endpoints become bottlenecks?
+- What rate limiting exists (or doesn't)?
+- Where do we have single points of failure?
+- What's our caching strategy?
+
+#### Frontend/Client
+- What bundle size problems emerge?
+- Which components cause performance issues?
+- Where do we hit memory limits?
+- What API call waterfalls exist?
+
+### 100x Data Scenario
+**Assume data volume grows 100x (more users, history, etc.)**
+
+What becomes unworkable?
+1. 
+2. 
+3. 
+
+#### Storage
+- Which tables explode in size?
+- What queries time out?
+- Where do we need partitioning?
+- What's our data retention strategy?
+
+#### Processing
+- Which background jobs can't keep up?
+- Where do we need batching/streaming?
+- What becomes too expensive to compute?
+
+## Team Scale Analysis
+
+### 10x Team Size
+**Assume team grows from 5 to 50 engineers.**
+
+What breaks in the development process?
+1. 
+2. 
+3. 
+
+#### Code Organization
+- Can we split into independent modules/services?
+- What coupling prevents parallel work?
+- Where do merge conflicts concentrate?
+- Can teams own clear boundaries?
+
+#### Build & Deploy
+- Does CI/CD scale to 50 PRs/day?
+- Can we deploy independently?
+- What's our rollback strategy?
+- How long are build times?
+
+#### Knowledge Distribution
+- What's only in one person's head?
+- Which systems are undocumented?
+- Where are the critical paths not redundant?
+
+## Maintenance Burden Forecast
+
+### Dependency Aging
+**Check every major dependency:**
+
+| Dependency | Current Version | Latest Version | Last Updated | Risk Level | Migration Effort |
+|------------|----------------|----------------|--------------|------------|------------------|
+|            |                |                |              |            |                  |
+
+**Red flags:**
+- Not updated in 2+ years
+- Major version behind (e.g. React 16 when 18 exists)
+- Known security vulnerabilities
+- Abandoned projects
+
+### Pattern Longevity
+**For each major pattern/framework used:**
+
+- Is this pattern still industry-standard?
+- What's the upgrade path?
+- Are we locked in?
+- What's the community support like?
+
+**Example questions:**
+- Redux vs. modern state management?
+- Class components vs. hooks?
+- REST vs. GraphQL?
+- Monolith vs. microservices?
+
+## Breaking Point Analysis
+
+For each critical system/component:
+
+### Component: ___________
+
+**What's the theoretical limit?**
+- 
+
+**What happens when we hit it?**
+- 
+
+**Warning signs before failure?**
+- 
+
+**Mitigation strategy?**
+- 
+
+**Cost to fix now vs. later?**
+- Now: 
+- Later: 
+
+## Extensibility Assessment
+
+### New Feature Scenarios
+
+**If we needed to add [common feature type], how hard would it be?**
+
+Example features to test:
+- Multi-tenancy
+- A/B testing framework
+- Real-time collaboration
+- Offline mode
+- i18n/localization
+- Third-party integrations
+- Audit logging
+- Advanced permissions
+
+For each:
+- **Effort (hours):** 
+- **Risk:** 
+- **What would we need to refactor first?**
+
+### API Versioning
+- Do we have an API versioning strategy?
+- Can we evolve APIs without breaking clients?
+- What's our deprecation process?
+
+### Database Migrations
+- Can we add/change schemas safely?
+- What's our zero-downtime migration strategy?
+- How do we handle data backfills?
+
+## Technical Debt Compounding
+
+### Identify Debt That Gets Worse
+What technical debt will become exponentially harder to fix?
+
+**Example:**
+- "Using Redux wrong in 10 places" → becomes 100 places in a year
+- "No TypeScript" → becomes millions of lines to convert
+- "Tightly coupled components" → becomes untestable as we add features
+
+**Current debt that's compounding:**
+1. 
+2. 
+3. 
+
+**Intervention points:**
+- Fix now before it spreads
+- Containment strategy (new code follows pattern X)
+- Gradual migration plan
+
+## Future-Proofing Checklist
+
+☐ **Database can scale** (indexed, partitionable, cacheable)
+☐ **APIs are versioned** and evolvable
+☐ **Code is modular** (can extract/replace pieces)
+☐ **Dependencies are current** and actively maintained
+☐ **Patterns are modern** and will age well
+☐ **Team can grow** (clear boundaries, documented)
+☐ **Build/deploy scales** (fast CI/CD, automated)
+☐ **Monitoring exists** (can detect issues at scale)
+☐ **Breaking points are known** and monitored
+☐ **Migration paths exist** for major changes
+
+## Final Assessment
+
+**If we 10x in the next year, rate confidence (1-10):**
+- Traffic handling: ___
+- Data handling: ___
+- Team scaling: ___
+- Codebase maintainability: ___
+
+**Single biggest future-proofing risk:**
+- 
+
+**Top 3 investments to make now:**
+1. 
+2. 
+3. 
+
+**What will we definitely regret not fixing?**
+- 

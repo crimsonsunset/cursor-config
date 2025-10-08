@@ -1,0 +1,382 @@
+---
+alwaysApply: false
+---
+# Industry Standards Comparison
+
+Compare this codebase to industry best practices and mature examples in the same domain.
+
+## Comparative Analysis Framework
+
+For each area, answer:
+1. **What do mature codebases do that this doesn't?**
+2. **Where is this behind the curve?**
+3. **What outdated patterns are still in use?**
+4. **Where could we learn from [similar successful project]?**
+
+---
+
+## Language/Framework Standards
+
+### For JavaScript/TypeScript Projects
+
+#### Modern Standards (2024+)
+- [ ] ES2022+ features used appropriately
+- [ ] TypeScript for type safety (if applicable)
+- [ ] Modern async/await patterns (not callback hell)
+- [ ] Module system (ESM not CommonJS)
+- [ ] Build tooling (Vite/esbuild not Webpack 4)
+
+#### React Native Specific (if applicable)
+- [ ] React 18+ with concurrent features
+- [ ] Hooks, not class components
+- [ ] Modern navigation (React Navigation v6+)
+- [ ] Performance optimizations (memo, useMemo, useCallback)
+- [ ] New architecture (TurboModules, Fabric)
+
+**Gaps identified:**
+- 
+- 
+
+**Outdated patterns found:**
+- 
+- 
+
+---
+
+## Architecture Standards
+
+### Industry Best Practices
+
+#### Separation of Concerns
+- [ ] Clear boundaries between layers (UI, business logic, data)
+- [ ] Domain-driven design principles followed
+- [ ] Dependency injection where appropriate
+- [ ] Single Responsibility Principle enforced
+
+#### State Management (React/React Native)
+**Modern approach:**
+- Server state: React Query, SWR, or tRPC
+- UI state: Context, Zustand, or Jotai
+- Redux: Only if actually needed for complex global state
+
+**This codebase:**
+- What's used: 
+- Is it appropriate: 
+- Overengineered or underengineered: 
+
+#### Error Handling
+**Industry standard:**
+- Consistent error boundaries (React)
+- Structured logging with context
+- User-friendly error messages
+- Retry logic with exponential backoff
+- Circuit breakers for external services
+
+**This codebase:**
+- Error boundary coverage: 
+- Logging strategy: 
+- User experience during errors: 
+- Gaps: 
+
+---
+
+## Testing Standards
+
+### Industry Benchmarks
+
+#### Coverage Targets
+- **Unit tests**: 80%+ for business logic
+- **Integration tests**: Critical user flows
+- **E2E tests**: Happy paths + critical edge cases
+- **Visual regression**: Component libraries
+
+#### Testing Pyramid
+```
+        /E2E\          (Few: 5-10% of tests)
+       /     \
+      /  Int  \        (Some: 15-20% of tests)
+     /         \
+    /   Unit    \      (Many: 75-80% of tests)
+   /-----------  \
+```
+
+**This codebase pyramid:**
+```
+       /     \         E2E: ___% (actual: ___ tests)
+      /       \        
+     /         \       Integration: ___% (actual: ___ tests)
+    /           \      
+   /             \     Unit: ___% (actual: ___ tests)
+  /---------------\
+```
+
+**Assessment:**
+- Inverted pyramid? (too many E2E, not enough unit)
+- Missing test types:
+- False confidence areas:
+
+### Testing Best Practices
+- [ ] Tests are fast (<5min full suite)
+- [ ] Tests are deterministic (no flakiness)
+- [ ] Tests are isolated (no shared state)
+- [ ] Tests test behavior, not implementation
+- [ ] Test data is well-organized (factories/fixtures)
+
+**Gaps:**
+- 
+- 
+
+---
+
+## Code Quality Standards
+
+### Industry Metrics
+
+| Metric | Industry Standard | This Codebase | Assessment |
+|--------|------------------|---------------|------------|
+| Function length | <50 lines | | |
+| File length | <300 lines | | |
+| Cyclomatic complexity | <10 per function | | |
+| Code duplication | <3% | | |
+| Comment ratio | 10-20% | | |
+| Test coverage | >80% | | |
+
+### SOLID Principles Adherence
+
+#### Single Responsibility
+**Standard:** Each module/class/function does one thing well.
+
+**Violations found:**
+- 
+
+#### Open/Closed
+**Standard:** Open for extension, closed for modification.
+
+**Violations found:**
+- 
+
+#### Liskov Substitution
+**Standard:** Subtypes must be substitutable for base types.
+
+**Violations found:**
+- 
+
+#### Interface Segregation
+**Standard:** Many specific interfaces > one general interface.
+
+**Violations found:**
+- 
+
+#### Dependency Inversion
+**Standard:** Depend on abstractions, not concretions.
+
+**Violations found:**
+- 
+
+---
+
+## Security Standards
+
+### OWASP Top 10 Compliance
+
+- [ ] **Injection**: Input validation, parameterized queries
+- [ ] **Broken Authentication**: Secure session management
+- [ ] **Sensitive Data Exposure**: Encryption at rest/transit
+- [ ] **XML External Entities**: Parser configuration
+- [ ] **Broken Access Control**: Authorization checks
+- [ ] **Security Misconfiguration**: Hardened configs
+- [ ] **XSS**: Output encoding, CSP headers
+- [ ] **Insecure Deserialization**: Safe deserialization
+- [ ] **Components with Known Vulnerabilities**: Updated deps
+- [ ] **Insufficient Logging**: Audit trails
+
+**Findings:**
+- 
+- 
+
+### Security Best Practices
+- [ ] Secrets management (not in code)
+- [ ] Dependency scanning (Snyk, Dependabot)
+- [ ] Security headers configured
+- [ ] HTTPS everywhere
+- [ ] Rate limiting on APIs
+- [ ] CORS properly configured
+
+**Gaps:**
+- 
+- 
+
+---
+
+## Performance Standards
+
+### Industry Benchmarks
+
+#### Frontend/Mobile
+| Metric | Target | This App | Status |
+|--------|--------|----------|--------|
+| First Contentful Paint | <1.8s | | |
+| Time to Interactive | <3.9s | | |
+| App bundle size | <5MB | | |
+| Cold start time | <2s | | |
+| Memory usage | <100MB | | |
+
+#### Backend (if applicable)
+| Metric | Target | This API | Status |
+|--------|--------|----------|--------|
+| Response time (p95) | <200ms | | |
+| Response time (p99) | <500ms | | |
+| Throughput | 1000+ req/s | | |
+| Error rate | <0.1% | | |
+
+**Performance issues identified:**
+- 
+- 
+
+### Performance Best Practices
+- [ ] Code splitting / lazy loading
+- [ ] Image optimization
+- [ ] Caching strategy
+- [ ] Database query optimization
+- [ ] CDN for static assets
+- [ ] Compression enabled
+
+**Missing optimizations:**
+- 
+- 
+
+---
+
+## DevOps & Deployment Standards
+
+### CI/CD Best Practices
+- [ ] Automated testing on PR
+- [ ] Automated deployments
+- [ ] Feature flags for gradual rollout
+- [ ] Blue-green or canary deployments
+- [ ] Automated rollback capability
+- [ ] Infrastructure as code
+
+**Current state:**
+- 
+- 
+
+### Monitoring & Observability
+- [ ] Application metrics (RED method)
+- [ ] Error tracking (Sentry, Rollbar)
+- [ ] Log aggregation (ELK, Datadog)
+- [ ] Distributed tracing
+- [ ] Uptime monitoring
+- [ ] Alerting with runbooks
+
+**Coverage:**
+- 
+- 
+
+---
+
+## Documentation Standards
+
+### Industry Expectations
+
+#### Must-Have Docs
+- [ ] README with quick start
+- [ ] Architecture decision records (ADRs)
+- [ ] API documentation (OpenAPI/Swagger)
+- [ ] Runbooks for incidents
+- [ ] Contributing guidelines
+- [ ] Setup/installation guide
+
+**Missing docs:**
+- 
+- 
+
+#### Code Documentation
+- [ ] JSDoc/TSDoc for public APIs
+- [ ] Complex logic explained
+- [ ] "Why" comments, not "what" comments
+- [ ] Diagrams for complex flows
+
+**Quality assessment:**
+- 
+- 
+
+---
+
+## Dependency Management Standards
+
+### Best Practices
+- [ ] Lock file committed (package-lock.json)
+- [ ] Regular dependency updates
+- [ ] Vulnerability scanning enabled
+- [ ] Minimal dependencies (avoid bloat)
+- [ ] Direct dependencies vs. transitive tracked
+- [ ] License compliance checked
+
+**Findings:**
+- Total dependencies: 
+- Outdated (>1 year): 
+- Known vulnerabilities: 
+- Unnecessary dependencies: 
+
+---
+
+## Comparative Examples
+
+### Similar Projects to Learn From
+
+**Project 1:** [Name of mature similar project]
+- What they do well:
+- What we could adopt:
+- Effort to implement:
+
+**Project 2:** [Another reference]
+- What they do well:
+- What we could adopt:
+- Effort to implement:
+
+---
+
+## Gap Analysis Summary
+
+### Critical Gaps (Must Fix)
+1. 
+2. 
+3. 
+
+### Major Gaps (Should Fix Soon)
+1. 
+2. 
+3. 
+
+### Minor Gaps (Nice to Have)
+1. 
+2. 
+3. 
+
+### Areas Where We're Ahead
+1. 
+2. 
+3. 
+
+---
+
+## Modernization Roadmap
+
+### Phase 1: Critical Updates (0-3 months)
+- 
+- 
+- 
+
+### Phase 2: Major Improvements (3-6 months)
+- 
+- 
+- 
+
+### Phase 3: Nice-to-Haves (6-12 months)
+- 
+- 
+- 
+
+**Estimated effort:** 
+**Business case for investment:**

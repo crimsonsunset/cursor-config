@@ -1,0 +1,457 @@
+---
+alwaysApply: false
+---
+# Documentation Quality Check
+
+Evaluate documentation as if you're a new developer joining tomorrow.
+
+## Review Perspective
+
+Imagine you're a senior engineer starting fresh on this codebase:
+- You've never seen this project before
+- You need to be productive in 2 hours
+- You might get paged at 3am for incidents
+- You need to ship a feature next week
+
+**What documentation do you need? What's missing? What's misleading?**
+
+## Documentation Categories
+
+### 1. README Assessment
+
+**Required elements:**
+- [ ] What is this project?
+- [ ] What problem does it solve?
+- [ ] Quick start (< 5 minutes to running)
+- [ ] Prerequisites clearly listed
+- [ ] Installation steps (copy-pasteable commands)
+- [ ] How to run locally
+- [ ] How to run tests
+- [ ] Project structure overview
+- [ ] Where to go next
+
+**Issues to identify:**
+- Outdated setup instructions
+- Missing prerequisites
+- Steps that don't work
+- Assumes too much knowledge
+- Links to non-existent files
+- No troubleshooting section
+
+**Rate README:** ___/5
+
+**What would block a new developer:**
+- 
+
+**What's missing:**
+- 
+
+**What's outdated:**
+- 
+
+### 2. Setup Documentation
+
+**Critical setup information:**
+- [ ] Environment setup (Node version, tools required)
+- [ ] Dependencies installation
+- [ ] Environment variables needed
+- [ ] Database setup (if applicable)
+- [ ] External service configuration
+- [ ] Common setup errors and solutions
+- [ ] How to verify setup worked
+
+**Test the setup instructions:**
+- Follow them literally from scratch
+- Document where you get stuck
+- Note assumptions made
+- Identify missing steps
+
+**Setup gaps identified:**
+1. 
+2. 
+3. 
+
+**Time to working environment:** ___ minutes/hours
+
+### 3. Architecture Documentation
+
+**Should exist:**
+- [ ] High-level architecture diagram
+- [ ] Major components and their responsibilities
+- [ ] Data flow diagrams
+- [ ] State management approach
+- [ ] Key design decisions (ADRs)
+- [ ] Technology stack and why
+- [ ] Integration points
+
+**Questions to answer:**
+- How is the app structured?
+- Where does business logic live?
+- How does data flow through the system?
+- What external services do we integrate with?
+- What's the navigation structure?
+- Where are the performance-critical paths?
+
+**Missing architecture docs:**
+- 
+- 
+
+**Confusing areas:**
+- 
+
+### 4. API Documentation
+
+**For each API/endpoint:**
+- [ ] Purpose/description
+- [ ] Request format
+- [ ] Response format
+- [ ] Authentication requirements
+- [ ] Error responses
+- [ ] Rate limits
+- [ ] Example requests
+
+**Assessment:**
+- Is API documented: Yes/No/Partial
+- Format: OpenAPI/Swagger/Markdown/Comments/None
+- Up-to-date: Yes/No
+- Examples work: Yes/No/Untested
+
+**Issues:**
+- Undocumented endpoints:
+- Outdated documentation:
+- Missing error codes:
+- No authentication docs:
+
+### 5. Code Comments
+
+**Comment quality:**
+- [ ] Complex logic explained
+- [ ] "Why" not "what" comments
+- [ ] No outdated comments
+- [ ] No commented-out code
+- [ ] Public APIs have JSDoc/TSDoc
+
+**Identify problems:**
+
+**Missing comments where needed:**
+- Complex algorithms unexplained
+- Non-obvious business logic
+- Magic numbers without context
+- Workarounds without explanation
+
+**Bad comments:**
+- Obvious comments (`// increment i`)
+- Outdated comments (contradict code)
+- Commented-out code still present
+- TODO comments from 2 years ago
+
+**Examples of good comments needed:**
+```javascript
+// ❌ Bad: obvious comment
+i++; // increment i
+
+// ✅ Good: explains why
+// We add 1 because API uses 1-indexed pages
+const apiPageNumber = currentPage + 1;
+
+// ✅ Good: explains complex business logic
+// Discount rate calculation follows IRS Schedule C rules:
+// - Under $10k: no discount
+// - $10k-$50k: 5% discount
+// - Over $50k: 10% discount plus 2% for every additional $10k
+```
+
+### 6. Onboarding Documentation
+
+**New developer needs:**
+- [ ] How to get access (repos, services, credentials)
+- [ ] Development workflow
+- [ ] How to make a change (branch, PR, merge)
+- [ ] Code review process
+- [ ] Testing requirements
+- [ ] How to deploy
+- [ ] Who to ask for help
+
+**Estimate onboarding time:** ___ days
+
+**Onboarding blockers:**
+1. 
+2. 
+3. 
+
+**First task suggestions:**
+- [ ] List of "good first issues"
+- [ ] Guided codebase tour
+- [ ] Sample PR to follow
+
+### 7. Deployment Documentation
+
+**Production deployment needs:**
+- [ ] How to deploy
+- [ ] Deployment checklist
+- [ ] Rollback procedure
+- [ ] Environment differences (dev/staging/prod)
+- [ ] Feature flag usage
+- [ ] Monitoring/observability
+- [ ] What to check after deploy
+
+**Critical questions:**
+- Can I safely deploy? How?
+- What happens if deployment breaks?
+- How do I rollback?
+- How do I know deployment succeeded?
+- What's the deploy frequency?
+
+**Missing deployment docs:**
+- 
+
+**Deploy risk level:** High/Medium/Low
+
+### 8. Troubleshooting/Runbook Documentation
+
+**For common issues:**
+- [ ] Error messages and what they mean
+- [ ] How to debug locally
+- [ ] Common pitfalls
+- [ ] FAQ section
+- [ ] Known issues and workarounds
+
+**For production incidents:**
+- [ ] How to access logs
+- [ ] How to access monitoring
+- [ ] Common incident types
+- [ ] Runbooks for each incident type
+- [ ] Escalation procedures
+
+**Rate incident preparedness:** ___/5
+
+**Missing runbooks for:**
+- 
+
+**3am incident scenario:**
+If service goes down at 3am, can someone who's never seen this codebase:
+- [ ] Access logs
+- [ ] Understand error messages
+- [ ] Find relevant code
+- [ ] Rollback safely
+- [ ] Know who to escalate to
+
+### 9. Testing Documentation
+
+**Testing requirements:**
+- [ ] How to run tests
+- [ ] How to write tests
+- [ ] Testing patterns/conventions
+- [ ] What requires tests
+- [ ] Coverage requirements
+- [ ] How to run specific tests
+
+**Current state:**
+- Test documentation exists: Yes/No
+- Testing standards clear: Yes/No
+- Examples provided: Yes/No
+
+**Questions new developer will have:**
+- Where do tests go?
+- How do I test [common scenario]?
+- What's our mocking strategy?
+- What coverage is required?
+
+### 10. Contributing Guidelines
+
+**Should exist:**
+- [ ] Code style guide
+- [ ] Branch naming conventions
+- [ ] Commit message format
+- [ ] PR template
+- [ ] Review process
+- [ ] CI/CD expectations
+- [ ] Definition of done
+
+**Issues:**
+- No contributing guide
+- Style guide contradicts actual code
+- Unclear expectations
+- No examples
+
+### 11. Business Logic Documentation
+
+**Domain knowledge:**
+- [ ] Key business concepts explained
+- [ ] Workflow diagrams
+- [ ] User roles and permissions
+- [ ] Data model explained
+- [ ] Business rules documented
+
+**Questions to answer:**
+- What are we building and why?
+- Who are the users?
+- What's the core business logic?
+- What are the edge cases?
+- What's considered valid data?
+
+**Missing domain docs:**
+- 
+
+### 12. Security Documentation
+
+**Security requirements:**
+- [ ] Authentication approach
+- [ ] Authorization model
+- [ ] Secrets management
+- [ ] Security best practices
+- [ ] Vulnerability reporting process
+- [ ] Compliance requirements
+
+**Security gaps in docs:**
+- 
+
+## Documentation Anti-Patterns
+
+### 1. Outdated Documentation
+**Symptom:** Instructions don't work, screenshots show old UI
+
+**Impact:** Wastes time, builds distrust in docs
+
+**Examples:**
+- 
+
+### 2. Aspirational Documentation
+**Symptom:** Docs describe how it should work, not how it does
+
+**Impact:** Confusion when reality differs
+
+**Examples:**
+- 
+
+### 3. Tribal Knowledge
+**Symptom:** Critical info only in people's heads
+
+**Impact:** Single point of failure, slow onboarding
+
+**Examples:**
+- 
+
+### 4. Documentation Rot
+**Symptom:** Docs were good once, now ignored
+
+**Impact:** Docs become liability, not asset
+
+**Signs:**
+- Last updated: > 1 year ago
+- Contradicts current code
+- Links to deleted files
+
+### 5. Over-Documentation
+**Symptom:** Docs so verbose nobody reads them
+
+**Impact:** Important info buried
+
+**Examples:**
+- 
+
+## Output Template
+
+### Documentation Health Score: ___/5
+
+### Critical Documentation Gaps (P0)
+**Missing docs that block new developers:**
+1. **No setup guide**
+   - Impact: Can't get environment running
+   - Time wasted: 2+ hours per new developer
+   - Effort to create: 2 hours
+
+### Major Documentation Issues (P1)
+**Docs that cause friction:**
+1. **Outdated deployment guide**
+   - Impact: Failed deploys, rolled back changes
+   - Fix: Update deployment steps
+   - Effort: 1 hour
+
+### Documentation Improvements (P2)
+**Nice-to-have docs:**
+1. **Missing architecture diagrams**
+   - Impact: Slower understanding of system
+   - Fix: Create diagrams
+   - Effort: 4 hours
+
+### Onboarding Assessment
+
+**Time to productive:** ___ days (target: < 2 days)
+
+**Blockers for new developers:**
+1. 
+2. 
+3. 
+
+**Documentation needed for smooth onboarding:**
+1. 
+2. 
+3. 
+
+### Incident Preparedness
+
+**Can on-call engineer handle 3am incident?** Yes/No
+
+**Missing incident docs:**
+1. 
+2. 
+3. 
+
+**Runbooks needed:**
+1. 
+2. 
+3. 
+
+### Documentation Priority Matrix
+
+| Documentation | Importance | Current State | Effort | Priority |
+|---------------|------------|---------------|--------|----------|
+| Setup guide   | Critical   | Missing       | 2h     | P0       |
+|               |            |               |        |          |
+
+### Quick Wins
+**Low effort, high impact docs to create:**
+1. 
+2. 
+3. 
+
+### Documentation Debt
+**Estimated time to fix all P0/P1 issues:** ___ hours
+
+**Estimated ROI:**
+- Time saved per new developer: ___ hours
+- Reduction in incidents: ___%
+- Faster feature development: ___%
+
+## Testing Documentation Yourself
+
+**Validate docs by:**
+1. Following setup instructions from scratch
+2. Having someone unfamiliar follow them
+3. Timing how long each process takes
+4. Documenting every confusion point
+5. Checking if examples actually work
+
+**Document your findings:**
+- Where did you get stuck?
+- What assumptions were made?
+- What's missing?
+- What's wrong?
+- What's confusing?
+
+## Recommendations
+
+**Priority order for documentation:**
+1. README (get people running)
+2. Setup guide (get environment working)
+3. Architecture overview (understand structure)
+4. Contributing guide (maintain quality)
+5. Runbooks (handle incidents)
+6. Everything else
+
+**Be specific:**
+- Point to specific missing documentation
+- Explain impact of missing docs (time wasted, bugs shipped)
+- Estimate effort to create/fix
+- Provide examples of what good docs look like

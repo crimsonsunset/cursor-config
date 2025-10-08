@@ -1,0 +1,466 @@
+---
+alwaysApply: false
+---
+# Dependency & Configuration Audit
+
+Analyze dependencies and configuration with extreme skepticism.
+
+## Review Objectives
+
+Identify:
+- Outdated dependencies (check against latest versions)
+- Overkill dependencies (500KB for one function)
+- Duplicate/redundant functionality
+- Dependencies with known vulnerabilities
+- Unmaintained packages (no updates in 2+ years)
+- Dependencies that conflict or cause peer warnings
+- Secrets/credentials in configuration
+- Configuration that won't scale
+
+## Dependency Analysis
+
+### 1. Dependency Inventory
+
+**Create comprehensive list:**
+
+| Package | Current Version | Latest Version | Age | Size | Weekly Downloads | Last Updated |
+|---------|-----------------|----------------|-----|------|------------------|--------------|
+|         |                 |                |     |      |                  |              |
+
+**Red flags to identify:**
+- 🔴 Major versions behind (e.g., React 16 when 18+ exists)
+- 🔴 Not updated in 2+ years
+- 🔴 <10k weekly downloads (unmaintained?)
+- 🔴 Deprecated packages
+- 🔴 Pre-1.0 packages in production
+
+### 2. Security Vulnerabilities
+
+**Run security audit:**
+```bash
+npm audit
+# or
+yarn audit
+```
+
+**For each vulnerability:**
+- Package: 
+- Severity: Critical/High/Moderate/Low
+- CVE ID: 
+- Attack vector: 
+- Fix available: Yes/No
+- Recommended action: Update/Replace/Accept risk
+
+**Critical questions:**
+- Do we have automated dependency scanning?
+- Are there unpatched critical vulnerabilities?
+- What's our vulnerability response process?
+
+### 3. Dependency Bloat Analysis
+
+**For each large dependency, evaluate:**
+
+#### Example: lodash (full library)
+- **Current:** importing entire lodash (~70KB)
+- **Actually using:** 5 functions
+- **Better approach:** Import specific functions or use native JS
+- **Savings:** ~60KB
+- **Effort:** 1 hour
+
+#### Analysis template:
+**Package:** _____________
+- **Size:** ___KB
+- **What we use:** 
+- **Alternative:** 
+- **Savings:** 
+- **Effort to replace:** 
+
+**Common bloat patterns:**
+- Full lodash instead of lodash-es
+- moment.js instead of date-fns or day.js
+- Entire UI library for 2 components
+- Full axios for simple fetch use
+
+### 4. Dependency Conflicts
+
+**Identify peer dependency warnings:**
+```
+ERESOLVE unable to resolve dependency tree
+```
+
+**For each conflict:**
+- **Packages involved:** 
+- **Version requirement:** 
+- **Current version:** 
+- **Impact:** Does it actually break things?
+- **Resolution:** Update/downgrade/use --legacy-peer-deps
+
+**Questions:**
+- Are we using `--force` or `--legacy-peer-deps`?
+- Why are we overriding peer dependencies?
+- What's the technical debt here?
+
+### 5. Duplicate Functionality
+
+**Identify packages doing the same thing:**
+
+**Example duplications:**
+- Multiple date libraries (moment + date-fns + native Date)
+- Multiple HTTP clients (axios + fetch + node-fetch)
+- Multiple state management (Redux + Context + MobX)
+- Multiple CSS solutions (styled-components + CSS modules + SASS)
+
+**For each duplication:**
+- **Packages:** 
+- **Why both exist:** 
+- **Which to keep:** 
+- **Migration effort:** 
+
+### 6. Transitive Dependencies
+
+**Analyze dependency tree:**
+```bash
+npm ls
+# or
+npm ls <package-name>
+```
+
+**Look for:**
+- Multiple versions of same package
+- Deep dependency trees (>5 levels)
+- Abandoned packages deep in tree
+- Security issues in transitive deps
+
+**Example finding:**
+```
+├─┬ package-a@1.0.0
+│ └─┬ package-b@2.0.0
+│   └─┬ package-c@3.0.0 (DEPRECATED)
+│     └── vulnerable-package@1.0.0 (CRITICAL VULN)
+```
+
+### 7. Dependency Maintenance Status
+
+**For each major dependency, check:**
+
+| Package | Last Commit | Open Issues | Open PRs | Maintainers | Status |
+|---------|-------------|-------------|----------|-------------|--------|
+|         |             |             |          |             |        |
+
+**Red flags:**
+- No commits in 12+ months
+- Hundreds of open issues, no responses
+- PRs sitting untouched for months
+- Single maintainer, no bus factor
+- Abandoned/deprecated notice
+
+**Risk assessment:**
+- Critical: Core functionality dependent on abandoned package
+- High: Important feature using unmaintained code
+- Medium: Nice-to-have using old package
+- Low: Dev dependency that's old
+
+### 8. License Compliance
+
+**Check licenses for all dependencies:**
+```bash
+npx license-checker --summary
+```
+
+**Flag concerning licenses:**
+- GPL (requires open-sourcing your code)
+- Unknown/missing licenses
+- Custom licenses requiring review
+
+**Are we compliant with all licenses?**
+- [ ] All licenses documented
+- [ ] No GPL conflicts
+- [ ] Attribution where required
+- [ ] Commercial use allowed
+
+### 9. Bundle Size Analysis
+
+**Production bundle impact:**
+
+**Run bundle analyzer:**
+```bash
+npm run build -- --analyze
+```
+
+**Identify largest dependencies:**
+| Package | Bundle Size | Tree-shaken? | Necessary? |
+|---------|-------------|--------------|------------|
+|         |             |              |            |
+
+**Questions:**
+- What's our total bundle size?
+- What's acceptable for our use case?
+- Which dependencies are >100KB?
+- Can any be lazy-loaded?
+- Are we tree-shaking properly?
+
+### 10. Development vs. Production Dependencies
+
+**Audit dependency classification:**
+
+**Should be devDependencies but aren't:**
+- 
+
+**Should be dependencies but are devDependencies:**
+- 
+
+**Unnecessary dependencies:**
+- Only used in one place, could inline
+- Not actually imported anywhere
+- Leftover from old feature
+
+## Configuration Analysis
+
+### 1. Environment Configuration
+
+**Review environment handling:**
+
+- [ ] `.env` files properly structured
+- [ ] `.env.example` exists and is current
+- [ ] No secrets in `.env` committed to git
+- [ ] Environment variables validated on startup
+- [ ] Different configs for dev/staging/prod
+
+**Red flags:**
+- Real secrets in `.env` files
+- No validation of required env vars
+- Hardcoded values that should be env vars
+- `.env` file committed to repo
+
+### 2. Build Configuration
+
+**Analyze build setup:**
+
+**Webpack/Vite/Metro config:**
+- Is it optimal?
+- Are there outdated plugins?
+- Is there dead configuration?
+- Are source maps configured properly?
+
+**Build performance:**
+- Build time: ___ seconds/minutes
+- Is it acceptable?
+- Where's the bottleneck?
+- Can we improve it?
+
+### 3. Linter/Formatter Configuration
+
+**Review code quality tooling:**
+
+**ESLint:**
+- [ ] Configuration exists
+- [ ] Rules are reasonable
+- [ ] Extends standard config
+- [ ] Custom rules documented
+- [ ] Pre-commit hooks enforce
+
+**Prettier:**
+- [ ] Configuration exists
+- [ ] Conflicts with ESLint resolved
+- [ ] Auto-format on save enabled
+- [ ] Style is consistent
+
+**Issues:**
+- Rules disabled without explanation
+- Conflicting configurations
+- Outdated rulesets
+- No enforcement
+
+### 4. TypeScript Configuration (if applicable)
+
+**Review tsconfig.json:**
+
+- [ ] Strict mode enabled
+- [ ] Source maps configured
+- [ ] Module resolution correct
+- [ ] Include/exclude paths set
+- [ ] Build output configured
+
+**Common issues:**
+- Non-strict mode in production code
+- `any` used everywhere
+- Type checking disabled
+- Implicit any allowed
+
+### 5. Testing Configuration
+
+**Review test setup:**
+
+**Jest/Vitest config:**
+- [ ] Coverage thresholds set
+- [ ] Test environment configured
+- [ ] Setup files in place
+- [ ] Mocks properly configured
+
+**Coverage requirements:**
+- Current coverage: ___%
+- Target coverage: ___%
+- Enforced: Yes/No
+
+### 6. CI/CD Configuration
+
+**Review pipeline configuration:**
+
+**GitHub Actions / GitLab CI / etc.:**
+- [ ] Tests run on PR
+- [ ] Linting enforced
+- [ ] Security scanning enabled
+- [ ] Dependency updates automated
+- [ ] Deploy automation exists
+
+**Issues:**
+- No automated testing
+- Secrets in pipeline config
+- Inefficient pipeline (too slow)
+- No deployment automation
+
+### 7. Package Manager Configuration
+
+**Review lock files:**
+- [ ] Lock file committed (package-lock.json / yarn.lock)
+- [ ] Lock file in sync with package.json
+- [ ] Using consistent package manager
+
+**Issues:**
+- Both package-lock.json AND yarn.lock (pick one!)
+- Lock file out of sync
+- Using deprecated package manager
+
+### 8. Security Configuration
+
+**Review security measures:**
+
+- [ ] Dependency scanning automated (Dependabot, Snyk)
+- [ ] Security headers configured
+- [ ] CORS configured properly
+- [ ] Rate limiting in place
+- [ ] Input validation configured
+
+**Secrets management:**
+- [ ] No secrets in code
+- [ ] Secrets stored securely (vault, env vars)
+- [ ] Secrets rotation process exists
+- [ ] Access to secrets is limited
+
+### 9. Performance Configuration
+
+**Review performance settings:**
+
+**Caching:**
+- [ ] HTTP caching configured
+- [ ] API response caching
+- [ ] Static asset caching
+- [ ] Service worker for offline
+
+**Optimization:**
+- [ ] Code splitting enabled
+- [ ] Tree shaking working
+- [ ] Minification enabled
+- [ ] Compression enabled (gzip/brotli)
+
+### 10. Database Configuration (if applicable)
+
+**Review database setup:**
+
+- [ ] Connection pooling configured
+- [ ] Indexes on frequently queried columns
+- [ ] Query timeout settings
+- [ ] Backup configuration
+- [ ] Migration strategy
+
+## Output Template
+
+### Dependency Health Score: ___/5
+
+### Critical Dependency Issues (P0)
+1. **Vulnerable package: `package@version`**
+   - CVE: CVE-2024-XXXXX (Critical)
+   - Impact: Remote code execution
+   - Fix: Update to 5.2.0 immediately
+   - Effort: 30 minutes
+
+### Major Dependency Issues (P1)
+1. **Abandoned package: `old-package@1.0.0`**
+   - Last updated: 3 years ago
+   - Impact: No security patches, no bug fixes
+   - Fix: Migrate to `modern-package`
+   - Effort: 4 hours
+
+### Dependency Bloat (P2)
+1. **Overkill: Using entire lodash (70KB) for 5 functions**
+   - Impact: Bundle size bloat
+   - Fix: Import specific functions or use native
+   - Savings: 60KB
+   - Effort: 1 hour
+
+### Configuration Issues
+1. **`.env` file committed with secrets**
+   - Severity: P0 - Security breach
+   - Fix: Remove from git history, rotate secrets
+   - Effort: 2 hours + secret rotation
+
+### Outdated Dependencies
+| Package | Current | Latest | Severity | Effort |
+|---------|---------|--------|----------|--------|
+|         |         |        |          |        |
+
+### Recommended Actions
+
+**Immediate (P0 - This week):**
+1. 
+2. 
+3. 
+
+**Short-term (P1 - This month):**
+1. 
+2. 
+3. 
+
+**Long-term (P2 - This quarter):**
+1. 
+2. 
+3. 
+
+### Dependency Update Plan
+- **Total outdated packages:** ___
+- **Critical updates:** ___
+- **Estimated effort:** ___ hours
+- **Risk level:** High/Medium/Low
+- **Testing required:** Yes/No
+
+### Bundle Size Optimization
+- **Current size:** ___KB
+- **Target size:** ___KB
+- **Potential savings:** ___KB
+- **Top 3 contributors:** 
+  1. 
+  2. 
+  3. 
+
+### Security Posture
+- **Known vulnerabilities:** ___
+- **Critical:** ___
+- **High:** ___
+- **Medium:** ___
+- **Automated scanning:** Yes/No
+
+## Automation Recommendations
+
+**Set up if missing:**
+- [ ] Dependabot for automated updates
+- [ ] Snyk or similar for vulnerability scanning
+- [ ] Bundle size tracking (bundlephobia)
+- [ ] License compliance checking
+- [ ] Dependency graph visualization
+
+## Be Specific
+- List exact package names and versions
+- Show security scan results
+- Calculate bundle size impact
+- Estimate migration efforts
+- Prioritize by risk and effort
