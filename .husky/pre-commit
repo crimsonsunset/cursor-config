@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Check if mcp.json has changes
+if git diff --cached --name-only | grep -q "mcp.json"; then
+  echo "🔒 mcp.json changed, regenerating mcp.example.json..."
+  npm run redact-mcp
+  git add mcp.example.json
+  echo "✅ mcp.example.json updated and staged"
+fi

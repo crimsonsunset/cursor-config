@@ -4,6 +4,9 @@ mcp.json
 mcp.json.backup*
 mcp_blank.json
 
+# Safe to commit: redacted example
+!mcp.example.json
+
 # === LARGE/PERSONAL - DO NOT COMMIT ===
 # Chat history and AI conversations
 chats/

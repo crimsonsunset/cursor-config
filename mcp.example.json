@@ -1,0 +1,176 @@
+{
+  "_comment": [
+    "This is a redacted version of mcp.json for documentation purposes.",
+    "Sensitive values (API keys, tokens, secrets) have been replaced with <REDACTED>.",
+    "To use: Copy to mcp.json and replace <REDACTED> values with your actual credentials.",
+    "Generated: 2026-01-14T21:20:51.637Z"
+  ],
+  "mcpServers": {
+    "gmail-personal": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "@gongrzhe/server-gmail-autoauth-mcp"
+      ],
+      "env": {
+        "CREDENTIALS_DIR": "<REDACTED>"
+      }
+    },
+    "google-calendar-personal": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "@cocal/google-calendar-mcp"
+      ],
+      "env": {
+        "GOOGLE_OAUTH_CREDENTIALS": "<REDACTED>",
+        "XDG_CONFIG_HOME": "/Users/joe/Desktop/Repos/Personal/gdrive-workspace"
+      }
+    },
+    "google-sheets-personal": {
+      "command": "/Users/joe/.local/bin/mcp-google-sheets",
+      "args": [],
+      "env": {
+        "CREDENTIALS_PATH": "<REDACTED>",
+        "TOKEN_PATH": "<REDACTED>"
+      }
+    },
+    "google-docs-personal": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/node",
+      "args": [
+        "/Users/joe/Desktop/Repos/Personal/gdrive-workspace/mcp-googledocs-server/dist/server.js"
+      ],
+      "env": {}
+    },
+    "google-workspace-personal": {
+      "command": "/Users/joe/.local/bin/uvx",
+      "args": [
+        "workspace-mcp",
+        "--transport",
+        "stdio",
+        "--tools",
+        "drive"
+      ],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "<REDACTED>",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "<REDACTED>",
+        "USER_GOOGLE_EMAIL": "jsangio1@gmail.com",
+        "WORKSPACE_MCP_BASE_URI": "http://localhost",
+        "WORKSPACE_MCP_PORT": "8001",
+        "OAUTHLIB_INSECURE_TRANSPORT": "<REDACTED>"
+      }
+    },
+    "gmail-work": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "@gongrzhe/server-gmail-autoauth-mcp"
+      ],
+      "env": {
+        "CREDENTIALS_DIR": "<REDACTED>"
+      }
+    },
+    "google-calendar-work": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "@cocal/google-calendar-mcp"
+      ],
+      "env": {
+        "GOOGLE_OAUTH_CREDENTIALS": "<REDACTED>",
+        "XDG_CONFIG_HOME": "/Users/joe/Desktop/Repos/Personal/sync2hire-workspace"
+      }
+    },
+    "google-sheets-work": {
+      "command": "/Users/joe/.local/bin/mcp-google-sheets",
+      "args": [],
+      "env": {
+        "CREDENTIALS_PATH": "<REDACTED>",
+        "TOKEN_PATH": "<REDACTED>"
+      }
+    },
+    "google-docs-work": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/node",
+      "args": [
+        "/Users/joe/Desktop/Repos/Personal/sync2hire-workspace/mcp-googledocs-server/dist/server.js"
+      ],
+      "env": {}
+    },
+    "google-workspace-work": {
+      "command": "/Users/joe/.local/bin/uvx",
+      "args": [
+        "workspace-mcp",
+        "--transport",
+        "stdio",
+        "--tools",
+        "drive"
+      ],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "<REDACTED>",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "<REDACTED>",
+        "USER_GOOGLE_EMAIL": "jsangiorgio@sync2hire.com",
+        "OAUTHLIB_INSECURE_TRANSPORT": "<REDACTED>"
+      }
+    },
+    "notionz": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "-y",
+        "@notionhq/notion-mcp-server"
+      ],
+      "env": {
+        "NOTION_TOKEN": "<REDACTED>"
+      }
+    },
+    "n8n-mcp": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "n8n-mcp"
+      ],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n.joe-hassio.com/api/v1",
+        "N8N_API_KEY": "<REDACTED>"
+      }
+    },
+    "supabase": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "<REDACTED>"
+      ]
+    },
+    "playwright": {
+      "command": "/Users/joe/.nvm/versions/node/v22.19.0/bin/npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "markitdown": {
+      "command": "/Users/joe/.local/bin/markitdown-mcp",
+      "args": []
+    },
+    "home-assistant": {
+      "command": "/Users/joe/.local/bin/hass-mcp",
+      "env": {
+        "HA_URL": "<REDACTED_URL>",
+        "HA_TOKEN": "<REDACTED>"
+      }
+    },
+    "Atlassian-Rovo": {
+      "url": "https://mcp.atlassian.com/v1/sse"
+    },
+    "Figma": {
+      "url": "https://mcp.figma.com/mcp",
+      "headers": {}
+    },
+    "Mantine": {
+      "url": "https://mantinedev.gitmcp.io/mantine",
+      "headers": {}
+    },
+    "Notion": {
+      "url": "https://mcp.notion.com/mcp",
+      "headers": {}
+    }
+  }
+}

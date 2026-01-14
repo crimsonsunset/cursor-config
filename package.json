@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "node scripts/install.js",
-    "release": "node scripts/publish.js"
+    "release": "node scripts/publish.js",
+    "redact-mcp": "node scripts/redact-mcp.js",
+    "prepare": "husky"
   },
   "keywords": [
     "cursor",
@@ -22,5 +24,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crimsonsunset/cursor-config.git"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }
