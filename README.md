@@ -1,6 +1,12 @@
 # @crimsonsunset/cursor-config
 
-Shared Cursor rules configuration - managed directly from `~/.cursor/` and published as an npm package.
+Shared Cursor rules and commands - managed directly from `~/.cursor/` and published as an npm package.
+
+## Repository Structure
+
+This repo lives at `~/.cursor/` and contains:
+- **27 rules** (`rules/`) - Cursor IDE rules for code quality, analysis, and workflows
+- **17 commands** (`commands/`) - Custom AI command shortcuts and workflows
 
 ## Two ways to use this:
 
@@ -14,14 +20,14 @@ That's it! The `.cursor/rules/` directory will be automatically created in your 
 
 ### 2. Work directly from source (for personal development)
 
-This repo lives at `~/.cursor/` and can be committed/pushed directly from there. All your Cursor rules are version controlled and can be shared across machines.
+This repo is your actual `~/.cursor/` directory. Edit rules and commands directly, then commit and push.
 
 ## What it does
 
-- Contains comprehensive development guidelines and best practices
+- **Rules**: Comprehensive development guidelines and best practices
+- **Commands**: Custom AI workflows for logging, debugging, testing, etc.
 - Works with Cursor's latest `.mdc` rule format
 - Publishes to npm for easy sharing with teams
-- Can be managed directly from your `~/.cursor/` folder
 
 ## Rules included
 
@@ -60,16 +66,35 @@ This repo lives at `~/.cursor/` and can be committed/pushed directly from there.
 - **analysis-scoring.mdc** - Code scoring rubric
 - **derived-cursor-rules.mdc** - Derived rules from cursor docs
 
+## Commands included (17 total)
+
+Custom AI workflows in `commands/`:
+- **add-jsg-logs.md** - Automated logging integration and debug loops
+- **fix-lints.md** / **fl.md** - Automated linting workflow
+- **session-startup.md** - Session initialization and context loading
+- **sw_mcp.md** - Web search with MCP integration
+- **dpw.md** - Playwright debugging workflows
+- **playwright-hygiene.md** - Playwright best practices
+- **n8n-workflow.md** - n8n automation integration
+- **find-mcp.md** - MCP server discovery
+- **meeting_recon.md** / **meeting_recap.md** - Meeting documentation
+- **rd.md** - Run dev server
+- **read_code.md** / **read_docs.md** - Code/documentation reading workflows
+- **interview-prep.md** - Interview preparation workflows
+- **fix_tests.md** - Test fixing workflows
+- **wo.md** - Write output workflows
+
 ## Working from source
 
-This repo lives at `~/.cursor/` so you can work on rules directly:
+This repo lives at `~/.cursor/` so you can work on rules and commands directly:
 
 ```bash
 cd ~/.cursor
 git status
 # Edit rules in ~/.cursor/rules/
-git add rules/
-git commit -m "Update rules"
+# Edit commands in ~/.cursor/commands/
+git add rules/ commands/
+git commit -m "Update rules and commands"
 git push
 ```
 
