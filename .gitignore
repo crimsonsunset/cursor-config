@@ -29,9 +29,6 @@ cli-config.json
 browser-logs/
 themes/
 
-# Commands history
-commands/
-
 # Worktrees
 worktrees/
 
