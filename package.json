@@ -16,7 +16,7 @@
   "author": "Joe Sangiorgio",
   "license": "MIT",
   "files": [
-    ".cursor/",
+    "rules/",
     "scripts/"
   ],
   "repository": {

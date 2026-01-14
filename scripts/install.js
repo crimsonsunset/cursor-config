@@ -13,20 +13,20 @@ try {
     console.log('✓ Created .cursor/rules/ directory');
   }
   
-  // Copy all .mdc files from .cursor directory
-  const sourceDir = path.join(__dirname, '../.cursor');
+  // Copy all .mdc and .md files from rules directory
+  const sourceDir = path.join(__dirname, '../rules');
   const files = fs.readdirSync(sourceDir);
-  const mdcFiles = files.filter(file => file.endsWith('.mdc'));
+  const ruleFiles = files.filter(file => file.endsWith('.mdc') || file.endsWith('.md'));
   
   const autoRules = [];
   const manualRules = [];
   const skippedRules = [];
   const installedRules = [];
   
-  mdcFiles.forEach(ruleFile => {
+  ruleFiles.forEach(ruleFile => {
     const sourcePath = path.join(sourceDir, ruleFile);
     const destPath = path.join(rulesDir, ruleFile);
-    const ruleName = ruleFile.replace('.mdc', '');
+    const ruleName = ruleFile.replace(/\.(mdc|md)$/, '');
     
     // Check if rule already exists
     if (fs.existsSync(destPath)) {

@@ -1,0 +1,7 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- all of your changes that affect anything in the home assistant (HA) addon require a version bump in config.json
+- they also require a changelog entry

@@ -1,5 +1,47 @@
+# === SENSITIVE - DO NOT COMMIT ===
+# API keys and credentials
+mcp.json
+mcp.json.backup*
+mcp_blank.json
+
+# === LARGE/PERSONAL - DO NOT COMMIT ===
+# Chat history and AI conversations
+chats/
+ai-tracking/
+
+# Extension data
+extensions/
+
+# Project-specific data
+projects/
+
+# Plans (may contain sensitive project info)
+plans/
+
+# Personal machine state
+ide_state.json
+argv.json
+prompt_history.json
+cli-config.json
+
+# System files
+.DS_Store
+browser-logs/
+themes/
+
+# Commands history
+commands/
+
+# Worktrees
+worktrees/
+
+# === BUILD/PACKAGE ARTIFACTS ===
 node_modules/
 *.log
-.DS_Store
 *.tgz
 .idea/
+
+# === OLD STRUCTURE (from previous repo) ===
+.cursor/
+.cursorindexingignore
+.specstory/
